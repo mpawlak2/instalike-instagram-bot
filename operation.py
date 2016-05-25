@@ -136,6 +136,9 @@ class Operations:
 	def get_user_following(self, user_id):
 		pass
 
-	def block_account(self, user_id):
+	def get_user_info(self, user_id):
+		pass
+
+	def block_user(self, user_id):
 		pass
 		
