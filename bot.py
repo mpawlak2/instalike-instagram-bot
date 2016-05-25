@@ -4,6 +4,7 @@ import json
 import time
 import sys
 import random
+import datetime
 from operation import Operations
 
 # ideas, obviously stolen :)
@@ -36,6 +37,7 @@ from operation import Operations
 # like posts of followers
 # like latest feed posts
 # like by location
+# blacklist
 
 # new algorith COMMENT
 # 90 and 180 min before operation
@@ -53,6 +55,10 @@ from operation import Operations
 
 class InstaLike:
 	operation = Operations()
+
+	start_liking_at = 12 # 0 - 23 format
+	stop_liking_at = 13 # 0 - 23 format
+
 
 	instagrams = []
 
@@ -142,9 +148,30 @@ class InstaLike:
 				self.loop_likes += 1
 			else:
 				self.loop_likes_fails += 1
-			time.sleep(random.randint(10,15))
+			time.sleep(random.randint(10,25))
 			self.log_event('{0}/{1}\r'.format(self.loop_likes + self.loop_likes_fails, how_many_to_like), 0)
 		self.log_event('liked {0}/{1} instagrams, {2} fails'.format(self.loop_likes, how_many_to_like, self.loop_likes_fails))
+
+	def wait_till_hour(self):
+		now = datetime.datetime.now()
+		if (now.hour > self.start_liking_at and now.hour < self.stop_liking_at):
+			return
+
+		# not in bounds -> wait
+		sec_diff = 0
+
+		if (now.hour < self.start_liking_at):
+			self.log_event('too early - ', 0)
+			wait_till = datetime.datetime(now.year, now.month, now.day, self.start_liking_at)
+			sec_diff = (wait_till - now).seconds
+		elif (now.hour > self.stop_liking_at):
+			self.log_event('time to bed - ', 0)
+			wait_till = datetime.datetime(now.year, now.month, now.day+1, self.start_liking_at)
+			sec_diff = (wait_till - now).seconds
+
+		if (sec_diff > 0):
+			self.log_event('waiting for {0} min, till hour {1}'.format(sec_diff // 60, self.start_liking_at))
+			time.sleep(sec_diff)
 
 	def photo_liked(self):
 		self.t1 = time.time()
@@ -174,10 +201,12 @@ class InstaLike:
 
 
 	def start(self):
+		self.wait_till_hour()
 		if(self.log_in() == False):
 			self.log_event('Abort.')
 			return False
 		while(1==1):
+			self.wait_till_hour()
 			self.instagrams = []
 			if(self.ban400 > 3):
 				self.log_event('You are banned?')
