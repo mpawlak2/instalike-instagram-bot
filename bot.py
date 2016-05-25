@@ -52,6 +52,12 @@ from operation import Operations
 
 # get photos -> filter -> like -> wait -> get photos ?
 
+# followed by profile that is not verified -> block user.
+# get latest activity from feed.
+# spam
+
+# comment guard -> delete unwanted comments
+
 
 class InstaLike:
 	operation = Operations()
@@ -59,7 +65,8 @@ class InstaLike:
 	start_liking_at = 0 # 0 - 23 format
 	stop_liking_at = 0 # 0 - 23 format
 
-	tag_black_list = ['nude', 'fuck', 'ass', 'shit', 'l4l', 'like4like']
+	tag_black_list = ['nude', 'fuck', 'ass', 'shit', '.+?nude', '.+?ass', '.+?fuck'] # ignore photos containing these tags, may regex here
+	tag_like = ['niepolecam']
 
 
 	instagrams = []
@@ -103,13 +110,9 @@ class InstaLike:
 			return True
 
 	def get_photos(self):
-		self.log_event('getting posts from #l4l ...')
-		self.instagrams.extend(self.operation.get_photos_by_tag('l4l'))
-		self.log_event('getting posts from #polishgirl ...')
-		self.instagrams.extend(self.operation.get_photos_by_tag('polishgirl'))
-		self.log_event('getting posts from #photography ...')
-		self.instagrams.extend(self.operation.get_photos_by_tag('photography'))
-
+		for tag in self.tag_like:
+			self.log_event('getting posts from #{0} ...'.format(tag))
+			self.instagrams.extend(self.operation.get_photos_by_tag(tag))
 
 		if (self.instagrams):
 			return True
@@ -126,6 +129,7 @@ class InstaLike:
 					is_bad = True
 					self.log_event('removed photo with tag {0}'.format(bad_tag))
 					break
+			self.log_event('liked?: {0}'.format(photo['likes'].get('viewer_has_liked', '??')))
 			if (is_bad):
 				is_bad = False
 			else:
