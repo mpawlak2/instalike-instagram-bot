@@ -35,6 +35,7 @@ from operation import Operations
 # like posts by keywords
 # like posts of specific users
 # like posts of followers
+# has less tags than 4 i.e.
 # like latest feed posts
 # like by location
 # blacklist
@@ -66,10 +67,10 @@ class InstaLike:
 	stop_liking_at = 0 # 0 - 23 format
 
 	tag_black_list = ['nude', 'fuck', 'ass', 'shit', '.+?nude', '.+?ass', '.+?fuck'] # ignore photos containing these tags, may regex here
-	tag_like = ['niepolecam']
+	tag_like = ['niepolecam', 'l4l', 'f4f', 'like4like', 'polishgirl']
 
 
-	instagrams = []
+	instagrams = [] # leave that way []
 
 	response_fail = 0
 	total_failed_likes = 0
@@ -81,6 +82,7 @@ class InstaLike:
 
 	loop_likes = 0
 	loop_likes_fails = 0
+	no_of_empty_tags = 0
 
 	period_start = 0
 	period_time = 60 * 60
@@ -129,7 +131,14 @@ class InstaLike:
 					is_bad = True
 					self.log_event('removed photo with tag {0}'.format(bad_tag))
 					break
-			self.log_event('liked?: {0}'.format(photo['likes'].get('viewer_has_liked', '??')))
+
+			if (is_bad == False):
+				photo_details = self.operation.get_photo_details(photo['code'])
+				if (photo_details):
+					if (photo_details['likes'].get('viewer_has_liked', '??') == True):
+						self.log_event('removed photo because already liked')
+						is_bad = True
+
 			if (is_bad):
 				is_bad = False
 			else:
@@ -157,13 +166,14 @@ class InstaLike:
 		self.loop_likes_fails = 0
 
 		how_many_to_like = random.randint(2,7)
-		self.log_event('trying to like {0} photos, selected randomly from a total of {1}'.format(how_many_to_like, len(self.instagrams)))
-
 		if (len(self.instagrams) < how_many_to_like):
 			how_many_to_like = len(self.instagrams)
 
 		if (how_many_to_like == 0):
 			return
+
+		self.log_event('trying to like {0} photos, selected randomly from a total of {1}'.format(how_many_to_like, len(self.instagrams)))
+
 
 		photos = random.sample(self.instagrams, how_many_to_like)
 		self.log_event('{0}/{1}\r'.format(0, how_many_to_like), 0)
@@ -172,9 +182,12 @@ class InstaLike:
 				self.loop_likes += 1
 			else:
 				self.loop_likes_fails += 1
-			time.sleep(random.randint(10,25))
+			time.sleep(random.randint(8,15))
 			self.log_event('{0}/{1}\r'.format(self.loop_likes + self.loop_likes_fails, how_many_to_like), 0)
 		self.log_event('liked {0}/{1} instagrams, {2} fails'.format(self.loop_likes, how_many_to_like, self.loop_likes_fails))
+		self.log_event('like operation complete; waiting for 30-60s')
+		time.sleep(random.randint(30,60)) # so that rand select could mean something
+
 
 	def wait_till_hour(self):
 		if (self.start_liking_at > self.stop_liking_at or (self.start_liking_at == 0 and self.stop_liking_at == 0)):
@@ -238,7 +251,7 @@ class InstaLike:
 			if(self.ban400 > 3):
 				self.log_event('You are banned?')
 			if(self.response_fail > 4):
-				self.log_event('Failed to like photo more than 4 times in short amount of time. Waiting for some time.')
+				self.log_event('Failed to like photo more than 4 times in short amount of time. Waiting for 10-15min.')
 				time.sleep(60*random.randint(10,15)) # 10 - 15 mins
 				self.response_fail = 0
 				self.log_in()
@@ -246,6 +259,7 @@ class InstaLike:
 				self.filter_photos()
 				self.auto_liker()
 				self.get_stats()
+				time.sleep(random.randint(10,20))
 			if (self.hourly_likes > self.max_likes_per_hour):
 				if (time.time() - self.period_start < self.period_time):
 					self.log_event('sleeping for {0} secs'.format(self.period_time - (time.time() - self.period_start)))

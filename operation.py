@@ -122,7 +122,12 @@ class Operations:
 		return json.loads(response.content.decode('utf-8'))['tag']['media']['nodes']
 
 	def get_photo_details(self, photo_code):
-		pass
+		response = self.session.get(self.photo_details_url_tmpl.format(photo_code), headers = self.headers)
+
+		if (response.status_code != 200):
+			return None
+		return json.loads(response.content.decode('utf-8'))['media']
+		
 
 	def get_my_followers(self):
 		pass
