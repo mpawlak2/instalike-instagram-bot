@@ -56,8 +56,8 @@ from operation import Operations
 class InstaLike:
 	operation = Operations()
 
-	start_liking_at = 12 # 0 - 23 format
-	stop_liking_at = 13 # 0 - 23 format
+	start_liking_at = 0 # 0 - 23 format
+	stop_liking_at = 0 # 0 - 23 format
 
 
 	instagrams = []
@@ -153,6 +153,9 @@ class InstaLike:
 		self.log_event('liked {0}/{1} instagrams, {2} fails'.format(self.loop_likes, how_many_to_like, self.loop_likes_fails))
 
 	def wait_till_hour(self):
+		if (self.start_liking_at > self.stop_liking_at or (self.start_liking_at == 0 and self.stop_liking_at == 0)):
+			return
+
 		now = datetime.datetime.now()
 		if (now.hour > self.start_liking_at and now.hour < self.stop_liking_at):
 			return
