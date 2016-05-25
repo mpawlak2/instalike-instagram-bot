@@ -38,7 +38,6 @@ from operation import Operations
 # has less tags than 4 i.e.
 # like latest feed posts
 # like by location
-# blacklist
 
 # new algorith COMMENT
 # 90 and 180 min before operation
@@ -66,7 +65,9 @@ class InstaLike:
 	start_liking_at = 0 # 0 - 23 format
 	stop_liking_at = 0 # 0 - 23 format
 
-	tag_black_list = ['nude', 'fuck', 'ass', 'shit', '.+?nude', '.+?ass', '.+?fuck'] # ignore photos containing these tags, may regex here
+	tag_black_list = ['nude', 'fuck', 'ass', 'shit', '.+?nude', '.+?ass[\s#]', '.+?fuck', 'followme', 'spam4spam', 'porn', 'tagsforlikes'] # ignore photos containing these tags, may regex here
+	username_regex_black_list = ['porn', 'spam', 'nude', 'fuck'] # do not like photo if owner's username contains one of these words
+	caption_black_list = ['spam', 'follow', 'like']
 	tag_like = ['niepolecam', 'l4l', 'f4f', 'like4like', 'polishgirl']
 
 
@@ -139,12 +140,23 @@ class InstaLike:
 						self.log_event('removed photo because already liked')
 						is_bad = True
 
+					if (not self.validate_user(photo_details['owner']['username'])):
+						is_bad = True
+
 			if (is_bad):
 				is_bad = False
 			else:
 				filtered_photos.append(photo)
 
 		self.instagrams = filtered_photos
+
+	def validate_user(self, username):
+		for bad_username in self.username_regex_black_list:
+			bad_words = re.search(bad_username, username)
+			if (bad_words):
+				self.log_event('removed photo because username is shitty, contains word {0}'.format(bad_username))
+				return False
+		return True
 
 
 	# where photo is json parsed from instagram site.
