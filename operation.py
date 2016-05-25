@@ -14,6 +14,7 @@ class Operations:
 	comment_url_tmpl = 'https://www.instagram.com/web/comments/{0}/add/' # payload = { comment_text : 'wow'}
 	tag_url = 'https://www.instagram.com/explore/tags/{0}/?__a=1'
 	photo_details_url_tmpl = 'https://www.instagram.com/p/{0}/?__a=1' # in {0} goes the image code GET __a=1 - return only json
+	get_account_activity_url = 'https://www.instagram.com/accounts/activity/?__a=1'
 
 	# info
 	user_agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'

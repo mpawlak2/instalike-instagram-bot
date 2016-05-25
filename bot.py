@@ -6,6 +6,7 @@ import sys
 import random
 import datetime
 from operation import Operations
+import spam
 
 # ideas, obviously stolen :)
 # progress
@@ -68,7 +69,7 @@ class InstaLike:
 	tag_black_list = ['nude', 'fuck', 'ass', 'shit', '.+?nude', '.+?ass[\s#]', '.+?fuck', 'followme', 'spam4spam', 'porn', 'tagsforlikes'] # ignore photos containing these tags, may regex here
 	username_regex_black_list = ['porn', 'spam', 'nude', 'fuck'] # do not like photo if owner's username contains one of these words
 	caption_black_list = ['spam', 'follow', 'like']
-	tag_like = ['niepolecam', 'l4l', 'f4f', 'like4like', 'polishgirl']
+	tag_like = ['l4l']
 
 
 	instagrams = [] # leave that way []
@@ -197,8 +198,8 @@ class InstaLike:
 			time.sleep(random.randint(8,15))
 			self.log_event('{0}/{1}\r'.format(self.loop_likes + self.loop_likes_fails, how_many_to_like), 0)
 		self.log_event('liked {0}/{1} instagrams, {2} fails'.format(self.loop_likes, how_many_to_like, self.loop_likes_fails))
-		self.log_event('like operation complete; waiting for 30-60s')
-		time.sleep(random.randint(30,60)) # so that rand select could mean something
+		self.log_event('like operation complete; waiting for 15-30s')
+		time.sleep(random.randint(15,30)) # so that rand select could mean something
 
 
 	def wait_till_hour(self):
