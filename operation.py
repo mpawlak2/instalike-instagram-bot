@@ -106,6 +106,12 @@ class Operations:
 
 		return self.session.post(self.comment_url_tmpl.format(photo_id), data = payload, headers = self.ajx_headers, cookies = self.cookies)
 
+	
+	def delete_my_comment(self, photo_id, comment_id):
+		pass
+
+	def delete_comment_uden_my_photo(self, photo_id, comment_id):
+		pass
 
 	def get_photos_by_tag(self, tag):
 		response = self.session.get(self.tag_url.format(tag), headers = self.headers)
@@ -130,4 +136,6 @@ class Operations:
 	def get_user_following(self, user_id):
 		pass
 
+	def block_account(self, user_id):
+		pass
 		
