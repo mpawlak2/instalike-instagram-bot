@@ -12,7 +12,8 @@ class Operations:
 	follow_url_tmpl = 'https://www.instagram.com/web/friendships/{0}/follow/'
 	unfollow_url_tmpl = 'https://www.instagram.com/web/friendships/{0}/unfollow/'
 	comment_url_tmpl = 'https://www.instagram.com/web/comments/{0}/add/' # payload = { comment_text : 'wow'}
-	tag_url = 'https://www.instagram.com/explore/tags/{0}/'
+	tag_url = 'https://www.instagram.com/explore/tags/{0}/?__a=1'
+	photo_details_url_tmpl = 'https://www.instagram.com/p/{0}/?__a=1' # in {0} goes the image code GET __a=1 - return only json
 
 	# info
 	user_agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
@@ -118,11 +119,10 @@ class Operations:
 		if (response.status_code != 200):
 			return None
 
-		posts = re.search(b'_sharedData = ({.+?});</script>', response.content)
-		if(posts):
-			return json.loads(posts.group(1).decode('utf-8'))['entry_data']['TagPage'][0]['tag']['media']['nodes']
-		else:
-			return None
+		return json.loads(response.content.decode('utf-8'))['tag']['media']['nodes']
+
+	def get_photo_details(self, photo_code):
+		pass
 
 	def get_my_followers(self):
 		pass
