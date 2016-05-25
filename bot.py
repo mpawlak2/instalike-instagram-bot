@@ -59,6 +59,8 @@ class InstaLike:
 	start_liking_at = 0 # 0 - 23 format
 	stop_liking_at = 0 # 0 - 23 format
 
+	tag_black_list = ['nude', 'fuck', 'ass', 'shit', 'l4l', 'like4like', 'selfie']
+
 
 	instagrams = []
 
@@ -113,6 +115,24 @@ class InstaLike:
 			return True
 		else:
 			return False
+
+	def filter_photos(self):
+		filtered_photos = []
+		is_bad = False
+		for photo in self.instagrams:
+			for bad_tag in self.tag_black_list:
+				bad_words = re.search('#{0}'.format(bad_tag), photo.get('caption', ''))
+				if (bad_words):
+					is_bad = True
+					self.log_event('removed photo with tag {0}'.format(bad_tag))
+					break
+			if (is_bad):
+				is_bad = False
+			else:
+				filtered_photos.append(photo)
+
+		self.instagrams = filtered_photos
+
 
 	# where photo is json parsed from instagram site.
 	def like(self, photo):
@@ -219,6 +239,7 @@ class InstaLike:
 				self.response_fail = 0
 				self.log_in()
 			if(self.get_photos()):
+				self.filter_photos()
 				self.auto_liker()
 				self.get_stats()
 			if (self.hourly_likes > self.max_likes_per_hour):
