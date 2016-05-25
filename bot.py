@@ -62,6 +62,7 @@ import spam
 
 class InstaLike:
 	operation = Operations()
+	spam_validator = object()
 
 	start_liking_at = 0 # 0 - 23 format
 	stop_liking_at = 0 # 0 - 23 format
@@ -95,9 +96,9 @@ class InstaLike:
 	hourly_likes = 0
 
 	def __init__(self, login, password):
-		self.session = requests.Session()
 		self.login = login.lower()
 		self.password = password
+		self.spam_validator = spam.SpamDetector(self.operation)
 
 	def log_in(self):
 		self.log_event('trying to log in')
@@ -124,41 +125,7 @@ class InstaLike:
 			return False
 
 	def filter_photos(self):
-		filtered_photos = []
-		is_bad = False
-		for photo in self.instagrams:
-			for bad_tag in self.tag_black_list:
-				bad_words = re.search('#{0}'.format(bad_tag), photo.get('caption', ''))
-				if (bad_words):
-					is_bad = True
-					self.log_event('removed photo with tag {0}'.format(bad_tag))
-					break
-
-			if (is_bad == False):
-				photo_details = self.operation.get_photo_details(photo['code'])
-				if (photo_details):
-					if (photo_details['likes'].get('viewer_has_liked', '??') == True):
-						self.log_event('removed photo because already liked')
-						is_bad = True
-
-					if (not self.validate_user(photo_details['owner']['username'])):
-						is_bad = True
-
-			if (is_bad):
-				is_bad = False
-			else:
-				filtered_photos.append(photo)
-
-		self.instagrams = filtered_photos
-
-	def validate_user(self, username):
-		for bad_username in self.username_regex_black_list:
-			bad_words = re.search(bad_username, username)
-			if (bad_words):
-				self.log_event('removed photo because username is shitty, contains word {0}'.format(bad_username))
-				return False
-		return True
-
+		self.instagrams = self.spam_validator.validate_photos(self.instagrams)
 
 	# where photo is json parsed from instagram site.
 	def like(self, photo):

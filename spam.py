@@ -27,16 +27,20 @@ class SpamDetector:
 
 	# check if photo caption contains specified words
 	def validate_photo(self, photo):
-		if (self.photo_vaidator.illegal_photo_caption(photo))
+		if (self.photo_vaidator.illegal_photo_caption(photo)):
+			print('banned tag - deleted')
 			return False
 
 		photo_details = self.operation.get_photo_details(photo['code'])
 		if (photo_details):
 			if (self.photo_vaidator.is_already_liked(photo_details)):
+				print('already liked - delete')
 				return False
 			if (self.photo_vaidator.illegal_owner_name(photo_details)):
+				print('banned owner name - deleted')
 				return False
-			if (self.photo_vaidator.likes_limit(photo_details)):
+			if (self.photo_vaidator.like_limit_exceeded(photo_details)):
+				print('like limit - deleted')
 				return False
 		else:
 			return False # could not load photo details
@@ -72,5 +76,5 @@ class PhotoValidator:
 				return True
 		return False
 
-	def likes_limit(self, photo):
-		return photo['likes']['count'] <= self.like_max_likes
+	def like_limit_exceeded(self, photo):
+		return photo['likes']['count'] > self.like_max_likes
