@@ -6,6 +6,7 @@ import sys
 from random import randint
 from operation import Operations
 
+# ideas, obviously stolen :)
 # progress
 # like by tag (in progress)
 # like by instagram account todo
@@ -14,6 +15,11 @@ from operation import Operations
 # like during specific times
 # !! liking algorithm !! replicate human behavior likes at random
 # follow back
+
+# spam filter
+# we want only real people to follow use
+# deleting spam comments and follows
+
 
 # new algorithm LIKE
 # wait 45 - 90 mins before new operation
