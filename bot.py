@@ -59,7 +59,7 @@ class InstaLike:
 	start_liking_at = 0 # 0 - 23 format
 	stop_liking_at = 0 # 0 - 23 format
 
-	tag_black_list = ['nude', 'fuck', 'ass', 'shit', 'l4l', 'like4like', 'selfie']
+	tag_black_list = ['nude', 'fuck', 'ass', 'shit', 'l4l', 'like4like']
 
 
 	instagrams = []
