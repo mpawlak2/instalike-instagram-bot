@@ -3,7 +3,7 @@ import re
 import json
 import time
 import sys
-from random import randint
+import random
 from operation import Operations
 
 # ideas, obviously stolen :)
@@ -54,7 +54,7 @@ from operation import Operations
 class InstaLike:
 	operation = Operations()
 
-	instagrams = ''
+	instagrams = []
 
 	response_fail = 0
 	total_failed_likes = 0
@@ -63,6 +63,9 @@ class InstaLike:
 	# instance stats
 	t0 = 0
 	t1 = 0
+
+	loop_likes = 0
+	loop_likes_fails = 0
 
 	period_start = 0
 	period_time = 60 * 60
@@ -91,43 +94,57 @@ class InstaLike:
 			self.log_event('Logged in successfully.')
 			return True
 
-	def get_instagrams(self):
-		self.log_event('getting posts...')
-		self.instagrams = self.operation.get_photos_by_tag('l4l')
+	def get_photos(self):
+		self.log_event('getting posts from #l4l ...')
+		self.instagrams.extend(self.operation.get_photos_by_tag('l4l'))
+		self.log_event('getting posts from #polishgirl ...')
+		self.instagrams.extend(self.operation.get_photos_by_tag('polishgirl'))
+		self.log_event('getting posts from #photography ...')
+		self.instagrams.extend(self.operation.get_photos_by_tag('photography'))
+
 
 		if (self.instagrams):
-			self.log_event('found {0} posts matching criteria out of {1}'.format(len(list(filter(lambda x : x['likes']['count'] < 10, self.instagrams))), len(self.instagrams)))
-			time.sleep(randint(5,7))
 			return True
 		else:
-			self.log_event('Could not find any posts.')
 			return False
 
-	def like(self):
-		to_like = len(list(filter(lambda x : x['likes']['count'] < 10, self.instagrams)))
-		liked = 0
-		self.current_likes = 0
-		self.response_fail = 0 # count fails that happen to occur in short amount of time
-		last_error = 'none'
-		for instagram in self.instagrams:
-			if(instagram['likes']['count'] < 100):
-				# todo
-				# self.log_event(instagram['likes'].get('viewer_has_liked', 'false'))
-				response = self.operation.like(instagram['id'])
-				# status code == 400 -> youre fucked! BAN.
-				if(response.status_code != 200):
-					if(response.status_code == 400):
-						self.ban400 += 1
-					self.failed_to_like()
-					last_error = response.status_code
-					continue
+	# where photo is json parsed from instagram site.
+	def like(self, photo):
+		response = self.operation.like(photo['id'])
 
-				# update stats
-				liked += 1
-				self.photo_liked()
-				time.sleep(randint(1,3))
-				self.log_event('{0}/{1}\r'.format(self.current_likes, to_like), 0)
-		self.log_event('liked {0}/{1} instagrams, {2} fails, last error code: {3}'.format(liked, to_like, to_like - liked, last_error))
+		if(response.status_code != 200):
+			if(response.status_code == 400):
+				self.ban400 += 1
+			self.failed_to_like()
+			return False
+		self.photo_liked()
+		return True
+
+	# like 2 - 7 random photos from collection
+	# rest for 10 - 15s before every like
+	def auto_liker(self):
+		self.loop_likes = 0
+		self.loop_likes_fails = 0
+
+		how_many_to_like = random.randint(2,7)
+		self.log_event('trying to like {0} photos, selected randomly from a total of {1}'.format(how_many_to_like, len(self.instagrams)))
+
+		if (len(self.instagrams) < how_many_to_like):
+			how_many_to_like = len(self.instagrams)
+
+		if (how_many_to_like == 0):
+			return
+
+		photos = random.sample(self.instagrams, how_many_to_like)
+		self.log_event('{0}/{1}\r'.format(0, how_many_to_like), 0)
+		for photo in photos:
+			if(self.like(photo)):
+				self.loop_likes += 1
+			else:
+				self.loop_likes_fails += 1
+			time.sleep(random.randint(10,15))
+			self.log_event('{0}/{1}\r'.format(self.loop_likes + self.loop_likes_fails, how_many_to_like), 0)
+		self.log_event('liked {0}/{1} instagrams, {2} fails'.format(self.loop_likes, how_many_to_like, self.loop_likes_fails))
 
 	def photo_liked(self):
 		self.t1 = time.time()
@@ -142,13 +159,15 @@ class InstaLike:
 		self.total_failed_likes += 1
 
 	def get_stats(self):
+		self.t1 = time.time()
 		per_hour = ((self.total_likes + self.total_failed_likes) * 60 * 60) // (self.t1 - self.t0)
+		self.log_event('==== stats ====')
 		self.log_event('total time [s]: {0}'.format(self.t1 - self.t0))
-		self.log_event('total likes: {0}'.format(self.total_likes))
+		self.log_event('successful likes: {0}'.format(self.total_likes))
+		self.log_event('failed likes: {0}'.format(self.total_failed_likes))
 		self.log_event('estimated likes per hour: {0}'.format(per_hour))
 		if (per_hour > 350):
 			self.log_event('\tWARNING: liking more than 350 pics/h may result in blocked account.')
-		self.log_event('total failed likes: {0}'.format(self.total_failed_likes))
 		self.log_event('#######################################')
 
 		
@@ -159,15 +178,16 @@ class InstaLike:
 			self.log_event('Abort.')
 			return False
 		while(1==1):
+			self.instagrams = []
 			if(self.ban400 > 3):
 				self.log_event('You are banned?')
 			if(self.response_fail > 4):
 				self.log_event('Failed to like photo more than 4 times in short amount of time. Waiting for some time.')
-				time.sleep(60*randint(10,15)) # 10 - 15 mins
+				time.sleep(60*random.randint(10,15)) # 10 - 15 mins
 				self.response_fail = 0
 				self.log_in()
-			if(self.get_instagrams()):
-				self.like()
+			if(self.get_photos()):
+				self.auto_liker()
 				self.get_stats()
 			if (self.hourly_likes > self.max_likes_per_hour):
 				if (time.time() - self.period_start < self.period_time):
