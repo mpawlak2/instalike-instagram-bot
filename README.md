@@ -1,5 +1,5 @@
 # instalike
-instagram profile management (massplaner like)
+instagram profile management
 
 1. automatically like posts under specific tag
 
