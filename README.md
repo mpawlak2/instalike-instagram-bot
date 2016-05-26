@@ -7,3 +7,6 @@ instagram profile management
 # python requirements
 <code>pip install requests</code>
 <code>pip install py-postgresql</code>
+
+# useful
+http://python.projects.pgfoundry.org/docs/1.1/
