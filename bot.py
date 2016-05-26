@@ -7,6 +7,8 @@ import random
 import datetime
 from operation import Operations
 import spam
+import model
+import database
 
 # ideas, obviously stolen :)
 # progress
@@ -85,6 +87,10 @@ class InstaLike:
 		self.instagrams = []
 		# NOT CONFIGURATION ABOVE
 
+		# DATABASE
+		self.data_source = database.DataSource('postgres', 'postgres', 'localhost', 'instamanager')
+		self.repository = database.Repository(self.data_source)
+
 		# CONFIGURATION BELOW
 		self.max_likes_per_hour = 245
 		
@@ -145,8 +151,6 @@ class InstaLike:
 
 		self.log_event('trying to like {0} photos, selected randomly from a total of {1}'.format(how_many_to_like, len(self.instagrams)))
 
-
-		photos = random.sample(self.instagrams, how_many_to_like)
 		self.instagrams = self.spam_validator.validate_photos(self.instagrams)
 
 	# where photo is json parsed from instagram site.
@@ -174,6 +178,9 @@ class InstaLike:
 			return # we have to wait more time
 
 		photo = self.instagrams.pop()
+		photo_model = model.Photo().from_json(photo)
+		self.repository.merge_photo(photo_model)
+
 		if (self.like(photo)):
 			self.log_event('liked photo with id: {0}'.format(photo['id']))
 		else:
@@ -256,7 +263,7 @@ class InstaLike:
 
 	def get_stats(self):
 		self.t1 = time.time()
-		per_hour = ((self.total_likes + self.total_failed_likes) * 60 * 60) // (self.t1 - self.t0)
+		per_hour = ((self.total_likes + self.total_failed_likes) * 60 * 60) // (1 if (self.t1 - self.t0) == 0 else self.t1 - self.t0)
 		self.log_event('==== stats ====')
 		self.log_event('total time [s]: {0}'.format(self.t1 - self.t0))
 		self.log_event('successful likes: {0}'.format(self.total_likes))
@@ -299,5 +306,5 @@ class InstaLike:
 
 
 	def log_event(self, text, nl = 1):
-		sys.stdout.write(text + ('\n' if nl == 1 else ''))
-		sys.stdout.flush()
+		print(text)
+		# sys.stdout.flush()
