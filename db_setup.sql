@@ -16,8 +16,8 @@ create table photos
 	likes_count int,
 	is_video boolean,
 	display_src varchar(500),
-	loc varchar(500),
-	owner_fk integer REFERENCES users(id));
+	loc varchar(500));--,
+	--owner_fk integer REFERENCES users(id));
 	
 
 create or replace function merge_photo(
