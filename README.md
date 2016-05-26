@@ -1,5 +1,5 @@
 # instalike
-instagram profile management (massplaner like)
+instagram profile management
 
 1. automatically like posts under specific tag
 
@@ -7,3 +7,6 @@ instagram profile management (massplaner like)
 # python requirements
 <code>pip install requests</code>
 <code>pip install py-postgresql</code>
+
+# useful
+http://python.projects.pgfoundry.org/docs/1.1/
