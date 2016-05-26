@@ -6,3 +6,4 @@ instagram profile management (massplaner like)
 
 # python requirements
 <code>pip install requests</code>
+<code>pip install py-postgresql</code>
