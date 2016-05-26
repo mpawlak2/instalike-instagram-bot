@@ -18,46 +18,53 @@ class SpamDetector:
 
 	def validate_photos(self, photos):
 		filtered_photos = []
-
+		self.log('validating {0} photos'.format(len(photos)))
 		for photo in photos:
 			if (self.validate_photo(photo)):
 				filtered_photos.append(photo)
 
+		self.log('filtered {0} valid photos out of {1}'.format(len(filtered_photos), len(photos)))
 		return filtered_photos
 
 	# check if photo caption contains specified words
 	def validate_photo(self, photo):
 		if (self.photo_vaidator.illegal_photo_caption(photo)):
-			print('banned tag - deleted')
+			self.log('photo removed - illegal tags')
 			return False
 
 		photo_details = self.operation.get_photo_details(photo['code'])
 		if (photo_details):
 			if (self.photo_vaidator.is_already_liked(photo_details)):
-				print('already liked - delete')
+				self.log('photo removed - already liked')
 				return False
 			if (self.photo_vaidator.illegal_owner_name(photo_details)):
-				print('banned owner name - deleted')
+				self.log('photo removed - illegal owners name')
 				return False
 			if (self.photo_vaidator.like_limit_exceeded(photo_details)):
-				print('like limit - deleted')
+				self.log('photo removed - like limit exceeded')
 				return False
 		else:
+			self.log('phtot removed - could not get the details')
 			return False # could not load photo details
 		return True
+
+	def log(self, message):
+		print(message)
+
 
 
 
 class PhotoValidator:
-	# LIKES
-	# ignore photos containing these tags, may regex here
-	like_photo_caption_blacklist = ['#nude', '#fuck', '#ass', '#shit', '#.+?nude', '#.+?ass[\s#]', '#.+?fuck', '#followme', '#spam4spam', '#porn', '#tagsforlikes'] 
+	def __init__(self):
+		# LIKES
+		# ignore photos containing these tags, may regex here
+		self.like_photo_caption_blacklist = ['#nude', '#fuck', '#ass', '#shit', '#.+?nude', '#.+?ass[\s#]', '#.+?fuck', '#followme', '#spam4spam', '#porn', '#tagsforlikes'] 
 
-	# do not like photo if owner's username contains one of these words
-	like_username_blacklist = ['porn', 'spam', 'nude', 'fuck']
+		# do not like photo if owner's username contains one of these words
+		self.like_username_blacklist = ['porn', 'spam', 'nude', 'fuck']
 
-	# do not like photo with more that this value likes, 0 - no limit
-	like_max_likes = 24
+		# do not like photo with more that this value likes, 0 - no limit
+		self.like_max_likes = 24
 
 	def is_already_liked(self, photo_details):
 		return photo_details['likes'].get('viewer_has_liked', '?')

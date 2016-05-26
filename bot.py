@@ -61,44 +61,52 @@ import spam
 
 
 class InstaLike:
-	operation = Operations()
-	spam_validator = object()
-
 	start_liking_at = 0 # 0 - 23 format
 	stop_liking_at = 0 # 0 - 23 format
 
-	tag_black_list = ['nude', 'fuck', 'ass', 'shit', '.+?nude', '.+?ass[\s#]', '.+?fuck', 'followme', 'spam4spam', 'porn', 'tagsforlikes'] # ignore photos containing these tags, may regex here
-	username_regex_black_list = ['porn', 'spam', 'nude', 'fuck'] # do not like photo if owner's username contains one of these words
-	caption_black_list = ['spam', 'follow', 'like']
 	tag_like = ['l4l']
 
-
-	instagrams = [] # leave that way []
-
-	response_fail = 0
-	total_failed_likes = 0
-	ban400 = 0
-
-	# instance stats
-	t0 = 0
-	t1 = 0
-
-	loop_likes = 0
-	loop_likes_fails = 0
-	no_of_empty_tags = 0
-
-	period_start = 0
-	period_time = 60 * 60
-
-	total_likes = 0
-	current_likes = 0
-	max_likes_per_hour = 245
-	hourly_likes = 0
 
 	def __init__(self, login, password):
 		self.login = login.lower()
 		self.password = password
+
+		# NOT CONFIGURATION BELOW
+		self.operation = Operations()
 		self.spam_validator = spam.SpamDetector(self.operation)
+		self.loop_likes = 0
+		self.loop_likes_fails = 0
+		self.no_of_empty_tags = 0
+		self.period_start = 0
+		self.total_likes = 0
+		self.current_likes = 0
+		self.hourly_likes = 0
+		self.period_time = 60 * 60
+		self.instagrams = []
+		# NOT CONFIGURATION ABOVE
+
+		# CONFIGURATION BELOW
+		self.max_likes_per_hour = 245
+		
+		# timing stuff
+		self.last_like_time = 0
+		self.next_like_time = 0
+		self.next_like_delta_time = 10 #
+		
+		self.last_response_fail_time = 0
+		self.clear_fails_after_sec = 10 # after 10 seconds clear fail counter
+
+		# loop stats
+		self.t0 = 0
+		self.t1 = 0
+
+		# ban, access denied etc.
+		self.ban400 = 0 # code: 400 responses
+		self.response_fail = 0
+		self.total_failed_likes = 0
+		self.last_error_code = 200
+
+
 
 	def log_in(self):
 		self.log_event('trying to log in')
@@ -125,19 +133,59 @@ class InstaLike:
 			return False
 
 	def filter_photos(self):
+		# select randomly few photos
+		how_many_to_like = random.randint(2,7)
+		if (len(self.instagrams) < how_many_to_like):
+			how_many_to_like = len(self.instagrams)
+
+		if (how_many_to_like == 0):
+			return
+
+		self.instagrams = random.sample(self.instagrams, how_many_to_like)	
+
+		self.log_event('trying to like {0} photos, selected randomly from a total of {1}'.format(how_many_to_like, len(self.instagrams)))
+
+
+		photos = random.sample(self.instagrams, how_many_to_like)
 		self.instagrams = self.spam_validator.validate_photos(self.instagrams)
 
 	# where photo is json parsed from instagram site.
 	def like(self, photo):
 		response = self.operation.like(photo['id'])
-
+		
 		if(response.status_code != 200):
+			self.last_error_code = response.status_code
 			if(response.status_code == 400):
 				self.ban400 += 1
 			self.failed_to_like()
 			return False
 		self.photo_liked()
 		return True
+
+	def like_bot(self):
+		if (len(self.instagrams) == 0):
+			self.log_event('operation completed')
+			self.get_stats()
+			self.get_photos()
+			self.filter_photos()
+			self.update_like_timer(10,30)
+
+		if (time.time() < self.next_like_time):
+			return # we have to wait more time
+
+		photo = self.instagrams.pop()
+		if (self.like(photo)):
+			self.log_event('liked photo with id: {0}'.format(photo['id']))
+		else:
+			self.log_event('failed to like photo with id: {0}, status code: {1}'.format(photo['id'], self.last_error_code))
+		self.update_like_timer(self.next_like_delta_time - 5, self.next_like_delta_time + 5)
+
+
+	def update_like_timer(self, mini, maxi):
+		next_in = random.randint(mini, maxi)
+		self.log_event('next like attempt in {0} sec, {1} more photos to go.'.format(next_in, len(self.instagrams)))
+		self.last_like_time = time.time()
+		self.next_like_time = time.time() + next_in
 
 	# like 2 - 7 random photos from collection
 	# rest for 10 - 15s before every like
@@ -204,6 +252,7 @@ class InstaLike:
 		self.current_likes += 1
 		self.response_fail += 1
 		self.total_failed_likes += 1
+		self.last_response_fail_time = time.time()
 
 	def get_stats(self):
 		self.t1 = time.time()
@@ -226,30 +275,27 @@ class InstaLike:
 			self.log_event('Abort.')
 			return False
 		while(1==1):
-			self.wait_till_hour()
-			self.instagrams = []
-			if(self.ban400 > 3):
-				self.log_event('You are banned?')
-			if(self.response_fail > 4):
-				self.log_event('Failed to like photo more than 4 times in short amount of time. Waiting for 10-15min.')
-				time.sleep(60*random.randint(10,15)) # 10 - 15 mins
-				self.response_fail = 0
-				self.log_in()
-			if(self.get_photos()):
-				self.filter_photos()
-				self.auto_liker()
-				self.get_stats()
-				time.sleep(random.randint(10,20))
-			if (self.hourly_likes > self.max_likes_per_hour):
-				if (time.time() - self.period_start < self.period_time):
-					self.log_event('sleeping for {0} secs'.format(self.period_time - (time.time() - self.period_start)))
-					time.sleep(self.period_time - (time.time() - self.period_start))
-					self.period_start = time.time()
-					self.hourly_likes = 0
-				else:
-					# done under max in about hour
-					self.log_event('done under max in period')
-					self.hourly_likes = 0
+			# self.wait_till_hour()
+			self.like_bot()
+			time.sleep(1 / 45) # 1s / 60 frames => 60fps
+
+			# if(self.ban400 > 3):
+			# 	self.log_event('You are banned?')
+			# if(self.response_fail > 4):
+			# 	self.log_event('Failed to like photo more than 4 times in short amount of time. Waiting for 10-15min.')
+			# 	time.sleep(60*random.randint(10,15)) # 10 - 15 mins
+			# 	self.response_fail = 0
+			# 	self.log_in()
+			# if (self.hourly_likes > self.max_likes_per_hour):
+			# 	if (time.time() - self.period_start < self.period_time):
+			# 		self.log_event('sleeping for {0} secs'.format(self.period_time - (time.time() - self.period_start)))
+			# 		time.sleep(self.period_time - (time.time() - self.period_start))
+			# 		self.period_start = time.time()
+			# 		self.hourly_likes = 0
+			# 	else:
+			# 		# done under max in about hour
+			# 		self.log_event('done under max in period')
+			# 		self.hourly_likes = 0
 
 
 	def log_event(self, text, nl = 1):
