@@ -63,8 +63,7 @@ import database
 
 
 class InstaLike:
-	start_liking_at = 0 # 0 - 23 format
-	stop_liking_at = 0 # 0 - 23 format
+
 
 	tag_like = ['l4l', 'like4like', 'follow4follow', 'f4f']
 
@@ -90,6 +89,7 @@ class InstaLike:
 		self.data_source = database.DataSource('postgres', 'postgres', 'localhost', 'instamanager')
 		self.repository = database.Repository(self.data_source)
 		self.photo_repository = database.PhotoRepository(self.data_source)
+
 		# SPAM
 		self.spam_validator = spam.SpamDetector(self.operation, self.repository)
 
@@ -99,7 +99,7 @@ class InstaLike:
 		# timing stuff
 		self.last_like_time = 0
 		self.next_like_time = 0
-		self.next_like_delta_time = 12 #
+		self.next_like_delta_time = 10 #
 		
 		self.last_response_fail_time = 0
 		self.clear_fails_after_sec = 10 # after 10 seconds clear fail counter
@@ -107,6 +107,10 @@ class InstaLike:
 		# loop stats
 		self.t0 = 0
 		self.t1 = 0
+
+		# liking period
+		self.start_liking_at = 2 # 0 - 23 format
+		self.stop_liking_at = 14 # 0 - 23 format
 
 		# ban, access denied etc.
 		self.ban400 = 0 # code: 400 responses
@@ -172,6 +176,9 @@ class InstaLike:
 		return True
 
 	def like_bot(self):
+		if (time.time() < self.next_like_time):
+			return # we have to wait more time
+
 		if (len(self.instagrams) == 0):
 			self.log_event('operation completed')
 			self.get_stats()
@@ -197,59 +204,27 @@ class InstaLike:
 		self.last_like_time = time.time()
 		self.next_like_time = time.time() + next_in
 
-	# like 2 - 7 random photos from collection
-	# rest for 10 - 15s before every like
-	def auto_liker(self):
-		self.loop_likes = 0
-		self.loop_likes_fails = 0
-
-		how_many_to_like = random.randint(2,7)
-		if (len(self.instagrams) < how_many_to_like):
-			how_many_to_like = len(self.instagrams)
-
-		if (how_many_to_like == 0):
+	def update_next_like_time(self):
+		# all good
+		if (self.stop_liking_at == self.start_liking_at):
 			return
 
-		self.log_event('trying to like {0} photos, selected randomly from a total of {1}'.format(how_many_to_like, len(self.instagrams)))
 
-
-		photos = random.sample(self.instagrams, how_many_to_like)
-		self.log_event('{0}/{1}\r'.format(0, how_many_to_like), 0)
-		for photo in photos:
-			if(self.like(photo)):
-				self.loop_likes += 1
-			else:
-				self.loop_likes_fails += 1
-			time.sleep(random.randint(8,15))
-			self.log_event('{0}/{1}\r'.format(self.loop_likes + self.loop_likes_fails, how_many_to_like), 0)
-		self.log_event('liked {0}/{1} instagrams, {2} fails'.format(self.loop_likes, how_many_to_like, self.loop_likes_fails))
-		self.log_event('like operation complete; waiting for 15-30s')
-		time.sleep(random.randint(15,30)) # so that rand select could mean something
-
-
-	def wait_till_hour(self):
-		if (self.start_liking_at > self.stop_liking_at or (self.start_liking_at == 0 and self.stop_liking_at == 0)):
-			return
+		next_day = False
+		if (self.stop_liking_at < self.start_liking_at):
+			next_day = True
 
 		now = datetime.datetime.now()
-		if (now.hour > self.start_liking_at and now.hour < self.stop_liking_at):
+		start = datetime.datetime(now.year, now.month, now.day, self.start_liking_at)
+		stop = datetime.datetime(now.year, now.month, now.day + (1 if next_day else 0), self.stop_liking_at)
+
+		if (now > start and now < stop):
 			return
 
-		# not in bounds -> wait
-		sec_diff = 0
-
-		if (now.hour < self.start_liking_at):
-			self.log_event('too early - ', 0)
-			wait_till = datetime.datetime(now.year, now.month, now.day, self.start_liking_at)
-			sec_diff = (wait_till - now).seconds
-		elif (now.hour > self.stop_liking_at):
-			self.log_event('time to bed - ', 0)
-			wait_till = datetime.datetime(now.year, now.month, now.day+1, self.start_liking_at)
-			sec_diff = (wait_till - now).seconds
-
-		if (sec_diff > 0):
-			self.log_event('waiting for {0} min, till hour {1}'.format(sec_diff // 60, self.start_liking_at))
-			time.sleep(sec_diff)
+		# we have to wait.
+		time_diff = (datetime.datetime(now.year, now.month, now.day + (1 if next_day else 0), self.start_liking_at) - now).seconds
+		self.log_event('has to wait {0} min'.format(time_diff // 60))
+		self.next_like_time = time.time() + time_diff
 
 	def photo_liked(self):
 		self.t1 = time.time()
@@ -280,12 +255,12 @@ class InstaLike:
 
 
 	def start(self):
-		self.wait_till_hour()
+		# self.update_next_like_time()
 		if(self.log_in() == False):
 			self.log_event('Abort.')
 			return False
 		while(1==1):
-			# self.wait_till_hour()
+			self.update_next_like_time()
 			self.like_bot()
 			time.sleep(1 / 45) # 1s / 60 frames => 60fps
 
