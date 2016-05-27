@@ -26,6 +26,7 @@ create table opcodes (
 
 insert into opcodes (id, op_name) values (1, 'like'), (2, 'unlike'), (3, 'follow'), (4, 'unfollow'), (5, 'block user'), (6, 'comment');
 	
+create table likes(id serial primary key, photo_id bigint REFERENCES photos (id), success boolean, status_code varchar(10))
 
 create or replace function merge_photo(
 	_id bigint,
@@ -73,6 +74,18 @@ returns boolean
 as $$
 -- store activities from your account
 begin
+
+end
+$$ language plpgsql;
+
+
+create or replace function like_photo(_photo_id bigint, _success boolean, _status_code varchar(10))
+returns boolean
+as $$
+begin
+
+insert into likes (photo_id, success, status_code) values (_photo_id, _success, _status_code);
+return true;
 
 end
 $$ language plpgsql;

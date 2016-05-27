@@ -89,7 +89,7 @@ class InstaLike:
 		# DATABASE
 		self.data_source = database.DataSource('postgres', 'postgres', 'localhost', 'instamanager')
 		self.repository = database.Repository(self.data_source)
-
+		self.photo_repository = database.PhotoRepository(self.data_source)
 		# SPAM
 		self.spam_validator = spam.SpamDetector(self.operation, self.repository)
 
@@ -160,7 +160,8 @@ class InstaLike:
 	# where photo is json parsed from instagram site.
 	def like(self, photo):
 		response = self.operation.like(photo['id'])
-		
+		self.photo_repository.like(model.Photo().from_json(photo), response.status_code)
+
 		if(response.status_code != 200):
 			self.last_error_code = response.status_code
 			if(response.status_code == 400):
