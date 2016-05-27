@@ -2,9 +2,10 @@ import time
 from random import randint
 
 class InstaFollow:
-	def __init__(self, operation, repository):
+	def __init__(self, operation, repository, content_manager):
 		self.operation = operation
 		self.user_repository = repository
+		self.content_manager = content_manager
 
 		# configuration
 		self.max_daily_follows = 200
@@ -22,22 +23,26 @@ class InstaFollow:
 		self.min_wait_before_follow = 10
 		self.max_wait_before_follow = 300
 
-	def follow(self, user):
-		response = self.operation.follow(user.id)
+	def follow(self, user_id):
+		response = self.operation.follow(user_id)
 
 		if (response.status_code != 200):
 			return False
 
-		self.followed_successfully(user)
+		self.followed_successfully(user_id)
 		return True
 
-	def follow_bot(self):
+	def act(self):
+		if (len(self.users) == 0):
+			self.users = self.content_manager.get_users()
 		if (time.time() < self.next_follow_time):
 			return
 
 		user = self.users.pop()
-		if (not self.follow(user))
+		if (not self.follow(user)):
 			self.users.insert(0, user)
+		else:
+			print('user followed')
 
 		self.update_timer()
 
@@ -45,8 +50,8 @@ class InstaFollow:
 		self.next_follow_time = time.time() + randint(self.min_wait_before_follow, self.max_wait_before_follow)
 
 
-	def followed_successfully(self, user):
-		self.user_repository.follow(self, user)
+	def followed_successfully(self, user_id):
+		# self.user_repository.follow(self, user_id)
 		self.total_follows += 1
 		self.period_follows += 1
 		

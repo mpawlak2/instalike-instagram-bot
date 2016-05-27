@@ -30,7 +30,7 @@ class InstaLike:
 		self.photo_liked()
 		return True
 
-	def like_bot(self):
+	def act(self):
 		if (len(self.instagrams) == 0):
 			self.instagrams = random.sample(self.content_manager.get_photos(), 7)
 
@@ -39,7 +39,7 @@ class InstaLike:
 
 		photo = self.instagrams.pop()
 		if (self.like(photo)):
-			self.log_event('liked photo!')
+			print('liked photo!')
 
 		self.update_like_timer(5, 15)
 
@@ -54,7 +54,6 @@ class InstaLike:
 
 	def failed_to_like(self):
 		self.hourly_likes += 1
-		self.total_failed_likes += 1
 
 	# def get_stats(self):
 	# 	self.t1 = time.time()

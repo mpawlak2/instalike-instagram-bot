@@ -26,7 +26,7 @@ create table opcodes (
 
 insert into opcodes (id, op_name) values (1, 'like'), (2, 'unlike'), (3, 'follow'), (4, 'unfollow'), (5, 'block user'), (6, 'comment');
 	
-create table likes(id serial primary key, photo_id bigint REFERENCES photos (id), success boolean, status_code varchar(10))
+create table likes(id serial primary key, photo_id bigint REFERENCES photos (id), status_code int)
 
 create or replace function merge_photo(
 	_id bigint,
