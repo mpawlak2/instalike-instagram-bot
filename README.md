@@ -1,12 +1,21 @@
 # instalike
 instagram profile management
 
-1. automatically like posts under specific tag
+- like posts under specified tags
+#### like algorithm
+1. get photos
+2. validate
+3. randomly select 2-7 photos from valid ones
+4. wait 10-30s
+5. like
+6. before each like wait x-5 to x+5s, repeat steps 5-6 till selected photos are liked
+7. step 1
 
-
-# python requirements
-<code>pip install requests</code>
-<code>pip install py-postgresql</code>
+# requirements
+-python 3.5.1
+-postgresql
+-`python -m pip install requests`
+-`python -m pip install py-postgresql`
 
 # useful
-http://python.projects.pgfoundry.org/docs/1.1/
+[py-postgresql docs](http://python.projects.pgfoundry.org/docs/1.1/)
