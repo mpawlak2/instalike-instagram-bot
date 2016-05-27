@@ -18,31 +18,42 @@ create table photos
 	display_src varchar(500),
 	loc varchar(500));--,
 	--owner_fk integer REFERENCES users(id));
+
+create table opcodes (
+		id integer primary key,
+		op_name varchar(100)
+	);
+
+insert into opcodes (id, op_name) values (1, 'like'), (2, 'unlike'), (3, 'follow'), (4, 'unfollow'), (5, 'block user'), (6, 'comment');
 	
 
 create or replace function merge_photo(
-	id bigint,
-	width integer,
-	height integer,
-	code varchar,
-	is_ad boolean,
-	likes_count integer,
-	viewer_has_liked boolean,
-	is_video boolean,
-	display_src varchar,
-	location varchar)
+	_id bigint,
+	_width integer,
+	_height integer,
+	_code varchar,
+	_is_ad boolean,
+	_likes_count integer,
+	_viewer_has_liked boolean,
+	_is_video boolean,
+	_display_src varchar,
+	_location varchar)
 returns boolean as $$
 begin
-	if id is null then
+	if _id is null then
 		return false;
 	end if;
 
-	if photo_exists(id) then
-		return false;
+	if photo_exists(_id) then
+		update photos
+		set
+			likes_count = _likes_count,
+			display_src = _display_src
+		where id = _id;
+	else
+		insert into photos (id, code, width, height, is_ad, likes_count, is_video, display_src, loc)
+		values (_id, _code, _width, _height, _is_ad, _likes_count, _is_video, _display_src, _location);
 	end if;
-
-	insert into photos (id, code, width, height, is_ad, likes_count, is_video, display_src, loc)
-	values (id, code, width, height, is_ad, likes_count, is_video, display_src, location);
 	
 	return true;
 end;
@@ -53,5 +64,15 @@ returns boolean
 as $$
 begin
 	return exists(select null from photos where id = photo_id);
+end
+$$ language plpgsql;
+
+
+create or replace function merge_activity(id bigint)
+returns boolean
+as $$
+-- store activities from your account
+begin
+
 end
 $$ language plpgsql;

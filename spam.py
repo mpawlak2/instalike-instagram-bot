@@ -1,5 +1,8 @@
 import re
 
+##
+import model
+
 class SpamDetector:
 	operation = object()
 	photo_vaidator = object()
@@ -9,9 +12,11 @@ class SpamDetector:
 	# COMMENTS
 
 
-	def __init__(self, op_object):
+	def __init__(self, op_object, repository):
 		self.operation = op_object
+		self.repository = repository
 		self.photo_vaidator = PhotoValidator()
+
 
 	def is_user_fake(self, user_id):
 		pass
@@ -46,6 +51,11 @@ class SpamDetector:
 		else:
 			self.log('phtot removed - could not get the details')
 			return False # could not load photo details
+		
+		# persist photos that you actually may like
+		photo_model = model.Photo().from_json(photo_details)
+		self.repository.merge_photo(photo_model)
+
 		return True
 
 	def log(self, message):

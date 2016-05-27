@@ -66,7 +66,7 @@ class InstaLike:
 	start_liking_at = 0 # 0 - 23 format
 	stop_liking_at = 0 # 0 - 23 format
 
-	tag_like = ['l4l']
+	tag_like = ['l4l', 'like4like', 'follow4follow', 'f4f']
 
 
 	def __init__(self, login, password):
@@ -75,7 +75,6 @@ class InstaLike:
 
 		# NOT CONFIGURATION BELOW
 		self.operation = Operations()
-		self.spam_validator = spam.SpamDetector(self.operation)
 		self.loop_likes = 0
 		self.loop_likes_fails = 0
 		self.no_of_empty_tags = 0
@@ -91,13 +90,16 @@ class InstaLike:
 		self.data_source = database.DataSource('postgres', 'postgres', 'localhost', 'instamanager')
 		self.repository = database.Repository(self.data_source)
 
+		# SPAM
+		self.spam_validator = spam.SpamDetector(self.operation, self.repository)
+
 		# CONFIGURATION BELOW
 		self.max_likes_per_hour = 245
 		
 		# timing stuff
 		self.last_like_time = 0
 		self.next_like_time = 0
-		self.next_like_delta_time = 10 #
+		self.next_like_delta_time = 12 #
 		
 		self.last_response_fail_time = 0
 		self.clear_fails_after_sec = 10 # after 10 seconds clear fail counter
@@ -131,7 +133,10 @@ class InstaLike:
 	def get_photos(self):
 		for tag in self.tag_like:
 			self.log_event('getting posts from #{0} ...'.format(tag))
-			self.instagrams.extend(self.operation.get_photos_by_tag(tag))
+			try:
+				self.instagrams.extend(self.operation.get_photos_by_tag(tag))
+			except TypeError:
+				self.log_event('oops! someting went wrong while fetching photos')
 
 		if (self.instagrams):
 			return True
@@ -147,11 +152,10 @@ class InstaLike:
 		if (how_many_to_like == 0):
 			return
 
-		self.instagrams = random.sample(self.instagrams, how_many_to_like)	
-
+		self.instagrams = self.spam_validator.validate_photos(self.instagrams)
+		self.instagrams = random.sample(self.instagrams, how_many_to_like)
 		self.log_event('trying to like {0} photos, selected randomly from a total of {1}'.format(how_many_to_like, len(self.instagrams)))
 
-		self.instagrams = self.spam_validator.validate_photos(self.instagrams)
 
 	# where photo is json parsed from instagram site.
 	def like(self, photo):
@@ -178,8 +182,6 @@ class InstaLike:
 			return # we have to wait more time
 
 		photo = self.instagrams.pop()
-		photo_model = model.Photo().from_json(photo)
-		self.repository.merge_photo(photo_model)
 
 		if (self.like(photo)):
 			self.log_event('liked photo with id: {0}'.format(photo['id']))

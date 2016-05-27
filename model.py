@@ -9,8 +9,8 @@ class Photo:
 		self.is_video = False
 		self.id = 0
 		self.display_src = ''
-		self.location = None
-		self.owner = None
+		self.location = 'null'
+		self.owner = 'null'
 
 	def from_json(self, json_node):
 		self.width = json_node['dimensions'].get('width', 0)
@@ -22,13 +22,20 @@ class Photo:
 		self.is_video = json_node['is_video']
 		self.id = json_node['id']
 		self.display_src = json_node['display_src']
-		self.location = json_node.get('location', 'null')
-		self.caption = str(json_node['caption'])
+		self.location = self.try_get_location(json_node)
+		self.caption = json_node.get('caption', 'null')
 		self.owner = User().from_json(json_node['owner'])
 		return self
 
-	def persist(self):
-		pass
+	def try_get_location(self, json_node):
+		loc = json_node.get('location', 'null')
+
+		if (loc == 'null' or loc == None):
+			return 'null'
+		loc = loc.get('name', 'null')
+		if (loc == 'null'):
+			return 'null'
+		return '\'{0}\''.format(loc.replace("'", ""))
 
 
 class User:
@@ -50,6 +57,3 @@ class User:
 		self.id = json_node.get('id', 'null')
 		self.is_private = json_node.get('is_private', 'null')
 		return self
-
-	def persist(self):
-		pass
