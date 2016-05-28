@@ -15,10 +15,15 @@ class InstaLike:
 		
 		# timing stuff
 		self.next_like_time = 0
+		self.like_time_delta = (60 * 60) // self.max_likes_per_hour
 
 		# instance stats
-		self.total_likes = 0
+		self.likes = 0
+		self.failed_likes = 0
 		self.hourly_likes = 0
+
+		self.t0 = time.time()
+		self.t1 = 0
 
 	def like(self, photo):
 		response = self.operation.like(photo['id'])
@@ -33,42 +38,55 @@ class InstaLike:
 	def act(self):
 		if (len(self.instagrams) == 0):
 			self.instagrams = random.sample(self.content_manager.get_photos(), 7)
+			self.update_time(30,50)
+
+		if (not self.can_act()):
+			return
 
 		if (time.time() < self.next_like_time):
 			return
 
 		photo = self.instagrams.pop()
-		if (self.like(photo)):
-			print('liked photo!')
+		self.like(photo)
 
-		self.update_like_timer(5, 15)
+		self.update_time(self.like_time_delta - (self.like_time_delta // 2), self.like_time_delta + (self.like_time_delta // 2))
 
+	def can_act(self):
+		self.t1 = time.time()
+		# hour elapsed
+		if ((self.t1 - self.t0) >= 60 * 60):
+			print('# of likes in last hour: {0}'.format(self.hourly_likes))
+			self.t0 = time.time()
+			self.hourly_likes = 0
+			return True
+		elif (self.hourly_likes > self.max_likes_per_hour):
+			return False
+		return True
 
-	def update_like_timer(self, mini, maxi):
+	def update_time(self, mini, maxi):
 		next_in = random.randint(mini, maxi)
 		self.next_like_time = time.time() + next_in
+		self.get_stats()
 
 	def photo_liked(self):
-		self.total_likes += 1
+		self.likes += 1
 		self.hourly_likes += 1
 
 	def failed_to_like(self):
 		self.hourly_likes += 1
+		self.failed_likes += 1
 
-	# def get_stats(self):
-	# 	self.t1 = time.time()
-	# 	per_hour = ((self.total_likes + self.total_failed_likes) * 60 * 60) // (1 if (self.t1 - self.t0) == 0 else self.t1 - self.t0)
-	# 	self.log_event('==== stats ====')
-	# 	self.log_event('total time [s]: {0}'.format(self.t1 - self.t0))
-	# 	self.log_event('successful likes: {0}'.format(self.total_likes))
-	# 	self.log_event('failed likes: {0}'.format(self.total_failed_likes))
-	# 	self.log_event('estimated likes per hour: {0}'.format(per_hour))
-	# 	if (per_hour > 350):
-	# 		self.log_event('\tWARNING: liking more than 350 pics/h may result in blocked account.')
-	# 	self.log_event('#######################################')
+	def get_stats(self):
+		self.t1 = time.time()
+		per_hour = ((self.likes + self.failed_likes) * 60 * 60) // (1 if (self.t1 - self.t0) == 0 else self.t1 - self.t0)
+		self.log('#######################################')
+		self.log('----------------LIKES------------------')
+		self.log('total time: {0:.0f}s'.format(self.t1 - self.t0))
+		self.log('likes: {0}'.format(self.likes))
+		self.log('failed likes: {0}'.format(self.failed_likes))
+		self.log('estimated likes per hour: {0:.0f}'.format(per_hour))
+		self.log('next like in: {0:.0f}s'.format(self.next_like_time - time.time()))
+		self.log('photos to like: {0}'.format(len(self.instagrams)))
 
-		
-
-	# def log_event(self, text, nl = 1):
-	# 	print(text)
-		# sys.stdout.flush()
+	def log(self, text):
+		print(text)

@@ -4,7 +4,7 @@ from random import randint
 class PeriodRandomizer:
 	def __init__(self):
 		# 0 - 23 format
-		self.from_hour = 12
+		self.from_hour = 7
 		self.to_hour = 23
 
 		self.from_time = None
@@ -78,9 +78,9 @@ class PeriodRandomizer:
 		return False
 
 	def info(self):
+		print('time periods, total: {0} minutes'.format(self.actual_length))
 		for period in self.periods:
 			period.get_times()
-		print(self.actual_length)
 
 
 		

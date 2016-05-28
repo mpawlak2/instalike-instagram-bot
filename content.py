@@ -12,14 +12,11 @@ class ContentManager:
 		self.user_ids = []
 
 	def get_photos(self):
-		if (len(self.photos) > 0):
-			return self.photos
-
 		# get by tags
 		for tag in self.tags:
 			try:
 				print('getting photos from tag {0}...'.format(tag))
-				self.photos.extend(self.operation.get_photos_by_tag(tag))
+				self.photos = self.operation.get_photos_by_tag(tag)
 			except TypeError:
 				print('oops! someting went wrong while fetching photos')
 
