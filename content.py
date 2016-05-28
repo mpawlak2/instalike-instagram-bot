@@ -1,4 +1,5 @@
 import spam
+import model
 
 class ContentManager:
 	def __init__(self, operation, repository):
@@ -9,6 +10,7 @@ class ContentManager:
 		self.tags = ['l4l', 'f4f']
 
 		self.photos = []
+		self.photos_from_model = []
 		self.user_ids = []
 
 	def get_photos(self):
@@ -19,6 +21,13 @@ class ContentManager:
 				self.photos = self.operation.get_photos_by_tag(tag)
 			except TypeError:
 				print('oops! someting went wrong while fetching photos')
+
+		# get details for each photo
+		for photo in self.photos:
+			photo_details = self.operation.get_photo_details(photo['code'])
+			photo_instance = model.Photo().from_json(photo_details)
+			self.photos_from_model.append(photo_instance)
+			print(photo_instance.owner_username)
 
 		self.filter_photos()
 

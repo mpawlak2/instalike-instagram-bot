@@ -1,6 +1,8 @@
 import time
 import random
 
+import model
+
 class InstaLike:
 
 	def __init__(self, operation, repository, content_manager):
@@ -27,7 +29,7 @@ class InstaLike:
 
 	def like(self, photo):
 		response = self.operation.like(photo['id'])
-		# self.photo_repository.like(model.Photo().from_json(photo), response.status_code)
+		self.repository.like(model.Photo().from_json(photo), response.status_code)
 
 		if(response.status_code != 200):
 			self.failed_to_like()

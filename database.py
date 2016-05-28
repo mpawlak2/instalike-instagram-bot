@@ -43,13 +43,8 @@ class Repository:
 			photo.likes_count, photo.viewer_has_liked, photo.is_video, photo.display_src, photo.location)
 		self.data_source.execute(sql_query)
 
-
-class PhotoRepository:
-	def __init__(self, data_source):
-		self.data_source = data_source
-
 	def like(self, photo_model, status_code):
-		sql_query = 'select like_photo(_photo_id := {0}, _status_code := \'{1}\')'
+		sql_query = 'select like_photo(_photo_id := {0}, _status_code := {1})'
 		sql_query = sql_query.format(photo_model.id, status_code)
 		self.data_source.execute(sql_query)
 		

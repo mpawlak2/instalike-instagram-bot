@@ -26,7 +26,7 @@ create table opcodes (
 
 insert into opcodes (id, op_name) values (1, 'like'), (2, 'unlike'), (3, 'follow'), (4, 'unfollow'), (5, 'block user'), (6, 'comment');
 	
-create table likes(id serial primary key, photo_id bigint REFERENCES photos (id), status_code int)
+create table likes(id serial primary key, photo_id bigint REFERENCES photos (id), status_code int, timestamp like_time);
 
 create or replace function merge_photo(
 	_id bigint,
@@ -79,13 +79,25 @@ end
 $$ language plpgsql;
 
 
-create or replace function like_photo(_photo_id bigint, _success boolean, _status_code varchar(10))
+create or replace function like_photo(_photo_id bigint, _success boolean, _status_code integer)
 returns boolean
 as $$
 begin
+if exists(select null from likes where photo_id = _photo_id) then
+return false;
+end if;
 
-insert into likes (photo_id, success, status_code) values (_photo_id, _success, _status_code);
+insert into likes (photo_id, success, status_code, like_time) values (_photo_id, _success, _status_code, clock_timestamp());
 return true;
 
 end
 $$ language plpgsql;
+
+
+create table following (id serial primary key, user_id REFERENCES users (id), is_following boolean, timestamp start_following, timestamp stop_following);
+create table followers (id serial primary key, user_id REFERENCES users (id), is_following boolean);
+
+
+
+
+

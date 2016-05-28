@@ -14,6 +14,7 @@ class Operations:
 	comment_url_tmpl = 'https://www.instagram.com/web/comments/{0}/add/' # payload = { comment_text : 'wow'}
 	tag_url = 'https://www.instagram.com/explore/tags/{0}/?__a=1'
 	photo_details_url_tmpl = 'https://www.instagram.com/p/{0}/?__a=1' # in {0} goes the image code GET __a=1 - return only json
+	user_details_url_tmpl = 'https://www.instagram.com/{0}/?__a=1' # user name as uid
 	get_account_activity_url = 'https://www.instagram.com/accounts/activity/?__a=1'
 
 	# info
@@ -128,6 +129,13 @@ class Operations:
 		if (response.status_code != 200):
 			return None
 		return json.loads(response.content.decode('utf-8'))['media']
+
+	def get_user_details(self, user_name):
+		response = self.session.get(self.user_details_url_tmpl.format(user_name), headers = self.headers)
+
+		if (response.status_code != 200):
+			return None
+		return json.loads(response.content.decode('utf-8'))['user']
 		
 
 	def get_my_followers(self):
