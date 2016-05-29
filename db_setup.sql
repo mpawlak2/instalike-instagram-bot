@@ -1,11 +1,18 @@
-create table users 
-	(id int primary key,
-	username varchar(200) unique,
-	full_name varchar(1000),
-	profile_pic_url varchar(500),
-	is_unpublished boolean,
-	blocked_by_viewer boolean,
-	is_private boolean);
+create table users(id bigint primary key,
+		    username varchar(500),
+		    has_blocked_viewer boolean,
+		    follows_count integer,
+		    followed_by_count integer,
+		    external_url varchar,
+		    follows_viewer boolean,
+		    profile_pic_url varchar(1000),
+		    is_private boolean,
+		    full_name varchar(500),   
+		    posts_count integer,
+		    blocked_by_viewer boolean,
+		    followed_by_viewer boolean,
+		    is_verified boolean,
+		    biography varchar(1000));
 
 create table photos 
 	(id int primary key,
@@ -97,6 +104,45 @@ $$ language plpgsql;
 create table following (id serial primary key, user_id REFERENCES users (id), is_following boolean, timestamp start_following, timestamp stop_following);
 create table followers (id serial primary key, user_id REFERENCES users (id), is_following boolean);
 
+CREATE OR REPLACE FUNCTION public.merge_user(
+    _id bigint,
+    _username varchar,
+    _has_blocked_viewer boolean,
+    _follows_count integer,
+    _followed_by_count integer,
+    _external_url varchar,
+    _follows_viewer boolean,
+    _profile_pic_url varchar,
+    _is_private boolean,
+    _full_name varchar,   
+    _posts_count integer,
+    _blocked_by_viewer boolean,
+    _followed_by_viewer boolean,
+    _is_verified boolean,
+    _biography varchar)
+  RETURNS boolean AS
+$$
+begin
+	if exists(select null from users where id = _id) then
+		update users
+		set
+			follows_count = _follows_count,
+			followed_by_count = _followed_by_count,
+			follows_viewer = _follows_viewer,
+			has_blocked_viewer = _has_blocked_viewer,
+			blocked_by_viewer = _blocked_by_viewer,
+			followed_by_viewer = _followed_by_viewer
+		where id = _id;
+	end if;
+
+	insert into users (id, username, has_blocked_viewer, follows_count, followed_by_count, external_url, follows_viewer, profile_pic_url, is_private,
+		    full_name, posts_count, blocked_by_viewer, followed_by_viewer, is_verified, biography)
+		values (_id, _username, _has_blocked_viewer, _follows_count, _followed_by_count, _external_url, _follows_viewer, _profile_pic_url, _is_private,
+		    _full_name, _posts_count, _blocked_by_viewer, _followed_by_viewer, _is_verified, biography);
+
+	return true;
+end
+$$ LANGUAGE plpgsql
 
 
 

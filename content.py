@@ -11,10 +11,13 @@ class ContentManager:
 
 		self.photos = []
 		self.photos_from_model = []
+		self.users_from_model = []
 		self.user_ids = []
 
 	def get_photos(self):
-		# get by tags
+		self.photos_from_model = []
+		self.users_from_model = []
+
 		for tag in self.tags:
 			try:
 				print('getting photos from tag {0}...'.format(tag))
@@ -26,8 +29,15 @@ class ContentManager:
 		for photo in self.photos:
 			photo_details = self.operation.get_photo_details(photo['code'])
 			photo_instance = model.Photo().from_json(photo_details)
+			self.repository.merge_photo(photo_instance)
+
+			user_details = self.operation.get_user_details(photo_instance.owner_username)
+			user_instance = model.User().from_json(user_details)
+			self.users_from_model.append(user_instance)
+			self.repository.merge_user(user_instance)
+
 			self.photos_from_model.append(photo_instance)
-			print(photo_instance.owner_username)
+			print(user_instance.follows_count)
 
 		self.filter_photos()
 

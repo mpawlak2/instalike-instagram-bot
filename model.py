@@ -42,6 +42,7 @@ class Photo:
 
 class User:
 	def __init__(self):
+		self.id = 0
 		self.username = 'null'
 		self.has_blocked_viewer = False
 		self.follows_count = 0
@@ -55,23 +56,29 @@ class User:
 		self.blocked_by_viewer = False
 		self.followed_by_viewer = False
 		self.is_verified = False
-		self.id = 0
 		self.biography = 'null'
 
 	def from_json(self, json_node):
-		self.username = json_node.get('username', 'null')
+		self.username = self.mark_as_text(json_node.get('username', 'null'))
 		self.has_blocked_viewer = json_node.get('has_blocked_viewer', False)
 		self.follows_count = json_node['follows'].get('count', 0)
 		self.followed_by_count = json_node['followed_by'].get('count', 0)
-		self.external_url = json_node.get('external_url')
+		self.external_url = self.mark_as_text(json_node.get('external_url', 'null'))
 		self.follows_viewer = json_node.get('follows_viewer', False)
-		self.profile_pic_url = json_node.get('profile_pic_url', 'null')
+		self.profile_pic_url = self.mark_as_text(json_node.get('profile_pic_url', 'null'))
 		self.is_private = json_node.get('is_private', False)
-		self.full_name = json_node.get('full_name', 'null')
+		self.full_name = self.mark_as_text(json_node.get('full_name', 'null'))
 		self.posts_count = json_node['media'].get('count', 0)
 		self.blocked_by_viewer = json_node.get('blocked_by_viewer', False)
 		self.followed_by_viewer = json_node.get('follows_viewer', False)
 		self.is_verified = json_node.get('is_verified', False)
 		self.id = json_node.get('id', 'null')
-		self.biography = json_node.get('biography', 'null').replace('\'','')
+		bio = json_node.get('biography', 'null')
+		self.biography = self.mark_as_text('null' if bio == None else bio.replace('\'',''))
+
 		return self
+
+	def mark_as_text(self, text):
+		if (text == None):
+			text = 'null'
+		return '\'' + text + '\''
