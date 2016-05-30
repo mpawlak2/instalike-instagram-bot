@@ -133,6 +133,7 @@ begin
 			blocked_by_viewer = _blocked_by_viewer,
 			followed_by_viewer = _followed_by_viewer
 		where id = _id;
+		return true;
 	end if;
 
 	insert into users (id, username, has_blocked_viewer, follows_count, followed_by_count, external_url, follows_viewer, profile_pic_url, is_private,
