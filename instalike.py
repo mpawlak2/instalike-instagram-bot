@@ -28,8 +28,8 @@ class InstaLike:
 		self.t1 = 0
 
 	def like(self, photo):
-		response = self.operation.like(photo['id'])
-		self.repository.like(model.Photo().from_json(photo), response.status_code)
+		response = self.operation.like(photo.id)
+		self.repository.like(photo, response.status_code)
 
 		if(response.status_code != 200):
 			self.failed_to_like()

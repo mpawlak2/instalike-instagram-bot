@@ -42,7 +42,7 @@ class ContentManager:
 
 		self.filter_photos()
 
-		return self.photos
+		return self.photos_from_model
 
 	def get_users(self):
 		if (len(self.photos) > 0):
