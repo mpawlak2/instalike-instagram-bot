@@ -70,6 +70,11 @@ class Repository:
 		sql_query = 'select like_photo(_photo_id := {0}, _status_code := {1})'
 		sql_query = sql_query.format(photo_model.id, status_code)
 		self.data_source.execute(sql_query)
+
+	def follow(self, user, status_code):
+		sql_query = 'select follow_user(_user_id := {0}, _status_code := {1})'
+		sql_query = sql_query.format(user.id, status_code)
+		self.data_source.execute(sql_query)
 		
 
 		

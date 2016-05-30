@@ -101,7 +101,7 @@ end
 $$ language plpgsql;
 
 
-create table following (id serial primary key, user_id REFERENCES users (id), is_following boolean, timestamp start_following, timestamp stop_following);
+
 create table followers (id serial primary key, user_id REFERENCES users (id), is_following boolean);
 
 CREATE OR REPLACE FUNCTION public.merge_user(
@@ -143,7 +143,17 @@ begin
 
 	return true;
 end
-$$ LANGUAGE plpgsql
+$$ LANGUAGE plpgsql;
+
+create table following (id serial primary key, user_id bigint REFERENCES users (id), status_code integer, start_following timestamp, stop_following timestamp);
+create or replace function public.follow_user(_user_id bigint, _status_code int) 
+returns boolean as
+$$
+begin
+	insert into public.following(user_id, status_code, start_following) values (_user_id, _status_code, clock_timestamp());
+	return true;
+end
+$$ language plpgsql;
 
 
 

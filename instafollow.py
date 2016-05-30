@@ -29,6 +29,7 @@ class InstaFollow:
 	def follow(self, user):
 		response = self.operation.follow(user.id)
 
+		self.user_repository.follow(user, response.status_code)
 		if (response.status_code != 200):
 			self.failed_follow()
 			return False
@@ -58,7 +59,6 @@ class InstaFollow:
 		self.failed_follows += 1
 
 	def followed_successfully(self, user):
-		# self.user_repository.follow(self, user_id)
 		self.follows += 1
 		self.hourly_follows += 1
 
