@@ -11,6 +11,7 @@ class Photo:
 		self.display_src = ''
 		self.location = 'null'
 		self.owner_id = 'null'
+		self.caption = 'null'
 		self.owner_username = 'null'
 
 	def from_json(self, json_node):

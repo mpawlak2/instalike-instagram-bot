@@ -33,28 +33,27 @@ class SpamDetector:
 
 	# check if photo caption contains specified words
 	def validate_photo(self, photo):
+		if (not photo):
+			return False
+
 		if (self.photo_vaidator.illegal_photo_caption(photo)):
 			self.log('photo removed - illegal tags')
 			return False
 
-		photo_details = self.operation.get_photo_details(photo['code'])
-		if (photo_details):
-			if (self.photo_vaidator.is_already_liked(photo_details)):
-				self.log('photo removed - already liked')
-				return False
-			if (self.photo_vaidator.illegal_owner_name(photo_details)):
-				self.log('photo removed - illegal owners name')
-				return False
-			if (self.photo_vaidator.like_limit_exceeded(photo_details)):
-				self.log('photo removed - like limit exceeded')
-				return False
-		else:
-			self.log('phtot removed - could not get the details')
-			return False # could not load photo details
+		if (self.photo_vaidator.is_already_liked(photo)):
+			self.log('photo removed - already liked')
+			return False
+
+		if (self.photo_vaidator.illegal_owner_name(photo)):
+			self.log('photo removed - illegal owners name')
+			return False
+
+		if (self.photo_vaidator.like_limit_exceeded(photo)):
+			self.log('photo removed - like limit exceeded')
+			return False
 		
 		# persist photos that you actually may like
-		photo_model = model.Photo().from_json(photo_details)
-		self.repository.merge_photo(photo_model)
+		self.repository.merge_photo(photo)
 
 		return True
 
@@ -76,22 +75,22 @@ class PhotoValidator:
 		# do not like photo with more that this value likes, 0 - no limit
 		self.like_max_likes = 24
 
-	def is_already_liked(self, photo_details):
-		return photo_details['likes'].get('viewer_has_liked', '?')
+	def is_already_liked(self, photo):
+		return photo.viewer_has_liked
 
-	def illegal_owner_name(self, photo_details):
+	def illegal_owner_name(self, photo):
 		for bad_name in self.like_username_blacklist:
-			match = re.search(bad_name, photo_details['owner']['username'])
+			match = re.search(bad_name, photo.owner_username)
 			if (match):
 				return True
 		return False
 
 	def illegal_photo_caption(self, photo):
 		for bad_tag in self.like_photo_caption_blacklist:
-			bad_words = re.search('#{0}'.format(bad_tag), photo.get('caption', ''))
+			bad_words = re.search('#{0}'.format(bad_tag), photo.caption)
 			if (bad_words):
 				return True
 		return False
 
 	def like_limit_exceeded(self, photo):
-		return photo['likes']['count'] > self.like_max_likes
+		return photo.likes_count > self.like_max_likes

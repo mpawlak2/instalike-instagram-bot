@@ -13,6 +13,7 @@ class ContentManager:
 		self.photos_from_model = []
 		self.users_from_model = []
 		self.user_ids = []
+		self.data_from_tags = []
 
 	def get_photos(self):
 		self.photos_from_model = []
@@ -52,6 +53,6 @@ class ContentManager:
 		return self.user_ids
 
 	def filter_photos(self):
-		self.photos = self.spam_validator.validate_photos(self.photos)
+		self.photos_from_model = self.spam_validator.validate_photos(self.photos_from_model)
 		print('downloaded {0} valid photos'.format(len(self.photos)))
 		
