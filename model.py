@@ -83,3 +83,16 @@ class User:
 		if (text == None):
 			text = 'null'
 		return '\'' + text + '\''
+
+class Activity:
+	def __init__(self):
+		self.timestamp = 'null'
+		self.user_id = 0
+		self.type = 0
+
+	def from_json(self, json_node):
+		self.timestamp = json_node.get('timestamp', 'null')
+		self.type = json_node.get('type', 0)
+		self.user_id = json_node['user'].get('pk', 0)
+		return self
+		
