@@ -26,20 +26,21 @@ class InstaFollow:
 		self.t0 = time.time()
 		self.t1 = 0
 
-	def follow(self, user_id):
-		response = self.operation.follow(user_id)
+	def follow(self, user):
+		response = self.operation.follow(user.id)
 
 		if (response.status_code != 200):
 			self.failed_follow()
 			return False
 
-		self.followed_successfully(user_id)
+		self.followed_successfully(user)
 		return True
 
 	def act(self):
 		if (len(self.users) == 0):
-			# users may be duplicated
 			self.users = self.content_manager.get_users()
+			self.update_timer(10,20)
+
 		if (time.time() < self.next_follow_time):
 			return
 
@@ -56,7 +57,7 @@ class InstaFollow:
 	def failed_follow(self):
 		self.failed_follows += 1
 
-	def followed_successfully(self, user_id):
+	def followed_successfully(self, user):
 		# self.user_repository.follow(self, user_id)
 		self.follows += 1
 		self.hourly_follows += 1

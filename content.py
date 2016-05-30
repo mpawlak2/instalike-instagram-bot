@@ -1,3 +1,5 @@
+import random
+
 import spam
 import model
 
@@ -18,6 +20,8 @@ class ContentManager:
 	def get_photos(self):
 		self.photos_from_model = []
 		self.users_from_model = []
+
+		no_of_photos = random.randint(2,10)
 
 		for tag in self.tags:
 			try:
@@ -47,10 +51,8 @@ class ContentManager:
 	def get_users(self):
 		if (len(self.photos) > 0):
 			self.user_ids = list(map(lambda x : x['owner']['id'], self.photos))
-			return self.user_ids
-		self.get_photos()
-		self.user_ids = list(map(lambda x : x['owner']['id'], self.photos))
-		return self.user_ids
+			return self.users_from_model
+		return self.users_from_model
 
 	def filter_photos(self):
 		self.photos_from_model = self.spam_validator.validate_photos(self.photos_from_model)
