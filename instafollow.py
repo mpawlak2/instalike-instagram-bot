@@ -4,7 +4,7 @@ from random import randint
 class InstaFollow:
 	def __init__(self, operation, repository, content_manager):
 		self.operation = operation
-		self.user_repository = repository
+		self.repository = repository
 		self.content_manager = content_manager
 
 		# configuration
@@ -29,13 +29,31 @@ class InstaFollow:
 	def follow(self, user):
 		response = self.operation.follow(user.id)
 
-		self.user_repository.follow(user, response.status_code)
+		self.repository.follow(user, response.status_code)
 		if (response.status_code != 200):
 			self.failed_follow()
 			return False
 
 		self.followed_successfully(user)
 		return True
+
+	def unfollow(self, user):
+		response = self.operation.unfollow(user.id)
+
+		self.repository.unfollow(user.id, response.status_code)
+		if (response.status_code != 200):
+			self.failed_unfollow()
+			return False
+
+		self.unfollowed(user)
+		return True
+
+	def failed_unfollow(self):
+		print('could not unfollow')
+
+	def unfollowed(self, user):
+		print('unfollowed successfully')
+
 
 	def act(self):
 		if (len(self.users) == 0):
