@@ -156,5 +156,21 @@ end
 $$ language plpgsql;
 
 
+-- activity
+create table public.activities(id serial primary key, activity_type integer, user_id bigint REFERENCES users (id), activity_time timestamp);
+create or replace function public.register_activity(_type integer, _user_id bigint, _activity_time varchar)
+returns boolean
+as 
+$$
+declare 
+	_activity_timestamp timestamp := to_timestamp(_activity_time);
+begin 
 
+	if exists(select null from activities where activity_time = _activity_timestamp and user_id = _user_id and activity_type = _type) then
+		return false;
+	end if;
+	insert into public.activities(activity_type, user_id, activity_time) values(_type, _user_id, _activity_timestamp);
+	return true;
+end
+$$ language plpgsql;
 

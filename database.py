@@ -75,6 +75,11 @@ class Repository:
 		sql_query = 'select follow_user(_user_id := {0}, _status_code := {1})'
 		sql_query = sql_query.format(user.id, status_code)
 		self.data_source.execute(sql_query)
+
+	def register_activity(self, activity):
+		sql_query = 'select register_activity(_type := {0}, _user_id := {1}, _activity_time := {2})'
+		sql_query = sql_query.format(activity.type, activity.user_id, activity.timestamp)
+		self.data_source.execute(sql_query)
 		
 
 		
