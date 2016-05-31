@@ -96,10 +96,6 @@ class PeriodRandomizer:
 
 		# print info about bot restart
 		for period in self.periods:
-			if (period.restarts_in() < 0):
-				self.periods.remove(period)
-				continue
-
 			if (period.is_active()):
 				return True
 
