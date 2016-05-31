@@ -1,4 +1,5 @@
 import datetime
+import time
 from random import randint
 
 class PeriodRandomizer:
@@ -22,6 +23,9 @@ class PeriodRandomizer:
 		self.actual_length = 0
 
 		self.periods = []
+
+		# timing
+		self.next_info_print = 0
 
 	def randomize(self):
 		self.periods = []
@@ -71,17 +75,34 @@ class PeriodRandomizer:
 				self.actual_length += period_proposition.get_length()
 
 	def is_active(self):
+		# print info about bot restart
+
+
 		for period in self.periods:
 			if (period.is_active()):
 				return True
 
+		if (self.next_info_print < time.time()):
+			print('bot restarts in {0:.0f} minutes'.format(self.restarts_in_s() / 60))
+			self.next_info_print = time.time() + 60
+
 		return False
 
+	def restarts_in_s(self):
+		now = datetime.datetime.now()
+		time_diff = (self.to_time - now).seconds
+		for period in self.periods:
+			start_t = period.get_start_time()
+			period_diff = (start_t - now).seconds
+			if (time_diff > period_diff):
+				time_diff = period_diff
+		return time_diff
+
 	def info(self):
-		print('time periods, total: {0} minutes'.format(self.actual_length))
+		print('time periods, total: {0:.0f} minutes'.format(self.actual_length))
+
 		for period in self.periods:
 			period.get_times()
-
 
 		
 class Period:
@@ -106,6 +127,9 @@ class Period:
 
 	def get_length(self):
 		return (self.end_time - self.start_time).seconds / 60
+
+	def get_start_time(self):
+		return self.start_time
 
 	def get_times(self):
 		print('from {0} to {1}, minutes: {2}, active: {3}'.format(self.start_time, self.end_time, self.get_length(), self.is_active()))
