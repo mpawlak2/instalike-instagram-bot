@@ -33,7 +33,7 @@ create table opcodes (
 
 insert into opcodes (id, op_name) values (1, 'like'), (2, 'unlike'), (3, 'follow'), (4, 'unfollow'), (5, 'block user'), (6, 'comment');
 	
-create table likes(id serial primary key, photo_id bigint REFERENCES photos (id), status_code int, timestamp like_time);
+create table likes(id serial primary key, photo_id bigint REFERENCES photos (id), status_code int, like_time timestamp);
 
 create or replace function merge_photo(
 	_id bigint,
@@ -102,7 +102,7 @@ $$ language plpgsql;
 
 
 
-create table followers (id serial primary key, user_id REFERENCES users (id), is_following boolean);
+create table followers (id serial primary key, user_id bigint REFERENCES users (id), is_following boolean);
 
 CREATE OR REPLACE FUNCTION public.merge_user(
     _id bigint,
