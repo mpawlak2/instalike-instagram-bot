@@ -74,11 +74,32 @@ class PeriodRandomizer:
 				self.periods.append(period_proposition)
 				self.actual_length += period_proposition.get_length()
 
-	def is_active(self):
-		# print info about bot restart
+		self.remove_late_periods()
 
-
+	def remove_late_periods(self):
+		valid_periods = []
 		for period in self.periods:
+			if (period.restarts_in() >= 0 or period.is_active()):
+				valid_periods.append(period)
+
+		self.periods = valid_periods
+
+	def is_active(self):
+		if (len(self.periods) == 0):
+			if(self.from_time.day != datetime.datetime.now().day):
+				self.randomize()
+			else:
+				if (self.next_info_print < time.time()):
+					print('work for day done, wait till midnight for next periods.')
+					self.next_info_print = time.time() + 60
+				return
+
+		# print info about bot restart
+		for period in self.periods:
+			if (period.restarts_in() < 0):
+				self.periods.remove(period)
+				continue
+
 			if (period.is_active()):
 				return True
 
@@ -131,5 +152,8 @@ class Period:
 	def get_start_time(self):
 		return self.start_time
 
+	def restarts_in(self):
+		return self.start_time.hour - datetime.datetime.now().hour
+
 	def get_times(self):
-		print('from {0} to {1}, minutes: {2}, active: {3}'.format(self.start_time, self.end_time, self.get_length(), self.is_active()))
+		print('from {0} to {1}, minutes: {2}, active: {3}, wait for {4} hours'.format(self.start_time, self.end_time, self.get_length(), self.is_active(), self.restarts_in()))
