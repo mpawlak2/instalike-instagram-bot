@@ -157,7 +157,7 @@ $$ language plpgsql;
 
 
 -- activity
-create table public.activities(id serial primary key, activity_type integer, user_id bigint REFERENCES users (id), activity_time timestamp);
+create table public.activities(id serial primary key, activity_type integer, user_id bigint, activity_time timestamp);
 create or replace function public.register_activity(_type integer, _user_id bigint, _activity_time varchar)
 returns boolean
 as 
