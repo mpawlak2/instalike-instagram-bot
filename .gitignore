@@ -1,3 +1,4 @@
 *.phy
 *.pyc
 __pycache__/
+*.txt
