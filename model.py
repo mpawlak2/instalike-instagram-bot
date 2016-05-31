@@ -99,4 +99,6 @@ class Activity:
 	def mark_as_text(self, text):
 		if (text == None):
 			text = 'null'
+		else:
+			text = text.replace('\'','')
 		return '\'' + text + '\''

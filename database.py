@@ -1,4 +1,5 @@
 import postgresql
+import log
 
 class DataSource:
 	def __init__(self, user, password, host, database_name):
@@ -14,6 +15,7 @@ class DataSource:
 class Repository:
 	def __init__(self, data_source):
 		self.data_source = data_source
+		self.logger = log.FileOutput('db_log.txt')
 
 	def merge_user(self, user_model):
 		sql_query = '''select merge_user(
@@ -48,6 +50,7 @@ class Repository:
 			user_model.followed_by_viewer,
 			user_model.is_verified,
 			user_model.biography)
+		self.logger.log(sql_query.encode('utf-8'))
 		self.data_source.execute(sql_query)
 
 	def merge_photo(self, photo):
@@ -64,21 +67,25 @@ class Repository:
 							_location := {9})'''
 		sql_query = sql_query.format(photo.id, photo.width, photo.height, photo.code, photo.is_ad, 
 			photo.likes_count, photo.viewer_has_liked, photo.is_video, photo.display_src, photo.location)
+		self.logger.log(sql_query.encode('utf-8'))
 		self.data_source.execute(sql_query)
 
 	def like(self, photo_model, status_code):
 		sql_query = 'select like_photo(_photo_id := {0}, _status_code := {1})'
 		sql_query = sql_query.format(photo_model.id, status_code)
+		self.logger.log(sql_query.encode('utf-8'))
 		self.data_source.execute(sql_query)
 
 	def follow(self, user, status_code):
 		sql_query = 'select follow_user(_user_id := {0}, _status_code := {1})'
 		sql_query = sql_query.format(user.id, status_code)
+		self.logger.log(sql_query.encode('utf-8'))
 		self.data_source.execute(sql_query)
 
 	def register_activity(self, activity):
 		sql_query = 'select register_activity(_type := {0}, _user_id := {1}, _activity_time := {2})'
 		sql_query = sql_query.format(activity.type, activity.user_id, activity.timestamp)
+		self.logger.log(sql_query.encode('utf-8'))
 		self.data_source.execute(sql_query)
 		
 
