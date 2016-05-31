@@ -98,14 +98,7 @@ class Activity:
 		self.type = 0
 
 	def from_json(self, json_node):
-		self.timestamp = self.mark_as_text(json_node.get('timestamp', 'null'))
+		self.timestamp = json_node.get('timestamp', 'null')
 		self.type = json_node.get('type', 0)
 		self.user_id = json_node['user'].get('pk', 0)
 		return self
-
-	def mark_as_text(self, text):
-		if (text == None or text == 'null'):
-			return 'null'
-		else:
-			text = text.replace('\'','')
-		return '\'' + text + '\''
