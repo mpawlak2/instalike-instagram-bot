@@ -124,7 +124,14 @@ class Operations:
 		return json.loads(response.content.decode('utf-8'))['tag']['media']['nodes']
 
 	def get_activity(self):
-		return self.session.get(self.get_account_activity_url, headers = self.headers)['activityFeed']
+		response = self.session.get(self.get_account_activity_url, headers = self.headers)
+
+		if (response.status_code != 200):
+			return None
+
+		return json.loads(response.content.decode('utf-8'))['activityFeed']['stories']
+
+
 
 	def get_photo_details(self, photo_code):
 		response = self.session.get(self.photo_details_url_tmpl.format(photo_code), headers = self.headers)

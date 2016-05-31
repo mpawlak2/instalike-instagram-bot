@@ -14,8 +14,7 @@ class ContentManager:
 		self.photos = []
 		self.photos_from_model = []
 		self.users_from_model = []
-		self.user_ids = []
-		self.data_from_tags = []
+		self.activities = []
 
 	def get_photos(self):
 		self.photos_from_model = []
@@ -51,7 +50,17 @@ class ContentManager:
 	def get_users(self):
 		return self.users_from_model
 
+	def get_activity(self):
+		self.activities = []
+		activities_json = self.operation.get_activity()
+
+		if (activities_json):
+			for json_node in activities_json:
+				activity_model = model.Activity().from_json(json_node)
+				self.activities.append(activity_model)
+		return self.activities
+
 	def filter_photos(self):
 		self.photos_from_model = self.spam_validator.validate_photos(self.photos_from_model)
-		print('downloaded {0} valid photos'.format(len(self.photos)))
+		print('downloaded {0} valid photos'.format(len(self.photos_from_model)))
 		

@@ -18,6 +18,7 @@ class InstaFollow:
 		self.follows = 0
 		self.failed_follows = 0
 		self.hourly_follows = 0
+		self.hourly_unfollows = 0
 
 		# timing
 		self.next_follow_time = 0
@@ -56,16 +57,12 @@ class InstaFollow:
 
 
 	def act(self):
-		if (len(self.users) == 0):
-			self.users = self.content_manager.get_users()
-			self.update_timer(10,20)
-
 		if (time.time() < self.next_follow_time):
 			return
 
+		self.users = self.content_manager.get_users()
 		user = self.users.pop()
-		if (not self.follow(user)):
-			self.users.insert(0, user)
+		self.follow(user)
 
 		self.update_timer(self.follow_time_delta - (self.follow_time_delta // 2), self.follow_time_delta + (self.follow_time_delta // 2))
 
