@@ -58,12 +58,12 @@ class Repository:
 							_id := {0},
 							_width := {1},
 							_height := {2},
-							_code := \'{3}\',
+							_code := {3},
 							_is_ad := {4},
 							_likes_count := {5},
 							_viewer_has_liked := {6},
 							_is_video := {7},
-							_display_src := \'{8}\',
+							_display_src := {8},
 							_location := {9})'''
 		sql_query = sql_query.format(photo.id, photo.width, photo.height, photo.code, photo.is_ad, 
 			photo.likes_count, photo.viewer_has_liked, photo.is_video, photo.display_src, photo.location)

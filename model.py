@@ -17,29 +17,34 @@ class Photo:
 	def from_json(self, json_node):
 		self.width = json_node['dimensions'].get('width', 0)
 		self.height = json_node['dimensions'].get('height', 0)
-		self.code = json_node['code']
+		self.code = self.mark_as_text(json_node['code'])
 		self.is_ad = json_node.get('is_ad', False)
 		self.likes_count = json_node['likes']['count']
 		self.viewer_has_liked = json_node['likes'].get('viewer_has_liked', False)
 		self.is_video = json_node['is_video']
 		self.id = json_node['id']
-		self.display_src = json_node['display_src']
-		self.location = self.try_get_location(json_node)
-		self.caption = json_node.get('caption', 'null')
+		self.display_src = self.mark_as_text(json_node['display_src'])
+		self.location = self.mark_as_text(self.try_get_location(json_node))
+		self.caption = self.mark_as_text(json_node.get('caption', 'null'))
 		self.owner_id = json_node['owner'].get('id', 'null')
-		self.owner_username = json_node['owner'].get('username', 'null')
+		self.owner_username = self.mark_as_text(json_node['owner'].get('username', 'null')) # nie mozna wyszukac uzytownika po 'username' powinno byc tylko username
 		return self
 
 	def try_get_location(self, json_node):
 		loc = json_node.get('location', 'null')
-
 		if (loc == 'null' or loc == None):
 			return 'null'
 		loc = loc.get('name', 'null')
 		if (loc == 'null'):
 			return 'null'
-		return '\'{0}\''.format(loc.replace("'", ""))
+		return loc
 
+	def mark_as_text(self, text):
+		if (text == None or text == 'null'):
+			return 'null'
+		else:
+			text = text.replace('\'','')
+		return '\'' + text + '\''
 
 class User:
 	def __init__(self):
@@ -80,8 +85,10 @@ class User:
 		return self
 
 	def mark_as_text(self, text):
-		if (text == None):
-			text = 'null'
+		if (text == None or text == 'null'):
+			return 'null'
+		else:
+			text = text.replace('\'','')
 		return '\'' + text + '\''
 
 class Activity:
@@ -97,8 +104,8 @@ class Activity:
 		return self
 
 	def mark_as_text(self, text):
-		if (text == None):
-			text = 'null'
+		if (text == None or text == 'null'):
+			return 'null'
 		else:
 			text = text.replace('\'','')
 		return '\'' + text + '\''
