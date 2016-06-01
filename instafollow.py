@@ -14,6 +14,10 @@ class InstaFollow:
 		# users
 		self.users = []
 
+		# unfollow
+		self.users_to_unfollow = []
+
+
 		# instance stats
 		self.follows = 0
 		self.failed_follows = 0
@@ -60,6 +64,10 @@ class InstaFollow:
 		if (time.time() < self.next_follow_time):
 			return
 
+		if (len(self.users_to_unfollow) == 0):
+			self.users_to_unfollow = self.content_manager.get_users_to_unfollow()
+			print(self.users_to_unfollow[1])
+
 		self.users = self.content_manager.get_users()
 		user = self.users.pop()
 		self.follow(user)
@@ -88,6 +96,7 @@ class InstaFollow:
 		self.log('estimated follows per hour: {0:.0f}'.format(per_hour))
 		self.log('next follow in: {0:.0f}s'.format(self.next_follow_time - time.time()))
 		self.log('users to follow: {0}'.format(len(self.users)))
+		self.log('users to unfollow: {0}'.format(len(self.users_to_unfollow)))
 
 	def log(self, text):
 		print(text)

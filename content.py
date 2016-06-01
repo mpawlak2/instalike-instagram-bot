@@ -1,4 +1,5 @@
 import random
+import json
 
 import spam
 import model
@@ -49,6 +50,10 @@ class ContentManager:
 
 	def get_users(self):
 		return self.users_from_model
+
+	def get_users_to_unfollow(self):
+		response = self.repository.get_users_to_unfollow()
+		return json.loads(response)
 
 	def get_activity(self):
 		self.activities = []

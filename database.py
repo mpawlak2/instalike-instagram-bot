@@ -11,6 +11,12 @@ class DataSource:
 	def execute(self, sql_query):
 		self.connection.execute(sql_query)
 
+	def prepare_procedure(self, procedure_signature):
+		proc = self.connection.proc(procedure_signature)
+		return proc
+
+
+
 		
 class Repository:
 	def __init__(self, data_source):
@@ -87,6 +93,9 @@ class Repository:
 		sql_query = sql_query.format(activity.type, activity.user_id, activity.timestamp)
 		self.logger.log(sql_query.encode('utf-8'))
 		self.data_source.execute(sql_query)
-		
+
+	def get_users_to_unfollow(self):
+		proc = self.data_source.prepare_procedure('get_users_to_unfollow()')
+		return proc()
 
 		

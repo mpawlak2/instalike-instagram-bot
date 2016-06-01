@@ -185,3 +185,20 @@ begin
 	where vf.user_id not in (select a.user_id from activities a where a.activity_type = 3) and date_part('day', vf.start_following, clock_timestamp()) + 4 >= 0;
 end
 $$ language plpgsql;
+
+
+
+
+-- creating tables 
+create table if not exists unfollows(id serial primary key, user_id bigint, unfollow_time timestamp);
+
+
+
+-- functions
+create or replace function unfollow(_user_id bigint, _status_code int) 
+returns void as
+$$
+begin
+	insert into unfollows(user_id, unfollow_time) values(_user_id, clock_timestamp());
+end
+$$ language plpgsql;
