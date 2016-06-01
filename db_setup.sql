@@ -75,17 +75,6 @@ begin
 end
 $$ language plpgsql;
 
-
-create or replace function merge_activity(id bigint)
-returns boolean
-as $$
--- store activities from your account
-begin
-
-end
-$$ language plpgsql;
-
-
 create or replace function like_photo(_photo_id bigint, _success boolean, _status_code integer)
 returns boolean
 as $$
@@ -190,7 +179,7 @@ $$ language plpgsql;
 
 
 -- creating tables 
-create table if not exists unfollows(id serial primary key, user_id bigint, unfollow_time timestamp);
+create table if not exists unfollows(id serial primary key, user_id bigint, status_code integer, unfollow_time timestamp);
 
 
 
@@ -199,6 +188,7 @@ create or replace function unfollow(_user_id bigint, _status_code int)
 returns void as
 $$
 begin
-	insert into unfollows(user_id, unfollow_time) values(_user_id, clock_timestamp());
+	insert into unfollows(user_id, status_code, unfollow_time) values(_user_id, _status_code, clock_timestamp());
 end
 $$ language plpgsql;
+

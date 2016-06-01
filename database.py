@@ -98,4 +98,9 @@ class Repository:
 		proc = self.data_source.prepare_procedure('get_users_to_unfollow()')
 		return proc()
 
+	def unfollow(self, user_id, status_code):
+		sql_query = 'select unfollow(_user_id := {0}, _status_code := {1})'.format(user_id, status_code)
+		self.logger.log(sql_query.encode('utf-8'))
+		self.data_source.execute(sql_query)
+
 		
