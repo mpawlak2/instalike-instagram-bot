@@ -9,6 +9,8 @@ class InstaFollow:
 
 		# configuration
 		self.max_follows_per_hour = 10
+
+		# unfollow configuration
 		self.max_unfollows_per_hour = 10
 
 		# users
@@ -19,6 +21,8 @@ class InstaFollow:
 		self.follows = 0
 		self.unfollows = 0
 		self.failed_follows = 0
+		self.failed_unfollows = 0
+
 		self.hourly_follows = 0
 		self.hourly_unfollows = 0
 
@@ -45,11 +49,14 @@ class InstaFollow:
 		else:
 			self.followed_successfully(user)
 
-		self.update_follow_timer(self.follow_time_delta - (self.follow_time_delta // 2), self.follow_time_delta + (self.follow_time_delta // 2))
+		self.update_follow_timer()
 
 	def unfollow(self):
 		if (time.time() < self.next_unfollow_time):
 			return
+
+		if (len(self.user_ids_to_unfollow) == 0):
+			self.user_ids_to_unfollow = self.content_manager.get_users_to_unfollow()
 
 		user_id = self.user_ids_to_unfollow.pop()
 		response = self.operation.unfollow(user_id)
@@ -60,28 +67,47 @@ class InstaFollow:
 		else:
 			self.unfollowed()
 
-		self.update_unfollow_timer(self.follow_time_delta - (self.follow_time_delta // 2), self.follow_time_delta + (self.follow_time_delta // 2))
-
-	def failed_unfollow(self):
-		print('could not unfollow')
-
-	def unfollowed(self):
-		self.unfollows += 1
+		self.update_unfollow_timer()
 
 	def act(self):
-		if (len(self.user_ids_to_unfollow) == 0):
-			self.user_ids_to_unfollow = self.content_manager.get_users_to_unfollow()
-
 		self.follow()
 		self.unfollow()
 
-	def update_follow_timer(self, mini, maxi):
-		self.next_follow_time = time.time() + randint(mini, maxi)
+	def update_follow_timer(self):
+		self.next_follow_time = time.time() + randint(self.follow_time_delta - (self.follow_time_delta // 2), self.follow_time_delta + (self.follow_time_delta // 2))
 		self.get_stats()
 
-	def update_unfollow_timer(self, mini, maxi):
-		self.next_unfollow_time = time.time() + randint(mini, maxi)
+	def update_unfollow_timer(self):
+		self.next_unfollow_time = time.time() + randint(self.follow_time_delta - (self.follow_time_delta // 2), self.follow_time_delta + (self.follow_time_delta // 2))
 		self.get_stats()
+
+
+	def get_stats(self):
+		self.t1 = time.time()
+		per_hour_follows = ((self.follows + self.failed_follows) * 60 * 60) // (1 if (self.t1 - self.t0) == 0 else self.t1 - self.t0)
+		per_hour_unfollows = ((self.unfollows + self.failed_unfollows) * 60 * 60) // (1 if (self.t1 - self.t0) == 0 else self.t1 - self.t0)
+		self.log('#######################################')
+		self.log('---------------FOLLOWS-----------------')
+		self.log('total time: {0:.0f}s'.format(self.t1 - self.t0))
+		self.log('follows: {0}'.format(self.follows))
+		self.log('failed follows: {0}'.format(self.failed_follows))
+		self.log('unfollows: {0}'.format(self.unfollows))
+		self.log('failed unfollows: {0}'.format(self.failed_unfollows))
+		self.log('estimated follows per hour: {0:.0f}'.format(per_hour_follows))
+		self.log('estimated unfollows per hour: {0:.0f}'.format(per_hour_unfollows))
+		self.log('next follow in: {0:.0f}s'.format(self.next_follow_time - time.time()))
+		self.log('next unfollow in: {0:.0f}s'.format(self.next_unfollow_time - time.time()))
+		self.log('users to follow: {0}'.format(len(self.users)))
+		self.log('users to unfollow: {0}'.format(len(self.user_ids_to_unfollow)))
+
+	def log(self, text):
+		print(text)
+		
+	def failed_unfollow(self):
+		self.failed_unfollows += 1
+
+	def unfollowed(self):
+		self.unfollows += 1
 
 	def failed_follow(self):
 		self.failed_follows += 1
@@ -89,21 +115,3 @@ class InstaFollow:
 	def followed_successfully(self, user):
 		self.follows += 1
 		self.hourly_follows += 1
-
-	def get_stats(self):
-		self.t1 = time.time()
-		per_hour = ((self.follows + self.failed_follows) * 60 * 60) // (1 if (self.t1 - self.t0) == 0 else self.t1 - self.t0)
-		self.log('#######################################')
-		self.log('---------------FOLLOWS-----------------')
-		self.log('total time: {0:.0f}s'.format(self.t1 - self.t0))
-		self.log('follows: {0}'.format(self.follows))
-		self.log('failed follows: {0}'.format(self.failed_follows))
-		self.log('unfollows: {0}'.format(self.unfollows))
-		self.log('estimated follows per hour: {0:.0f}'.format(per_hour))
-		self.log('next follow in: {0:.0f}s'.format(self.next_follow_time - time.time()))
-		self.log('users to follow: {0}'.format(len(self.users)))
-		self.log('users to unfollow: {0}'.format(len(self.user_ids_to_unfollow)))
-
-	def log(self, text):
-		print(text)
-		

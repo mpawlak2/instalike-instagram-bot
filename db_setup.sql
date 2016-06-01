@@ -192,3 +192,22 @@ begin
 end
 $$ language plpgsql;
 
+CREATE OR REPLACE FUNCTION public.unfollow(
+    _user_id bigint,
+    _status_code integer)
+  RETURNS void AS
+$BODY$
+begin
+	insert into unfollows(user_id, unfollow_time) values(_user_id, clock_timestamp());
+
+	update unfollow_queue
+	set unfollow_time = clock_timestamp()
+	where user_id = _user_id;
+end
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION public.unfollow(bigint, integer)
+  OWNER TO postgres;
+
+
