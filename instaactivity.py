@@ -20,6 +20,9 @@ class InstaActivity:
 	# 3 - follow
 
 	def parse_activities(self):
+		self.follows = 0
+		self.likes = 0
+		
 		activities = self.content_manager.get_activity()
 		for activity in activities:
 			if (activity.type == 3):
