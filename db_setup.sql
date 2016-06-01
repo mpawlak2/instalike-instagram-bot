@@ -174,3 +174,14 @@ begin
 end
 $$ language plpgsql;
 
+create table unfollow_queue (user_id bigint primary key, unfollow_time timestamp);
+create or replace function update_unfollow_queue()
+returns void
+as $$
+begin 
+	insert into unfollow_queue
+	select vf.user_id 
+	from (select f.user_id, f.start_following from following f where f.user_id not in (select user_id from unfollow_queue)) vf
+	where vf.user_id not in (select a.user_id from activities a where a.activity_type = 3) and date_part('day', vf.start_following, clock_timestamp()) + 4 >= 0;
+end
+$$ language plpgsql;
