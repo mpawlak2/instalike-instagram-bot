@@ -39,7 +39,7 @@ class InstaLike:
 
 	def act(self):
 		if (len(self.instagrams) == 0):
-			self.instagrams = random.sample(self.content_manager.get_photos(), 7)
+			self.instagrams = self.content_manager.get_photos()
 			self.update_time(30,50)
 
 		if (not self.can_act()):

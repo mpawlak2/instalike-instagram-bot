@@ -46,6 +46,11 @@ class ContentManager:
 
 		self.filter_photos()
 
+		if (len(self.photos_from_model) < no_of_photos):
+			no_of_photos = len(self.photos_from_model)
+
+		self.photos_from_model = random.sample(self.photos_from_model, no_of_photos)
+
 		return self.photos_from_model
 
 	def get_users(self):
