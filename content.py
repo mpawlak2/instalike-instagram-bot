@@ -50,6 +50,7 @@ class ContentManager:
 			no_of_photos = len(self.photos_from_model)
 
 		self.photos_from_model = random.sample(self.photos_from_model, no_of_photos)
+		self.users_from_model = self.spam_validator.validate_users(self.users_from_model)
 
 		return self.photos_from_model
 

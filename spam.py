@@ -4,22 +4,22 @@ import re
 import model
 
 class SpamDetector:
-	operation = object()
-	photo_vaidator = object()
-
-	# FOLLOWS
-
-	# COMMENTS
-
-
 	def __init__(self, op_object, repository):
 		self.operation = op_object
 		self.repository = repository
 		self.photo_vaidator = PhotoValidator()
+		self.user_validator = UserValidator()
 
 
 	def is_user_fake(self, user_id):
 		pass
+
+	def validate_users(self, users):
+		valid_users = []
+		for user in users:
+			if(self.user_validator.is_valid(user)):
+				valid_users.append(user)
+		return valid_users
 
 	def validate_photos(self, photos):
 		filtered_photos = []
@@ -61,6 +61,42 @@ class SpamDetector:
 		print(message)
 
 
+class UserValidator:
+	def __init__(self):
+		self.username_blacklist = ['nude']
+		self.description_blacklist = ['tbt-sex', 'sexy', 'nude', 'boobs']
+
+		self.min_followers = 50
+		self.min_following = 50
+
+	def is_valid(self, user):
+		return self.is_in_follow_bounds(user) and self.is_not_already_followed(user) and not self.illegal_username(user) and not self.illegal_user_bio(user)
+
+	def is_in_follow_bounds(self, user):
+		if (user.follows_count > self.min_following and user.followed_by_count > self.min_followers):
+			return True
+		return False
+
+	def is_not_already_followed(self, user):
+		return not user.followed_by_viewer
+
+	def illegal_username(self, user):
+		for bad_word in self.username_blacklist:
+			match = re.search(bad_word, user.username)
+			if (match):
+				return True
+
+		return False
+
+	def illegal_user_bio(self, user):
+		for bad_word in self.description_blacklist:
+			match = re.search(bad_word, user.biography)
+			if (match):
+				return True
+
+		return False
+
+		
 
 
 class PhotoValidator:
