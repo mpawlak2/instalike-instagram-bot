@@ -59,7 +59,9 @@ class ContentManager:
 
 	def get_users_to_unfollow(self):
 		response = self.repository.get_users_to_unfollow()
-		return json.loads(response)
+		if(response):
+			return json.loads(response)
+		return []
 
 	def get_activity(self):
 		self.activities = []

@@ -58,14 +58,15 @@ class InstaFollow:
 		if (len(self.user_ids_to_unfollow) == 0):
 			self.user_ids_to_unfollow = self.content_manager.get_users_to_unfollow()
 
-		user_id = self.user_ids_to_unfollow.pop()
-		response = self.operation.unfollow(user_id)
-		self.repository.unfollow(user_id, response.status_code)
+		if(len(self.user_ids_to_unfollow) > 0):
+			user_id = self.user_ids_to_unfollow.pop()
+			response = self.operation.unfollow(user_id)
+			self.repository.unfollow(user_id, response.status_code)
 
-		if (response.status_code != 200):
-			self.failed_unfollow()
-		else:
-			self.unfollowed()
+			if (response.status_code != 200):
+				self.failed_unfollow()
+			else:
+				self.unfollowed()
 
 		self.update_unfollow_timer()
 
