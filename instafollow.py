@@ -30,7 +30,8 @@ class InstaFollow:
 		self.next_follow_time = 0
 		self.next_unfollow_time = 0
 
-		self.follow_time_delta = 60 * 60 // ((self.max_follows_per_hour + self.max_unfollows_per_hour) // 2)
+		self.follow_time_delta = 60 * 60 // self.max_follows_per_hour
+		self.unfllow_time_delta = 60 * 60 // self.max_unfollows_per_hour
 
 		self.t0 = time.time()
 		self.t1 = 0
@@ -79,7 +80,7 @@ class InstaFollow:
 		self.get_stats()
 
 	def update_unfollow_timer(self):
-		self.next_unfollow_time = time.time() + randint(self.follow_time_delta - (self.follow_time_delta // 2), self.follow_time_delta + (self.follow_time_delta // 2))
+		self.next_unfollow_time = time.time() + randint(self.unfllow_time_delta - (self.unfllow_time_delta // 2), self.unfllow_time_delta + (self.unfllow_time_delta // 2))
 		self.get_stats()
 
 
