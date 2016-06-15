@@ -15,6 +15,7 @@ class Configuration:
 		ban = self.config['BAN']
 		database = self.config['DATABASE']
 		instalike = self.config['INSTALIKE']
+		instafollow = self.config['INSTAFOLLOW']
 
 		# BOT SECTION
 		self.bot_work_hours = bot.get('workhoursperday', 6)
@@ -46,5 +47,8 @@ class Configuration:
 		self.instalike_max_likes_per_hour = int(instalike.get('maxlikesperhour', 160))
 		self.instalike_tags = instalike.get('tags', None)
 
-
+		# INSTAFOLLOW
+		self.instafollow_max_follows_per_hour = int(instafollow.get('maxfollowsperhour', 8))
+		self.instafollow_max_unfollows_per_hour = int(instafollow.get('maxunfollowsperhour', 2))
+		self.instafollow_unfollow_who_does_not_follow_back = instafollow.getboolean('unfollowwhennotfollowingback', True)
 		
