@@ -24,6 +24,8 @@ class InstaActivity:
 		self.likes = 0
 		
 		activities = self.content_manager.get_activity()
+		if(len(activities) == 0):
+			return
 		for activity in activities:
 			if (activity.type == 3):
 				self.follows += 1

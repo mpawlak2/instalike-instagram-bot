@@ -129,7 +129,17 @@ class Operations:
 		if (response.status_code != 200):
 			return None
 
-		return json.loads(response.content.decode('utf-8'))['activityFeed']['stories']
+		print(response.content)		
+		try:
+				decoded = json.loads(response.content.decode('utf-8'))
+		except json.decoder.JSONDecodeError:
+			return None
+			
+		activityFeed = decoded.get('activityFeed', None)
+		if(not activityFeed):
+			return None
+
+		return activityFeed.get('stories', None)
 
 
 

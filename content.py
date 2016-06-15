@@ -10,7 +10,7 @@ class ContentManager:
 		self.repository = repository
 		self.spam_validator = spam.SpamDetector(self.operation, self.repository)
 
-		self.tags = ['l4l', 'f4f']
+		self.tags = ['l4l', 'f4f', 'polishgirl', 'polskadziewczyna']
 
 		self.photos = []
 		self.photos_from_model = []
