@@ -5,13 +5,16 @@ import content
 import instafollow
 import instalike
 import instaactivity
+import configuration
 
 import time
 
 class InstaBot:
 	def __init__(self, username, password):
-		self.username = username
-		self.password = password
+		self.configuration = configuration.Configuration('default.cfg')
+		
+		self.username = self.configuration.instagram_username
+		self.password = self.configuration.instagram_password
 
 		self.operation = operation.Operations()
 		self.data_source = database.DataSource('postgres', 'postgres', 'localhost', 'instamanager')
@@ -40,9 +43,25 @@ class InstaBot:
 	def log(self, text):
 		print(text)
 
+	def initialize(self):
+		if(not self.config):
+			print('Error reading configuration file: default.cfg')
+			return False
+		else:
+			self.username = self.config['INSTAGRAM'].get('username', None)
+			self.password = self.config['INSTAGRAM'].get('password', None)
+			if(not self.username or not self.password):
+				print('You have to provide username and password. Update section [INSTAGRAM] in default.cfg file!')
+				return False
+
+
+
+
+
+
 	def start(self):
 		self.period_randomizer.randomize()
-		self.period_randomizer.info();
+		self.period_randomizer.info()
 
 		while(not self.log_in()):
 			print('failed to log in wait for 5min')
@@ -50,8 +69,11 @@ class InstaBot:
 
 		while(True):
 			if (self.period_randomizer.is_active()):
-				self.like_bot.act()
-				self.follow_bot.act()
+				if(self.configuration.enable_instalike):
+						self.like_bot.act()
+
+				if(self.configuration.enable_instafollow):
+						self.follow_bot.act()
 				self.activity_bot.act()
 			time.sleep(1 / 60)
 
