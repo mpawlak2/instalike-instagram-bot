@@ -8,10 +8,10 @@ class InstaFollow:
 		self.content_manager = content_manager
 
 		# configuration
-		self.max_follows_per_hour = 8
+		self.max_follows_per_hour = 6
 
 		# unfollow configuration
-		self.max_unfollows_per_hour = 8
+		self.max_unfollows_per_hour = 2
 
 		# users
 		self.users = []
