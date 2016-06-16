@@ -27,6 +27,7 @@ class InstaBot:
 		self.like_bot = instalike.InstaLike(self.operation, self.repository, self.content_manager)
 		self.activity_bot = instaactivity.InstaActivity(self.operation, self.repository, self.content_manager)
 
+		# timing
 		self.next_frame = 0
 	
 	def log_in(self):
@@ -51,7 +52,7 @@ class InstaBot:
 			self.username = self.config['INSTAGRAM'].get('username', None)
 			self.password = self.config['INSTAGRAM'].get('password', None)
 			if(not self.username or not self.password):
-				print('You have to provide username and password. Update section [INSTAGRAM] in default.cfg file!')
+				print('You have to provide username and password. Update section INSTAGRAM in default.cfg file!')
 				return False
 
 
