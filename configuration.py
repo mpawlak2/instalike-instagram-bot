@@ -67,3 +67,6 @@ class Configuration:
 			if(not self.instalike_tags):
 				print('You have to provide tags under INSTALIKE section in default.cfg file.')
 				return False
+		
+		# all fine
+		return True

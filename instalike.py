@@ -5,15 +5,17 @@ import model
 
 class InstaLike:
 
-	def __init__(self, operation, repository, content_manager):
+	def __init__(self, operation, repository, content_manager, configuration):
 		self.operation = operation
 		self.content_manager = content_manager
 		self.repository = repository
+		self.configuration = configuration
 
 		self.instagrams = []
 
 		# CONFIGURATION BELOW
-		self.max_likes_per_hour = 200
+		# self.max_likes_per_hour = 200
+		self.max_likes_per_hour = self.configuration.instalike_max_likes_per_hour
 		
 		# timing stuff
 		self.next_like_time = 0
