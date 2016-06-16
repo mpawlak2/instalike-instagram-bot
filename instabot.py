@@ -60,6 +60,11 @@ class InstaBot:
 
 
 	def start(self):
+		# we need valid configuration in order for bot to work properly
+		if(not self.configuration.validate()):
+			return False
+
+		# generate 'random' periods of time
 		self.period_randomizer.randomize()
 		self.period_randomizer.info()
 

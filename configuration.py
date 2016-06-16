@@ -51,4 +51,19 @@ class Configuration:
 		self.instafollow_max_follows_per_hour = int(instafollow.get('maxfollowsperhour', 8))
 		self.instafollow_max_unfollows_per_hour = int(instafollow.get('maxunfollowsperhour', 2))
 		self.instafollow_unfollow_who_does_not_follow_back = instafollow.getboolean('unfollowwhennotfollowingback', True)
-		
+
+	def validate(self):
+		if(not self.instagram_username or not self.instagram_password):
+			print('You have to provide instagram username and password under INSTAGRAM section in default.cfg file.')
+			return False
+
+		if(self.enable_database):
+			if(not self.database_user or not self.database_password):
+				print('You have to provide database username and password or disable database use under DATABASE section in default.cfg file.')
+				return False
+
+		# validate instalike configuration
+		if(self.enable_instalike):
+			if(not self.instalike_tags):
+				print('You have to provide tags under INSTALIKE section in default.cfg file.')
+				return False
