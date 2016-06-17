@@ -11,7 +11,8 @@ class ContentManager:
 		self.configuration = configuration
 		self.spam_validator = spam.SpamDetector(self.operation, self.repository)
 
-		self.tags = map(lambda tag: tag.strip(), self.configuration.instalike_tags.split(','))
+		self.tags = list(map(lambda tag: tag.strip(), self.configuration.instalike_tags.split(',')))
+		print(len(self.tags))
 
 		self.photos = []
 		self.photos_from_model = []
