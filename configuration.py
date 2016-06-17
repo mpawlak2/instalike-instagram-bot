@@ -18,6 +18,8 @@ class Configuration:
 		instafollow = self.config['INSTAFOLLOW']
 
 		# BOT SECTION
+		self.bot_work_whole_time = bot.get('workwholetime', False)
+		self.bot_stop_after_minutes = bot.get('stopafternumerOfminutes', 0)
 		self.bot_work_hours = bot.get('workhoursperday', 6)
 		self.intelligent_hours = bot.get('intelligentworkinghours', False)
 		self.enable_instalike = bot.getboolean('instalike', True)
@@ -42,6 +44,7 @@ class Configuration:
 		self.database_name = database.get('databasename', 'instamanager')
 		self.database_user = database.get('username', None)
 		self.database_password = database.get('password', None)
+		self.database_address = database.get('address', 'localhost')
 
 		# INSTALIKE
 		self.instalike_max_likes_per_hour = int(instalike.get('maxlikesperhour', 160))
