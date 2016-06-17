@@ -1,9 +1,14 @@
 import configparser
 
+import sys
+import getopt
+
 class Configuration:
 	def __init__(self, filename):
 		self.config = configparser.ConfigParser()
 		self.config.read(filename)
+
+		self.args = sys.argv[1:]
 
 		if(not self.config):
 			print('Could not open the file {0}'.format(filename))
@@ -56,6 +61,22 @@ class Configuration:
 		self.instafollow_unfollow_who_does_not_follow_back = instafollow.getboolean('unfollowwhennotfollowingback', True)
 
 	def validate(self):
+		# override default.cfg username and password settings if provided via command line
+		if(len(self.args) > 0):
+			try:
+				opts, args = getopt.getopt(self.args, 'u:p:')
+			except getopt.GetoptError:
+				print('Usage: main.py -u username -p password')
+				return False
+			if(len(opts) != 2):
+				print('Usage: main.py -u username -p password')
+				return False
+			for opt, arg in opts:
+				if(opt == '-u'):
+					self.instagram_username = arg
+				if(opt == '-p'):
+					self.instagram_password = arg
+
 		if(not self.instagram_username or not self.instagram_password):
 			print('You have to provide instagram username and password under INSTAGRAM section in default.cfg file.')
 			return False
