@@ -12,9 +12,6 @@ import time
 class InstaBot:
 	def __init__(self, username, password):
 		self.configuration = configuration.Configuration('default.cfg')
-		
-		self.username = self.configuration.instagram_username
-		self.password = self.configuration.instagram_password
 
 		self.operation = operation.Operations()
 		self.data_source = database.DataSource(self.configuration.database_user, self.configuration.database_password, self.configuration.database_address, self.configuration.database_name)
@@ -33,7 +30,7 @@ class InstaBot:
 	
 	def log_in(self):
 		self.log('trying to log in ...')
-		response = self.operation.log_in(self.username.lower(), self.password)
+		response = self.operation.log_in(self.configuration.instagram_username.lower(), self.configuration.instagram_password)
 
 		if (response):
 			self.log('logged in')
