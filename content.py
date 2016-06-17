@@ -5,12 +5,14 @@ import spam
 import model
 
 class ContentManager:
-	def __init__(self, operation, repository):
+	def __init__(self, operation, repository, configuration):
 		self.operation = operation
 		self.repository = repository
+		self.configuration = configuration
 		self.spam_validator = spam.SpamDetector(self.operation, self.repository)
 
 		self.tags = ['l4l', 'f4f', 'polishgirl', 'polskadziewczyna']
+		self.tags = map(lambda tag: tag.strip(), self.configuration.instalike_tags.split(','))
 
 		self.photos = []
 		self.photos_from_model = []

@@ -19,7 +19,7 @@ class InstaBot:
 		self.operation = operation.Operations()
 		self.data_source = database.DataSource('postgres', 'postgres', 'localhost', 'instamanager')
 		self.repository = database.Repository(self.data_source)
-		self.content_manager = content.ContentManager(self.operation, self.repository)
+		self.content_manager = content.ContentManager(self.operation, self.repository, self.configuration)
 		self.period_randomizer = period.PeriodRandomizer()
 
 		# bots
