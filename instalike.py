@@ -14,7 +14,6 @@ class InstaLike:
 		self.instagrams = []
 
 		# CONFIGURATION BELOW
-		# self.max_likes_per_hour = 200
 		self.max_likes_per_hour = self.configuration.instalike_max_likes_per_hour
 		
 		# timing stuff
