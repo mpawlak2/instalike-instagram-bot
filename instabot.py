@@ -44,22 +44,6 @@ class InstaBot:
 	def log(self, text):
 		print(text)
 
-	def initialize(self):
-		if(not self.config):
-			print('Error reading configuration file: default.cfg')
-			return False
-		else:
-			self.username = self.config['INSTAGRAM'].get('username', None)
-			self.password = self.config['INSTAGRAM'].get('password', None)
-			if(not self.username or not self.password):
-				print('You have to provide username and password. Update section INSTAGRAM in default.cfg file!')
-				return False
-
-
-
-
-
-
 	def start(self):
 		# we need valid configuration in order for bot to work properly
 		if(not self.configuration.validate()):
