@@ -20,7 +20,7 @@ class InstaBot:
 		self.data_source = database.DataSource(self.configuration.database_user, self.configuration.database_password, self.configuration.database_address, self.configuration.database_name)
 		self.repository = database.Repository(self.data_source)
 		self.content_manager = content.ContentManager(self.operation, self.repository, self.configuration)
-		self.period_randomizer = period.PeriodRandomizer()
+		self.period_randomizer = period.PeriodRandomizer(self.configuration)
 
 		# bots
 		self.follow_bot = instafollow.InstaFollow(self.operation, self.repository, self.content_manager)
@@ -29,6 +29,7 @@ class InstaBot:
 
 		# timing
 		self.next_frame = 0
+		self.start_time = time.time()
 	
 	def log_in(self):
 		self.log('trying to log in ...')

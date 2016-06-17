@@ -3,7 +3,8 @@ import time
 from random import randint
 
 class PeriodRandomizer:
-	def __init__(self):
+	def __init__(self, configuration):
+		self.configuration = configuration
 		# 0 - 23 format
 		self.from_hour = 7
 		self.to_hour = 23
@@ -28,6 +29,9 @@ class PeriodRandomizer:
 		self.next_info_print = 0
 
 	def randomize(self):
+		# working whole time or for certain amount of time. No need to generate random periods.
+		if(self.configuration.bot_work_whole_time):
+			return
 		self.periods = []
 
 		now = datetime.datetime.now()
@@ -85,6 +89,9 @@ class PeriodRandomizer:
 		self.periods = valid_periods
 
 	def is_active(self):
+		# working whole time, active.
+		if(self.configuration.bot_work_whole_time):
+			return True
 		if (len(self.periods) == 0):
 			if(self.from_time.day != datetime.datetime.now().day):
 				self.randomize()
@@ -116,6 +123,10 @@ class PeriodRandomizer:
 		return time_diff
 
 	def info(self):
+		if(self.configuration.bot_work_whole_time):
+			print('working whole time.')
+			return
+			
 		print('time periods, total: {0:.0f} minutes'.format(self.actual_length))
 
 		for period in self.periods:

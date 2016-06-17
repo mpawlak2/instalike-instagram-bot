@@ -18,7 +18,7 @@ class Configuration:
 		instafollow = self.config['INSTAFOLLOW']
 
 		# BOT SECTION
-		self.bot_work_whole_time = bot.get('workwholetime', False)
+		self.bot_work_whole_time = bot.getboolean('workwholetime', False)
 		self.bot_stop_after_minutes = bot.get('stopafternumerOfminutes', 0)
 		self.bot_work_hours = bot.get('workhoursperday', 6)
 		self.intelligent_hours = bot.get('intelligentworkinghours', False)
