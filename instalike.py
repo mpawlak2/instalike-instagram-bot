@@ -49,8 +49,11 @@ class InstaLike:
 		if (time.time() < self.next_like_time):
 			return
 
-		photo = self.instagrams.pop()
-		self.like(photo)
+		if(len(self.instagrams) > 0):
+			photo = self.instagrams.pop()
+			self.like(photo)
+		else:
+			print('Error getting photos from tags')
 
 		self.update_time(self.like_time_delta - (self.like_time_delta // 2), self.like_time_delta + (self.like_time_delta // 2))
 
