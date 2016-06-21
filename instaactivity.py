@@ -1,7 +1,7 @@
 import time
 import random
 
-# bot that records follows & likes you receive.
+# bot that records follows & comments & likes you receive.
 class InstaActivity:
 	def __init__(self, operation, repository, content_manager):
 		self.operation = operation
@@ -46,7 +46,7 @@ class InstaActivity:
 	def get_stats(self):
 		print('#######################################')
 		print('--------------ACTIVITIES---------------')
-		print('my follows: {0}'.format(self.follows))
-		print('my likes: {0}'.format(self.likes))
+		print('received follows: {0}'.format(self.follows))
+		print('received likes: {0}'.format(self.likes))
 
 		
