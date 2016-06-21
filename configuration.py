@@ -76,6 +76,8 @@ class Configuration:
 					self.instagram_username = arg
 				if(opt == '-p'):
 					self.instagram_password = arg
+		
+		print('credentials are: "{0}" with password "{1}"'.format(self.instagram_username, self.instagram_password))
 
 		if(not self.instagram_username or not self.instagram_password):
 			print('You have to provide instagram username and password under INSTAGRAM section in default.cfg file.')
