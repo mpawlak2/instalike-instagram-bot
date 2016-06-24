@@ -6,5 +6,6 @@ class FileOutput:
 		self.target.close()
 
 	def log(self, text):
-		self.target.write(text)
+		pass
+		# self.target.write(text)
 		
