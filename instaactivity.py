@@ -40,7 +40,7 @@ class InstaActivity:
 
 
 	def update_timer(self):
-		self.next_activity_check = time.time() + random.randint(30,60)
+		self.next_activity_check = time.time() + random.randint(100,120)
 		self.get_stats()
 
 	def get_stats(self):
