@@ -20,7 +20,7 @@ class InstaBot:
 		self.period_randomizer = period.PeriodRandomizer(self.configuration)
 
 		# bots
-		self.follow_bot = instafollow.InstaFollow(self.operation, self.repository, self.content_manager)
+		self.follow_bot = instafollow.InstaFollow(self.operation, self.repository, self.content_manager, self.configuration)
 		self.like_bot = instalike.InstaLike(self.operation, self.repository, self.content_manager, self.configuration)
 		self.activity_bot = instaactivity.InstaActivity(self.operation, self.repository, self.content_manager)
 

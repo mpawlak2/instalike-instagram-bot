@@ -2,10 +2,11 @@ import time
 from random import randint
 
 class InstaFollow:
-	def __init__(self, operation, repository, content_manager):
+	def __init__(self, operation, repository, content_manager, configuration):
 		self.operation = operation
 		self.repository = repository
 		self.content_manager = content_manager
+		self.configuration = configuration
 
 		# configuration
 		self.max_follows_per_hour = 6
