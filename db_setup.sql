@@ -15,7 +15,7 @@ create table users(id bigint primary key,
 		    biography varchar(1000));
 
 create table photos 
-	(id int primary key,
+	(id bigint primary key,
 	code varchar(100) unique,
 	width int,
 	height int,
