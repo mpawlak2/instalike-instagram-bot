@@ -79,6 +79,9 @@ edit `default.cfg` file
   </tr>
 </table>
 
+# how to start
+`python main.py` or `python main.py -u username -p password`
+
 
 # instalike
 instagram profile management
