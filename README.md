@@ -65,6 +65,18 @@ edit `default.cfg` file
     <td>NOTIFICATIONS::EmailServerPassword</td>
     <td>not working</td>
   </tr>
+  <tr id='opt13'>
+    <td>BAN::DoNotGetBanned</td>
+    <td>not working</td>
+  </tr>
+  <tr id='opt14'>
+    <td>INSTAGRAM::Username</td>
+    <td>Instagram username.</td>
+  </tr>
+  <tr id='opt15'>
+    <td>INSTAGRAM::Password</td>
+    <td>Instagram password.</td>
+  </tr>
 </table>
 
 
