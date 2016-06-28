@@ -2,6 +2,52 @@ in progress..
 <br/><br/>
 ![some likes](https://s32.postimg.org/53zwfkat1/Screenshot_2016_05_25_05_20_06_1.png)
 
+# what works
+- automated likes
+- automated follows
+
+# configuration guide
+edit `default.cfg` file
+<table>
+  <tr>
+    <th>Option</th>
+    <th>Meaning</th>
+  </tr>
+  <tr id='opt0'>
+    <td>BOT::WorkWholeTime</td>
+    <td>If set to <code>True</code> bot will work whole time, no breaks. In other case periods will be in use.</td>
+  </tr>
+  <tr id='opt1'>
+    <td>BOT::StopAfterNumerOfMinutes</td>
+    <td>not working</td>
+  </tr>
+  <tr id='opt2'>
+    <td>BOT::WorkHoursPerDay</td>
+    <td>If option <code onmouseover='alert(1);'>BOT::WorkWholeTime</code> is set to <code>False</code> bot will work in 2 to 5 periods that sum up to that amount.</td>
+  </tr>
+  <tr id='opt3'>
+    <td>BOT::IntelligentWorkingHours</td>
+    <td>not working</td>
+  </tr>
+  <tr id='opt4'>
+    <td>BOT::InstaLike</td>
+    <td>If set to <code>True</code> bot will be liking photos.</td>
+  </tr>
+  <tr id='opt5'>
+    <td>BOT::InstaFollow</td>
+    <td>If set to <code>True</code> bot will be following users.</td>
+  </tr>
+  <tr id='opt6'>
+    <td>BOT::InstaComment</td>
+    <td>not working</td>
+  </tr>
+  <tr id='opt7'>
+    <td>BOT::InstaMessage</td>
+    <td>not working</td>
+  </tr>
+</table>
+
+
 # instalike
 instagram profile management
 
