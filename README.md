@@ -45,6 +45,26 @@ edit `default.cfg` file
     <td>BOT::InstaMessage</td>
     <td>not working</td>
   </tr>
+  <tr id='opt8'>
+    <td>NOTIFICATIONS::EnableEmailSummaryNotifications</td>
+    <td>not working</td>
+  </tr>
+  <tr id='opt9'>
+    <td>NOTIFICATIONS::SendAttachment</td>
+    <td>not working</td>
+  </tr>
+  <tr id='opt10'>
+    <td>NOTIFICATIONS::EmailAdress</td>
+    <td>not working</td>
+  </tr>
+  <tr id='opt11'>
+    <td>NOTIFICATIONS::EmailServerAddress</td>
+    <td>not working</td>
+  </tr>
+  <tr id='opt12'>
+    <td>NOTIFICATIONS::EmailServerPassword</td>
+    <td>not working</td>
+  </tr>
 </table>
 
 
