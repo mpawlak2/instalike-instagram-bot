@@ -128,7 +128,7 @@ begin
 	insert into users (id, username, has_blocked_viewer, follows_count, followed_by_count, external_url, follows_viewer, profile_pic_url, is_private,
 		    full_name, posts_count, blocked_by_viewer, followed_by_viewer, is_verified, biography)
 		values (_id, _username, _has_blocked_viewer, _follows_count, _followed_by_count, _external_url, _follows_viewer, _profile_pic_url, _is_private,
-		    _full_name, _posts_count, _blocked_by_viewer, _followed_by_viewer, _is_verified, biography);
+		    _full_name, _posts_count, _blocked_by_viewer, _followed_by_viewer, _is_verified, _biography);
 
 	return true;
 end
