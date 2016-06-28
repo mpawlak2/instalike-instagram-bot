@@ -225,3 +225,14 @@ where date_part('day', clock_timestamp()) - date_part('day', f.start_following) 
 on conflict(user_id) do nothing;
 end
 $$ language plpgsql;
+
+
+-- get users to unfollow
+CREATE OR REPLACE FUNCTION public.get_users_to_unfollow()
+  RETURNS json AS
+$BODY$
+begin
+	return array_to_json(array_agg(user_id)) from unfollow_queue where unfollow_time is null;
+end
+$BODY$
+  LANGUAGE plpgsql;
