@@ -75,19 +75,22 @@ begin
 end
 $$ language plpgsql;
 
-create or replace function like_photo(_photo_id bigint, _success boolean, _status_code integer)
-returns boolean
-as $$
+CREATE OR REPLACE FUNCTION public.like_photo(
+    _photo_id bigint,
+    _status_code integer)
+  RETURNS boolean AS
+$BODY$
 begin
 if exists(select null from likes where photo_id = _photo_id) then
 return false;
 end if;
 
-insert into likes (photo_id, success, status_code, like_time) values (_photo_id, _success, _status_code, clock_timestamp());
+insert into likes (photo_id, status_code, like_time) values (_photo_id, _status_code, clock_timestamp());
 return true;
 
 end
-$$ language plpgsql;
+$BODY$
+  LANGUAGE plpgsql;
 
 
 
