@@ -81,6 +81,26 @@ edit `default.cfg` file
     <td>DATABASE::UseDatabase</td>
     <td>If set to <code>True</code> all operations will be persisted in postgresql database that you must have installed. Below are setting. Set to <code>False</code> if you dont have database installed.</td>
   </tr>
+  <tr id='opt17'>
+    <td>DATABASE::DatabaseName</td>
+    <td>Name of database you want to use.</td>
+  </tr>
+  <tr id='opt18'>
+    <td>DATABASE::UserName</td>
+    <td>Database user.</td>
+  </tr>
+  <tr id='opt19'>
+    <td>DATABASE::Password</td>
+    <td>Database password.</td>
+  </tr>
+  <tr id='opt20'>
+    <td>DATABASE::Address</td>
+    <td>Database host, <code>localhost</code> is default.</td>
+  </tr>
+  <tr id='opt21'>
+    <td>DATABASE::LogOperations</td>
+    <td>not working</td>
+  </tr>
 </table>
 
 # how to start
