@@ -77,6 +77,10 @@ edit `default.cfg` file
     <td>INSTAGRAM::Password</td>
     <td>Instagram password.</td>
   </tr>
+  <tr id='opt16'>
+    <td>DATABASE::UseDatabase</td>
+    <td>If set to <code>True</code> all operations will be persisted in postgresql database that you must have installed. Below are setting. Set to <code>False</code> if you dont have database installed.</td>
+  </tr>
 </table>
 
 # how to start
