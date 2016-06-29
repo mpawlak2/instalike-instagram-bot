@@ -14,7 +14,7 @@ class InstaBot:
 		self.configuration = configuration.Configuration('default.cfg')
 
 		self.operation = operation.Operations()
-		self.data_source = database.DataSource(self.configuration.database_user, self.configuration.database_password, self.configuration.database_address, self.configuration.database_name)
+		self.data_source = database.DataSource(self.configuration.database_user, self.configuration.database_password, self.configuration.database_address, self.configuration.database_name, self.configuration.enable_database)
 		self.repository = database.Repository(self.data_source)
 		self.content_manager = content.ContentManager(self.operation, self.repository, self.configuration)
 		self.period_randomizer = period.PeriodRandomizer(self.configuration)
