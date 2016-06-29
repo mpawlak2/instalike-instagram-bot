@@ -101,6 +101,14 @@ edit `default.cfg` file
     <td>DATABASE::LogOperations</td>
     <td>not working</td>
   </tr>
+  <tr id='opt22'>
+    <td>INSTALIKE::MaxLikesPerHour</td>
+    <td>Estimate what max likes per hour should be, based on this setting wait times are calculated. <code>200</code> is default.</td>
+  </tr>
+  <tr id='opt23'>
+    <td>INSTALIKE::Tags</td>
+    <td>Specify tags that bot will use to find and like photos or follow users. Make sure to put comma between tags e.g. <code>tag1, tag2, tag3, tag4</code></td>
+  </tr>
 </table>
 
 # how to start
