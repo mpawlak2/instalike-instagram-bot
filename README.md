@@ -109,6 +109,14 @@ edit `default.cfg` file
     <td>INSTALIKE::Tags</td>
     <td>Specify tags that bot will use to find and like photos or follow users. Make sure to put comma between tags e.g. <code>tag1, tag2, tag3, tag4</code></td>
   </tr>
+  <tr id='opt24'>
+    <td>INSTAFOLLOW::MaxFollowsPerHour</td>
+    <td>Max users that will be followed per hour. Default value is <code>8</code></td>
+  </tr>
+  <tr id='opt25'>
+    <td>INSTAFOLLOW::MaxUnfollowsPerHour</td>
+    <td>Max users that will be unfollowed per hour. Default value is <code>2</code>. Unfollowing functionality in progress.</td>
+  </tr>
 </table>
 
 # how to start
