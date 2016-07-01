@@ -81,15 +81,46 @@ edit `default.cfg` file
     <td>DATABASE::UseDatabase</td>
     <td>If set to <code>True</code> all operations will be persisted in postgresql database that you must have installed. Below are setting. Set to <code>False</code> if you dont have database installed.</td>
   </tr>
+  <tr id='opt17'>
+    <td>DATABASE::DatabaseName</td>
+    <td>Name of database you want to use.</td>
+  </tr>
+  <tr id='opt18'>
+    <td>DATABASE::UserName</td>
+    <td>Database user.</td>
+  </tr>
+  <tr id='opt19'>
+    <td>DATABASE::Password</td>
+    <td>Database password.</td>
+  </tr>
+  <tr id='opt20'>
+    <td>DATABASE::Address</td>
+    <td>Database host, <code>localhost</code> is default.</td>
+  </tr>
+  <tr id='opt21'>
+    <td>DATABASE::LogOperations</td>
+    <td>not working</td>
+  </tr>
+  <tr id='opt22'>
+    <td>INSTALIKE::MaxLikesPerHour</td>
+    <td>Estimate what max likes per hour should be, based on this setting wait times are calculated. <code>200</code> is default.</td>
+  </tr>
+  <tr id='opt23'>
+    <td>INSTALIKE::Tags</td>
+    <td>Specify tags that bot will use to find and like photos or follow users. Make sure to put comma between tags e.g. <code>tag1, tag2, tag3, tag4</code></td>
+  </tr>
+  <tr id='opt24'>
+    <td>INSTAFOLLOW::MaxFollowsPerHour</td>
+    <td>Max users that will be followed per hour. Default value is <code>8</code></td>
+  </tr>
+  <tr id='opt25'>
+    <td>INSTAFOLLOW::MaxUnfollowsPerHour</td>
+    <td>Max users that will be unfollowed per hour. Default value is <code>2</code>. Unfollowing functionality in progress.</td>
+  </tr>
 </table>
 
 # how to start
-`python main.py` or `python main.py -u username -p password`
-
-
-# instalike
-instagram profile management
-
+if you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`
 
 
 ### like algorithm
