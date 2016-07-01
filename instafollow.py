@@ -9,10 +9,8 @@ class InstaFollow:
 		self.configuration = configuration
 
 		# configuration
-		self.max_follows_per_hour = 6
-
-		# unfollow configuration
-		self.max_unfollows_per_hour = 2
+		self.max_follows_per_hour = self.configuration.instafollow_max_follows_per_hour
+		self.max_unfollows_per_hour = self.configuration.instafollow_max_unfollows_per_hour
 
 		# users
 		self.users = []
