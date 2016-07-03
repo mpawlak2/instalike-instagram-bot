@@ -119,7 +119,7 @@ edit `default.cfg` file
   </tr>
 </table>
 
-# how to start
+# starting bot
 if you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`
 
 
@@ -129,5 +129,5 @@ if you have provided your username and password combination in `default.cfg` fil
 - `python -m pip install requests`
 - `python -m pip install py-postgresql`
 
-# useful
+# external libs docs
 [py-postgresql docs](http://python.projects.pgfoundry.org/docs/1.1/)
