@@ -1,5 +1,3 @@
-in progress..
-<br/><br/>
 ![some likes](https://s32.postimg.org/53zwfkat1/Screenshot_2016_05_25_05_20_06_1.png)
 
 # what works
