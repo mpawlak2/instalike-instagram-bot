@@ -4,9 +4,10 @@ import re
 import model
 
 class SpamDetector:
-	def __init__(self, op_object, repository):
+	def __init__(self, op_object, repository, banned_tags):
 		self.operation = op_object
 		self.repository = repository
+		self.banned_tags = list(map(lambda tag: tag.strip(), banned_tags.split(',')))
 		self.photo_vaidator = PhotoValidator()
 		self.user_validator = UserValidator()
 
