@@ -1,5 +1,3 @@
-in progress..
-<br/><br/>
 ![some likes](https://s32.postimg.org/53zwfkat1/Screenshot_2016_05_25_05_20_06_1.png)
 
 # what works
@@ -119,19 +117,9 @@ edit `default.cfg` file
   </tr>
 </table>
 
-# how to start
+# starting bot
 if you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`
 
-
-### like algorithm
-
-1. get photos
-2. validate
-3. randomly select 2-7 photos from valid ones
-4. wait 10-30s
-5. like
-6. before each like wait x-5 to x+5s, repeat steps 5-6 till selected photos are liked
-7. step 1
 
 # requirements
 - python 3.5.1
@@ -139,5 +127,5 @@ if you have provided your username and password combination in `default.cfg` fil
 - `python -m pip install requests`
 - `python -m pip install py-postgresql`
 
-# useful
+# external libs docs
 [py-postgresql docs](http://python.projects.pgfoundry.org/docs/1.1/)
