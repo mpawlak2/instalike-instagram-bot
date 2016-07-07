@@ -63,6 +63,17 @@ class Configuration:
 
 		# BLACKLIST
 		self.banned_tags = blacklist.get('PhotoTagsList', None)
+		self.banned_words_in_user_desc = blacklist.get('UserDescription', None)
+
+		if (not self.banned_tags):
+			self.banned_tags = []
+		else:
+			self.banned_tags = list(map(lambda tag: '#' + tag.strip(), self.banned_tags.split(',')))
+
+		if (not self.banned_words_in_user_desc):
+			self.banned_words_in_user_desc = []
+		else:
+			self.banned_words_in_user_desc = list(map(lambda tag: '#' + tag.strip(), self.banned_words_in_user_desc.split(',')))
 
 	def validate(self):
 		# override default.cfg username and password settings if provided via command line
@@ -97,6 +108,6 @@ class Configuration:
 			if(not self.instalike_tags):
 				print('You have to provide tags under INSTALIKE section in default.cfg file.')
 				return False
-		
+
 		# all fine
 		return True
