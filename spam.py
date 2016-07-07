@@ -110,7 +110,6 @@ class PhotoValidator:
 
 		# do not like photo with more that this value likes, 0 - no limit
 		self.like_max_likes = 24
-		print(banned_tags)
 
 	def is_already_liked(self, photo):
 		return photo.viewer_has_liked
@@ -126,7 +125,6 @@ class PhotoValidator:
 		for bad_tag in self.like_photo_caption_blacklist:
 			bad_words = re.search('{0}'.format(bad_tag), photo.caption)
 			if (bad_words):
-				print(bad_tag)
 				return True
 		return False
 
