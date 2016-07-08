@@ -10,7 +10,7 @@ import configuration
 import time
 
 class InstaBot:
-	def __init__(self, username, password):
+	def __init__(self):
 		self.configuration = configuration.Configuration('default.cfg')
 
 		self.operation = operation.Operations()
