@@ -73,7 +73,7 @@ class Configuration:
 		if (not self.banned_words_in_user_desc):
 			self.banned_words_in_user_desc = []
 		else:
-			self.banned_words_in_user_desc = list(map(lambda tag: '#' + tag.strip(), self.banned_words_in_user_desc.split(',')))
+			self.banned_words_in_user_desc = list(map(lambda tag: tag.strip(), self.banned_words_in_user_desc.split(',')))
 
 	def validate(self):
 		# override default.cfg username and password settings if provided via command line
