@@ -4,10 +4,10 @@ import re
 import model
 
 class SpamDetector:
-	def __init__(self, op_object, repository, banned_tags):
+	def __init__(self, op_object, repository, banned_tags, banned_description):
 		self.operation = op_object
 		self.repository = repository
-		self.photo_vaidator = PhotoValidator(banned_tags)
+		self.photo_vaidator = PhotoValidator(banned_tags, banned_description)
 		self.user_validator = UserValidator()
 
 
@@ -100,13 +100,13 @@ class UserValidator:
 
 
 class PhotoValidator:
-	def __init__(self, banned_tags):
+	def __init__(self, banned_tags, banned_description):
 		# LIKES
 		# ignore photos containing these tags, may regex here
 		self.like_photo_caption_blacklist = banned_tags
 
 		# do not like photo if owner's username contains one of these words
-		self.like_username_blacklist = ['tbt-sex', 'fff']
+		self.like_username_blacklist = banned_description
 
 		# do not like photo with more that this value likes, 0 - no limit
 		self.like_max_likes = 24
