@@ -8,7 +8,7 @@ class SpamDetector:
 		self.operation = op_object
 		self.repository = repository
 		self.photo_vaidator = PhotoValidator(banned_tags, banned_description)
-		self.user_validator = UserValidator()
+		self.user_validator = UserValidator(banned_description)
 
 
 	def is_user_fake(self, user_id):
@@ -62,9 +62,9 @@ class SpamDetector:
 
 
 class UserValidator:
-	def __init__(self):
+	def __init__(self, banned_description):
 		self.username_blacklist = ['nude']
-		self.description_blacklist = ['tbt-sex', 'sexy', 'nude', 'boobs']
+		self.description_blacklist = banned_description
 
 		self.min_followers = 50
 		self.min_following = 50
