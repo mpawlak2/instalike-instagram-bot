@@ -115,6 +115,14 @@ edit `default.cfg` file
     <td>INSTAFOLLOW::MaxUnfollowsPerHour</td>
     <td>Max users that will be unfollowed per hour. Default value is <code>2</code>. Unfollowing functionality in progress.</td>
   </tr>
+  <tr id='opt26'>
+    <td>BLACKLIST::PhotoTagsList</td>
+    <td>Specify tags that you would like to avoid. e.g. <code>comma, separated, list, format</code></td>
+  </tr>
+  <tr id='opt27'>
+    <td>BLACKLIST::UserDescription</td>
+    <td>Avoid users whose description contains any of these words. e.g. <code>comma, separated, list, format</code></td>
+  </tr>
 </table>
 
 # starting bot
