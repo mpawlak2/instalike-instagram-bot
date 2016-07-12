@@ -60,6 +60,9 @@ class InstaBot:
 				if(self.period_randomizer.should_relog()):
 					if(self.log_in()):
 						self.period_randomizer.logged()
+				if(self.operation.has_error()):
+					if(self.log_in()):
+						self.operation.clear_error()
 
 				if(self.configuration.enable_instalike):
 						self.like_bot.act()
