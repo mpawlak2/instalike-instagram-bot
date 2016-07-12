@@ -7,7 +7,7 @@ class DataSource:
 			self.disabled = True
 		else:
 			self.disabled = False
-		if (not self or not password or not host or not database_name or disabled):
+		if (not self or not password or not host or not database_name or disable):
 			self.connection = None
 		else:
 			self.connection = postgresql.open('pq://{0}:{1}@{2}/{3}'.format(user, password, host, database_name))
