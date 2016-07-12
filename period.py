@@ -22,6 +22,7 @@ class PeriodRandomizer:
 		self.min_period_length = 30
 		self.max_period_length = 0
 		self.actual_length = 0
+		self.require_login = False # require login after longer period of work; False - we start off as logged in.
 
 		self.periods = []
 
@@ -88,6 +89,12 @@ class PeriodRandomizer:
 
 		self.periods = valid_periods
 
+	def should_relog(self):
+		return self.require_login
+
+	def logged(self):
+		self.require_login = False
+
 	def is_active(self):
 		# working whole time, active.
 		if(self.configuration.bot_work_whole_time):
@@ -96,6 +103,7 @@ class PeriodRandomizer:
 			if(self.from_time.day != datetime.datetime.now().day):
 				self.randomize()
 			else:
+				self.require_login = True
 				if (self.next_info_print < time.time()):
 					print('work for day done, wait till midnight for next periods.')
 					self.next_info_print = time.time() + 60
