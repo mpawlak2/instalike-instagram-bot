@@ -24,6 +24,7 @@ class Operations:
 
 
 	session = requests.Session()
+	pending_error = False # was there error?
 
 	headers = dict()
 	ajx_headers = dict()
@@ -91,7 +92,12 @@ class Operations:
 		self.prepare_ajax_request(request_response)
 
 	def like(self, photo_id):
-		return self.session.post(self.like_url_tmpl.format(photo_id), headers = self.ajx_headers, cookies = self.cookies)
+		response = None
+		try:
+			response = self.session.post(self.like_url_tmpl.format(photo_id), headers = self.ajx_headers, cookies = self.cookies)
+		except requests.exceptions.ConnectionError:
+			pending_error = True
+		return response
 
 	def unlike(self, photo_id):
 		return self.session.post(self.unlike_url_tmpl.format(photo_id), headers = self.ajx_headers, cookies = self.cookies)
