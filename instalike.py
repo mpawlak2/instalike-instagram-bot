@@ -30,6 +30,8 @@ class InstaLike:
 
 	def like(self, photo):
 		response = self.operation.like(photo.id)
+		if(not response):
+			return False
 		self.repository.like(photo, response.status_code)
 
 		if(response.status_code != 200):
