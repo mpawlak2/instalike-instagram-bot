@@ -60,6 +60,12 @@ class Operations:
 	def is_logged_in(self):
 		pass
 
+	def has_error(self):
+		return self.pending_error
+
+	def clear_error(self):
+		self.pending_error = False
+
 	# dont use
 	def prepare_ajax_request(self, request_response):
 		self.ajx_headers = {
