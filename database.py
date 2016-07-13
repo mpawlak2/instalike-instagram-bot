@@ -2,25 +2,22 @@ import postgresql
 import log
 
 class DataSource:
-	def __init__(self, user, password, host, database_name, disable):
-		if(disable == True):
-			self.disabled = True
-		else:
-			self.disabled = False
-		if (not self or not password or not host or not database_name or disable):
+	def __init__(self, user, password, host, database_name, use_database):
+		self.disabled = not use_database
+
+		if (not self or not password or not host or not database_name or self.disabled):
 			self.connection = None
 		else:
 			self.connection = postgresql.open('pq://{0}:{1}@{2}/{3}'.format(user, password, host, database_name))
 
 	def execute(self, sql_query):
 		if(self.disabled):
-			pass
 			return
 		self.connection.execute(sql_query)
 
 	def prepare_procedure(self, procedure_signature):
 		if(self.disabled):
-			return procedure_signature
+			return None
 		proc = self.connection.proc(procedure_signature)
 		return proc
 
@@ -105,6 +102,8 @@ class Repository:
 
 	def get_users_to_unfollow(self):
 		proc = self.data_source.prepare_procedure('get_users_to_unfollow()')
+		if(not proc):
+			return None
 		return proc()
 
 	def unfollow(self, user_id, status_code):
