@@ -11,7 +11,7 @@ class InstaFollow:
 		# configuration
 		self.max_follows_per_hour = self.configuration.instafollow_max_follows_per_hour
 		self.max_unfollows_per_hour = self.configuration.instafollow_max_unfollows_per_hour
-
+		self.unfollow_users = False # unfollow ppl?
 		# users
 		self.users = []
 		self.user_ids_to_unfollow = []
@@ -52,7 +52,7 @@ class InstaFollow:
 		self.update_follow_timer()
 
 	def unfollow(self):
-		if (time.time() < self.next_unfollow_time):
+		if (not self.unfollow_users or (time.time() < self.next_unfollow_time)):
 			return
 
 		if (len(self.user_ids_to_unfollow) == 0):
@@ -92,14 +92,18 @@ class InstaFollow:
 		self.log('total time: {0:.0f}s'.format(self.t1 - self.t0))
 		self.log('follows: {0}'.format(self.follows))
 		self.log('failed follows: {0}'.format(self.failed_follows))
-		self.log('unfollows: {0}'.format(self.unfollows))
-		self.log('failed unfollows: {0}'.format(self.failed_unfollows))
+		if(self.unfollow_users):
+			self.log('unfollows: {0}'.format(self.unfollows))
+			self.log('failed unfollows: {0}'.format(self.failed_unfollows))
 		self.log('estimated follows per hour: {0:.0f}'.format(per_hour_follows))
-		self.log('estimated unfollows per hour: {0:.0f}'.format(per_hour_unfollows))
+		if(self.unfollow_users):
+			self.log('estimated unfollows per hour: {0:.0f}'.format(per_hour_unfollows))
 		self.log('next follow in: {0:.0f}s'.format(self.next_follow_time - time.time()))
-		self.log('next unfollow in: {0:.0f}s'.format(self.next_unfollow_time - time.time()))
+		if(self.unfollow_users):
+			self.log('next unfollow in: {0:.0f}s'.format(self.next_unfollow_time - time.time()))
 		self.log('users to follow: {0}'.format(len(self.users)))
-		self.log('users to unfollow: {0}'.format(len(self.user_ids_to_unfollow)))
+		if(self.unfollow_users):
+			self.log('users to unfollow: {0}'.format(len(self.user_ids_to_unfollow)))
 
 	def log(self, text):
 		print(text)
