@@ -169,20 +169,6 @@ end
 $BODY$
   LANGUAGE plpgsql;
 
-create table unfollow_queue (user_id bigint primary key, unfollow_time timestamp);
-create or replace function update_unfollow_queue()
-returns void
-as $$
-begin 
-	insert into unfollow_queue
-	select vf.user_id 
-	from (select f.user_id, f.start_following from following f where f.user_id not in (select user_id from unfollow_queue)) vf
-	where vf.user_id not in (select a.user_id from activities a where a.activity_type = 3) and date_part('day', vf.start_following, clock_timestamp()) + 4 >= 0;
-end
-$$ language plpgsql;
-
-
-
 
 -- creating tables 
 create table if not exists unfollows(id serial primary key, user_id bigint, status_code integer, unfollow_time timestamp);
@@ -217,20 +203,20 @@ ALTER FUNCTION public.unfollow(bigint, integer)
   OWNER TO postgres;
 
 -- Update unfollow queue
-create or replace function update_unfollow_queue()
-returns void
-as 
-$$
+CREATE OR REPLACE FUNCTION public.update_unfollow_queue(_days integer)
+  RETURNS void AS
+$BODY$
 begin
 insert into unfollow_queue(user_id)
 select f.user_id
 from following f 
-where date_part('day', clock_timestamp()) - date_part('day', f.start_following) > 6 
+where date_part('day', clock_timestamp()) - date_part('day', f.start_following) > _days 
 	and f.status_code = 200
 	and f.user_id not in (select a.user_id from activities a where a.activity_type = 3)
 on conflict(user_id) do nothing;
 end
-$$ language plpgsql;
+$BODY$
+  LANGUAGE plpgsql;
 
 
 -- get users to unfollow
