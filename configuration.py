@@ -59,6 +59,7 @@ class Configuration:
 		# INSTAFOLLOW
 		self.instafollow_max_follows_per_hour = int(instafollow.get('maxfollowsperhour', 8))
 		self.instafollow_max_unfollows_per_hour = int(instafollow.get('maxunfollowsperhour', 2))
+		self.instafollow_unfollow_users = instafollow.getboolean('UnfollowUsers', False)
 		self.instafollow_unfollow_who_does_not_follow_back = instafollow.getboolean('unfollowwhennotfollowingback', True)
 
 		# BLACKLIST

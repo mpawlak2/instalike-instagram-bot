@@ -11,7 +11,7 @@ class InstaFollow:
 		# configuration
 		self.max_follows_per_hour = self.configuration.instafollow_max_follows_per_hour
 		self.max_unfollows_per_hour = self.configuration.instafollow_max_unfollows_per_hour
-		self.unfollow_users = False # unfollow ppl?
+		self.unfollow_users = self.configuration.instafollow_unfollow_users # unfollow ppl?
 		# users
 		self.users = []
 		self.user_ids_to_unfollow = []
