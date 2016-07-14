@@ -60,6 +60,7 @@ class Configuration:
 		self.instafollow_max_follows_per_hour = int(instafollow.get('maxfollowsperhour', 8))
 		self.instafollow_max_unfollows_per_hour = int(instafollow.get('maxunfollowsperhour', 2))
 		self.instafollow_unfollow_users = instafollow.getboolean('UnfollowUsers', False)
+		self.instafollow_unfollow_after_days = int(instafollow.get('UnfollowAfterNoOfDays', 6))
 
 		# BLACKLIST
 		self.banned_tags = blacklist.get('PhotoTagsList', None)
