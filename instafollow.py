@@ -68,8 +68,7 @@ class InstaFollow:
 				self.failed_unfollow()
 			else:
 				self.unfollowed()
-
-		self.update_unfollow_timer()
+			self.update_unfollow_timer()
 
 	def act(self):
 		self.follow()
@@ -81,7 +80,7 @@ class InstaFollow:
 
 	def update_unfollow_timer(self):
 		self.next_unfollow_time = time.time() + randint(self.unfllow_time_delta - (self.unfllow_time_delta // 2), self.unfllow_time_delta + (self.unfllow_time_delta // 2))
-		self.get_stats()
+		self.get_stats()	
 
 
 	def get_stats(self):
