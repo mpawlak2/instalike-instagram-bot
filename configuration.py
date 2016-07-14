@@ -94,21 +94,25 @@ class Configuration:
 					self.instagram_password = arg
 		
 		print('credentials are: "{0}" with password "{1}"'.format(self.instagram_username, self.instagram_password))
+		if(self.instafollow_unfollow_users and not self.enable_database):
+			print('WARNING: Unfollowing users wont work without database.')
 
 		if(not self.instagram_username or not self.instagram_password):
-			print('You have to provide instagram username and password under INSTAGRAM section in default.cfg file.')
+			print('ERROR: You have to provide instagram username and password under INSTAGRAM section in default.cfg file.')
 			return False
 
 		if(self.enable_database):
 			if(not self.database_user or not self.database_password):
-				print('You have to provide database username and password or disable database use under DATABASE section in default.cfg file.')
+				print('ERROR: You have to provide database username and password or disable database use under DATABASE section in default.cfg file.')
 				return False
 
 		# validate instalike configuration
 		if(self.enable_instalike):
 			if(not self.instalike_tags):
-				print('You have to provide tags under INSTALIKE section in default.cfg file.')
+				print('ERROR: You have to provide tags under INSTALIKE section in default.cfg file.')
 				return False
+
+
 
 		# all fine
 		return True
