@@ -100,7 +100,7 @@ class InstaFollow:
 			self.log('estimated unfollows per hour: {0:.0f}'.format(per_hour_unfollows))
 		self.log('next follow in: {0:.0f}s'.format(self.next_follow_time - time.time()))
 		if(self.unfollow_users):
-			self.log('next unfollow in: {0:.0f}s'.format(self.next_unfollow_time - time.time()))
+			self.log('next unfollow in: {0:.0f}s'.format(0 if self.next_unfollow_time == 0 else self.next_unfollow_time - time.time()))
 		self.log('users to follow: {0}'.format(len(self.users)))
 		if(self.unfollow_users):
 			self.log('users to unfollow: {0}'.format(len(self.user_ids_to_unfollow)))
