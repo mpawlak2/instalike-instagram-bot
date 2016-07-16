@@ -126,7 +126,7 @@ edit `default.cfg` file
 </table>
 
 # starting bot
-if you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`
+If you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`
 
 
 # requirements
