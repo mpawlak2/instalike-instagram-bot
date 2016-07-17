@@ -5,7 +5,7 @@
 - automated follows
 
 # configuration guide
-edit `default.cfg` file
+Edit `default.cfg` file
 <table>
   <tr>
     <th>Option</th>
