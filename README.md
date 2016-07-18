@@ -5,7 +5,7 @@
 - automated follows
 
 # configuration guide
-edit `default.cfg` file
+Edit `default.cfg` file
 <table>
   <tr>
     <th>Option</th>
@@ -123,10 +123,18 @@ edit `default.cfg` file
     <td>BLACKLIST::UserDescription</td>
     <td>Avoid users whose description contains any of these words. e.g. <code>comma, separated, list, format</code></td>
   </tr>
+  <tr id='opt28'>
+    <td>LIKEFILTER::MinLikesOnPhoto</td>
+    <td>Do not like photos with less likes than specified value, default value is <code>0</code></td>
+  </tr>
+  <tr id='opt29'>
+    <td>LIKEFILTER::MaxLikesOnPhoto</td>
+    <td>Do not like photos with more likes than specified value, default value is <code>0</code> which is no limit</td>
+  </tr>
 </table>
 
 # starting bot
-if you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`
+If you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`
 
 
 # requirements
