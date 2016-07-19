@@ -9,7 +9,7 @@ class ContentManager:
 		self.operation = operation
 		self.repository = repository
 		self.configuration = configuration
-		self.spam_validator = spam.SpamDetector(self.operation, self.repository, self.configuration.banned_tags, self.configuration.banned_words_in_user_desc)
+		self.spam_validator = spam.SpamDetector(self.operation, self.repository, self.configuration)
 
 		self.tags = list(map(lambda tag: tag.strip(), self.configuration.instalike_tags.split(',')))
 		

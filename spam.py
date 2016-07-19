@@ -4,11 +4,11 @@ import re
 import model
 
 class SpamDetector:
-	def __init__(self, op_object, repository, banned_tags, banned_description):
+	def __init__(self, op_object, repository, configuration):
 		self.operation = op_object
 		self.repository = repository
-		self.photo_vaidator = PhotoValidator(banned_tags, banned_description)
-		self.user_validator = UserValidator(banned_description)
+		self.photo_vaidator = PhotoValidator(configuration.banned_tags, configuration.banned_words_in_user_desc)
+		self.user_validator = UserValidator(configuration.banned_words_in_user_desc)
 
 
 	def is_user_fake(self, user_id):
@@ -130,4 +130,4 @@ class PhotoValidator:
 		return False
 
 	def like_limit_exceeded(self, photo):
-		return (photo.likes_count > self.like_max_likes) or (phto.likes_count < self.like_min_likes)
+		return (photo.likes_count > self.like_max_likes) or (photo.likes_count < self.like_min_likes)
