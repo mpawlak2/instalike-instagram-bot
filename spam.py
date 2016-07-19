@@ -110,6 +110,7 @@ class PhotoValidator:
 
 		# do not like photo with more that this value likes, 0 - no limit
 		self.like_max_likes = 24
+		self.like_min_likes = 0
 
 	def is_already_liked(self, photo):
 		return photo.viewer_has_liked
@@ -129,4 +130,4 @@ class PhotoValidator:
 		return False
 
 	def like_limit_exceeded(self, photo):
-		return photo.likes_count > self.like_max_likes
+		return (photo.likes_count > self.like_max_likes) or (phto.likes_count < self.like_min_likes)
