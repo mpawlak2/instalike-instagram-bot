@@ -7,9 +7,8 @@ class SpamDetector:
 	def __init__(self, op_object, repository, configuration):
 		self.operation = op_object
 		self.repository = repository
-		self.photo_vaidator = PhotoValidator(configuration.banned_tags, configuration.banned_words_in_user_desc)
+		self.photo_vaidator = PhotoValidator(configuration.banned_tags, configuration.banned_words_in_user_desc, configuration.like_min_likes_on_photo, configuration.like_max_likes_on_photo)
 		self.user_validator = UserValidator(configuration.banned_words_in_user_desc)
-
 
 	def is_user_fake(self, user_id):
 		pass
@@ -100,7 +99,7 @@ class UserValidator:
 
 
 class PhotoValidator:
-	def __init__(self, banned_tags, banned_description):
+	def __init__(self, banned_tags, banned_description, min_likes, max_likes):
 		# LIKES
 		# ignore photos containing these tags, may regex here
 		self.like_photo_caption_blacklist = banned_tags
@@ -109,8 +108,8 @@ class PhotoValidator:
 		self.like_username_blacklist = banned_description
 
 		# do not like photo with more that this value likes, 0 - no limit
-		self.like_max_likes = 24
-		self.like_min_likes = 0
+		self.like_max_likes = max_likes
+		self.like_min_likes = min_likes
 
 	def is_already_liked(self, photo):
 		return photo.viewer_has_liked
@@ -130,4 +129,4 @@ class PhotoValidator:
 		return False
 
 	def like_limit_exceeded(self, photo):
-		return (photo.likes_count > self.like_max_likes) or (photo.likes_count < self.like_min_likes)
+		return (photo.likes_count > self.like_max_likes and self.like_max_likes != 0) or (photo.likes_count < self.like_min_likes)

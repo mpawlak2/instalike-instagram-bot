@@ -22,6 +22,7 @@ class Configuration:
 		instalike = self.config['INSTALIKE']
 		instafollow = self.config['INSTAFOLLOW']
 		blacklist = self.config['BLACKLIST']
+		likefilter = self.config['LIKEFILTER']
 
 		# BOT SECTION
 		self.bot_work_whole_time = bot.getboolean('workwholetime', False)
@@ -65,6 +66,10 @@ class Configuration:
 		# BLACKLIST
 		self.banned_tags = blacklist.get('PhotoTagsList', None)
 		self.banned_words_in_user_desc = blacklist.get('UserDescription', None)
+
+		# LIKEFILTER
+		self.like_min_likes_on_photo = int(likefilter.get('MinLikesOnPhoto', 0))
+		self.like_max_likes_on_photo = int(likefilter.get('MaxLikesOnPhoto', 0))
 
 		if (not self.banned_tags):
 			self.banned_tags = []
