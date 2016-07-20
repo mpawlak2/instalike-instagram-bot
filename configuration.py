@@ -5,6 +5,7 @@ import getopt
 
 class Configuration:
 	def __init__(self, filename):
+		self.validated = True
 		self.config = configparser.ConfigParser()
 		self.config.read(filename)
 
@@ -98,26 +99,20 @@ class Configuration:
 				if(opt == '-p'):
 					self.instagram_password = arg
 		
-		print('credentials are: "{0}" with password "{1}"'.format(self.instagram_username, self.instagram_password))
-		if(self.instafollow_unfollow_users and not self.enable_database):
-			print('WARNING: Unfollowing users wont work without database.')
+		self.check_Constraint(self.instafollow_unfollow_users and not self.enable_database, 'Unfollowing users wont work without database.', 1)
+		self.check_Constraint(not self.instagram_username or not self.instagram_password, 'You have to provide instagram username and password under INSTAGRAM section in default.cfg file.', 2)
+		self.check_Constraint(self.enable_database and (not self.database_user or not self.database_password), 'You have to provide database username and password or disable database use under DATABASE section in default.cfg file.', 2)
+		self.check_Constraint(self.enable_instalike and not self.instalike_tags, 'You have to provide tags under INSTALIKE section in default.cfg file.', 2)
 
-		if(not self.instagram_username or not self.instagram_password):
-			print('ERROR: You have to provide instagram username and password under INSTAGRAM section in default.cfg file.')
-			return False
+		return self.validated
 
-		if(self.enable_database):
-			if(not self.database_user or not self.database_password):
-				print('ERROR: You have to provide database username and password or disable database use under DATABASE section in default.cfg file.')
-				return False
+	# condition - when true displays message
+	# message - message to display
+	# error_type - 1 - WARNING, 2 - ERROR
+	def check_Constraint(self, condition, message, error_type):
+		if(condition):
+			print(('WARNING: ' if error_type == 1 else 'ERROR: ') + message)
+			if(error_type == 2):
+				self.validated = False
+				print('Correct errors and start bot again.')
 
-		# validate instalike configuration
-		if(self.enable_instalike):
-			if(not self.instalike_tags):
-				print('ERROR: You have to provide tags under INSTALIKE section in default.cfg file.')
-				return False
-
-
-
-		# all fine
-		return True
