@@ -102,7 +102,8 @@ class Configuration:
 		self.check_Constraint(self.instafollow_unfollow_users and not self.enable_database, 'Unfollowing users wont work without database.', 1)
 		self.check_Constraint(not self.instagram_username or not self.instagram_password, 'You have to provide instagram username and password under INSTAGRAM section in default.cfg file.', 2)
 		self.check_Constraint(self.enable_database and (not self.database_user or not self.database_password), 'You have to provide database username and password or disable database use under DATABASE section in default.cfg file.', 2)
-		self.check_Constraint(self.enable_instalike and not self.instalike_tags, 'You have to provide tags under INSTALIKE section in default.cfg file.', 2)
+		self.check_Constraint(self.enable_instalike and not self.instalike_tags, 'default.cfg, section: INSTALIKE, option: tags - you have to provide tags that bot can use to download media', 2)
+		self.check_Constraint(self.like_min_likes_on_photo > self.like_max_likes_on_photo, 'default.cfg, section: LIKEFILTER, option: MinLikesOnPhoto & MaxLikesOnPhoto - max likes should be greater than min likes.', 2)
 
 		return self.validated
 
@@ -111,7 +112,7 @@ class Configuration:
 	# error_type - 1 - WARNING, 2 - ERROR
 	def check_Constraint(self, condition, message, error_type):
 		if(condition):
-			print(('WARNING: ' if error_type == 1 else 'ERROR: ') + message)
+			print(('WARNING! ' if error_type == 1 else 'ERROR! ') + message)
 			if(error_type == 2):
 				self.validated = False
 				print('Correct errors and start bot again.')
