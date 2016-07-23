@@ -3,6 +3,7 @@
 # what works
 - automated likes
 - automated follows
+- automated unfollows (requires database connection)
 
 # configuration guide
 Edit `default.cfg` file
