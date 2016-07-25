@@ -1,8 +1,9 @@
 ![some likes](https://s32.postimg.org/53zwfkat1/Screenshot_2016_05_25_05_20_06_1.png)
 
-# what works
+# avaiable features
 - automated likes
 - automated follows
+- automated unfollows (requires database connection)
 
 # configuration guide
 Edit `default.cfg` file
@@ -138,7 +139,7 @@ If you have provided your username and password combination in `default.cfg` fil
 
 
 # requirements
-- python 3.5.1
+- python 3.5+
 - postgresql
 - `python -m pip install requests`
 - `python -m pip install py-postgresql`
