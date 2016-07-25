@@ -100,6 +100,9 @@ class Configuration:
 					self.instagram_password = arg
 		
 		self.check_Constraint(self.instafollow_unfollow_users and not self.enable_database, 'Unfollowing users wont work without database.', 1)
+		self.check_Constraint(self.instalike_max_likes_per_hour > 200, 'High likes per hour may result in blocked account.', 1)
+		self.check_Constraint(self.instafollow_max_follows_per_hour > 10, 'High follows per hour may result in blocked account.', 1)
+		self.check_Constraint(self.instafollow_max_unfollows_per_hour > 10, 'High unfollows per hour may result in blocked account.', 1)
 		self.check_Constraint(not self.instagram_username or not self.instagram_password, 'You have to provide instagram username and password under INSTAGRAM section in default.cfg file.', 2)
 		self.check_Constraint(self.enable_database and (not self.database_user or not self.database_password), 'You have to provide database username and password or disable database use under DATABASE section in default.cfg file.', 2)
 		self.check_Constraint(self.enable_instalike and not self.instalike_tags, 'default.cfg, section: INSTALIKE, option: tags - you have to provide tags that bot can use to download media', 2)
