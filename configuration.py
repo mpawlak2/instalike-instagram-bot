@@ -107,6 +107,7 @@ class Configuration:
 		self.check_Constraint(self.enable_database and (not self.database_user or not self.database_password), 'You have to provide database username and password or disable database use under DATABASE section in default.cfg file.', 2)
 		self.check_Constraint(self.enable_instalike and not self.instalike_tags, 'default.cfg, section: INSTALIKE, option: tags - you have to provide tags that bot can use to download media', 2)
 		self.check_Constraint(self.like_min_likes_on_photo > self.like_max_likes_on_photo, 'default.cfg, section: LIKEFILTER, option: MinLikesOnPhoto & MaxLikesOnPhoto - max likes should be greater than min likes.', 2)
+		self.check_Constraint(self.bot_work_whole_time, 'bot is working whole time, be careful because leaving it running for too long time may result in blocked account.', 1)
 
 		return self.validated
 
