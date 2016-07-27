@@ -115,7 +115,7 @@ class Configuration:
 	# message - message to display
 	# error_type - 1 - WARNING, 2 - ERROR
 	def check_Constraint(self, condition, message, error_type):
-		if(condition):
+		if(condition and self.validated):
 			print(('WARNING! ' if error_type == 1 else 'ERROR! ') + message)
 			if(error_type == 2):
 				self.validated = False
