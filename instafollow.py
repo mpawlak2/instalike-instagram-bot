@@ -77,8 +77,8 @@ class InstaFollow:
 
 	def update_unfollow_queue(self):
 		if(self.next_unfollow_queue_update < time.time()):
-			self.repository.update_unfollow_queue(6)
-			self.log('### Unfollow queue updated...')
+			response = self.repository.update_unfollow_queue(6)
+			self.log('### Unfollow queue updated, added {0} users.'.format(response))
 			self.next_unfollow_queue_update = time.time() + 60 * 60 * 6 # on bot start and then every 6 hours
 
 	def act(self):
