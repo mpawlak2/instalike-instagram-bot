@@ -203,10 +203,13 @@ ALTER FUNCTION public.unfollow(bigint, integer)
   OWNER TO postgres;
 
 -- Update unfollow queue
-CREATE OR REPLACE FUNCTION public.update_unfollow_queue(_days integer)
-  RETURNS void AS
+create or replace function update_unfollow_queue(_days integer)
+  RETURNS integer AS
 $BODY$
+declare
+ added_users integer;
 begin
+select count(*) into added_users from unfollow_queue;
 insert into unfollow_queue(user_id)
 select f.user_id
 from following f 
@@ -214,9 +217,16 @@ where date_part('day', clock_timestamp()) - date_part('day', f.start_following) 
 	and f.status_code = 200
 	and f.user_id not in (select a.user_id from activities a where a.activity_type = 3)
 on conflict(user_id) do nothing;
-end
+
+select into added_users count(*) - added_users from unfollow_queue;
+
+return added_users;
+end;
 $BODY$
-  LANGUAGE plpgsql;
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION public.update_unfollow_queue(integer)
+  OWNER TO postgres;
 
 
 -- get users to unfollow
