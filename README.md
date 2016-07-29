@@ -12,43 +12,43 @@ Edit `default.cfg` file
     <th>Option</th>
     <th>Meaning</th>
   </tr>
-  <tr
+  <tr>
     <td>BOT::WorkWholeTime</td>
     <td>If set to <code>True</code> bot will work whole time, no breaks. In other case periods will be in use.</td>
   </tr>
-  <tr
+  <tr>
     <td>BOT::StopAfterNumerOfMinutes</td>
     <td>not working</td>
   </tr>
-  <tr
+  <tr>
     <td>BOT::WorkHoursPerDay</td>
     <td>If option <code onmouseover='alert(1);'>BOT::WorkWholeTime</code> is set to <code>False</code> bot will work in 2 to 5 periods that sum up to that amount.</td>
   </tr>
-  <tr
+  <tr>
     <td>BOT::IntelligentWorkingHours</td>
     <td>not working</td>
   </tr>
-  <tr
+  <tr>
     <td>BOT::InstaLike</td>
     <td>If set to <code>True</code> bot will be liking photos.</td>
   </tr>
-  <tr
+  <tr>
     <td>BOT::InstaFollow</td>
     <td>If set to <code>True</code> bot will be following users.</td>
   </tr>
-  <tr
+  <tr>
     <td>BOT::InstaComment</td>
     <td>not working</td>
   </tr>
-  <tr
+  <tr>
     <td>BOT::InstaMessage</td>
     <td>not working</td>
   </tr>
-  <tr
+  <tr>
     <td>NOTIFICATIONS::EnableEmailSummaryNotifications</td>
     <td>not working</td>
   </tr>
-  <tr
+  <tr>
     <td>NOTIFICATIONS::SendAttachment</td>
     <td>not working</td>
   </tr>
