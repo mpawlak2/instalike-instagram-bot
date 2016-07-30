@@ -118,7 +118,7 @@ Edit `default.cfg` file
   </tr>
   <tr>
     <td>INSTAFOLLOW::UnfollowAfterNoOfDays</td>
-    <td>Unfollow users who do not follow you back after that amount of days.</td>
+    <td>Unfollow users who do not follow you back after that amount of days. <code>6</code> is default</td>
   </tr>
   <tr>
     <td>BLACKLIST::PhotoTagsList</td>
