@@ -130,7 +130,7 @@ Edit `default.cfg` file
   </tr>
   <tr>
     <td>LIKEFILTER::MinLikesOnPhoto</td>
-    <td>Do not like photos with less likes than specified value, default value is <code>0</code></td>
+    <td>Do not like photos with less likes than specified value, default value is <code>0</code> which is no limit</td>
   </tr>
   <tr>
     <td>LIKEFILTER::MaxLikesOnPhoto</td>
