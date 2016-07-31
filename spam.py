@@ -129,4 +129,4 @@ class PhotoValidator:
 		return False
 
 	def like_limit_exceeded(self, photo):
-		return (photo.likes_count > self.like_max_likes and self.like_max_likes != 0) or (photo.likes_count < self.like_min_likes)
+		return (photo.likes_count > self.like_max_likes and self.like_max_likes != 0) or (photo.likes_count < self.like_min_likes and self.like_min_likes != 0)
