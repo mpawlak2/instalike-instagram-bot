@@ -35,6 +35,8 @@ insert into opcodes (id, op_name) values (1, 'like'), (2, 'unlike'), (3, 'follow
 	
 create table likes(id serial primary key, photo_id bigint REFERENCES photos (id), status_code int, like_time timestamp);
 
+create table unfollow_queue(user_id bigint NOT NULL, unfollow_time timestamp without time zone, CONSTRAINT unfollow_queue_pkey PRIMARY KEY (user_id));
+
 create or replace function merge_photo(
 	_id bigint,
 	_width integer,
