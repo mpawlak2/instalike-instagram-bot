@@ -24,13 +24,13 @@ class Operations:
 
 
 	session = requests.Session()
-	pending_error = False # was there error?
+	pending_error = False
 
 	headers = dict()
 	ajx_headers = dict()
 	cookies = dict()
 
-	# this one has to be successful
+
 	def log_in(self, user, password):
 		payload = {
 			'username' : user,
@@ -41,21 +41,21 @@ class Operations:
 		# get unique csrftoken from server
 		response = self.session.get(self.base_url)
 		if (response.status_code != 200):
-			print('error: {0}'.format(response.status_code))
+			print('code: {0}, could not GET: {1}'.format(response.status_code, self.base_url))
 			return None
 
 		payload['csrfmiddlewaretoken'] = response.cookies['csrftoken']
-		
+
 		self.prepare_request(response)
 		response = self.session.post(self.login_url, data = payload, headers = self.headers, allow_redirects = True)
 		if (response.status_code != 200):
-			print('could not log in. error: {0}'.format(response.status_code))
+			print('code: {0}, could not POST: {1}'.format(response.status_code, self.login_url))
 			return None
 		return response
 
 	def log_out(self):
 		return self.session.post(self.logout_url, headers = self.headers, cookies = self.cookies)
-		
+
 
 	def is_logged_in(self):
 		pass
@@ -105,6 +105,17 @@ class Operations:
 			pending_error = True
 		return response
 
+	def like_media(self, media):
+		response = None
+		try:
+			response = self.session.post(self.like_url_tmpl.format(media.get_id()), headers = self.ajx_headers, cookies = self.cookies)
+			if (response.status_code != 200):
+				print('code: {0}, could not POST {1}'.format(response.status_code, self.like_url_tmpl.format(media.get_id())))
+				return None
+		except requests.exceptions.ConnectionError:
+			pending_error = True
+		return response
+
 	def unlike(self, photo_id):
 		return self.session.post(self.unlike_url_tmpl.format(photo_id), headers = self.ajx_headers, cookies = self.cookies)
 
@@ -121,7 +132,7 @@ class Operations:
 
 		return self.session.post(self.comment_url_tmpl.format(photo_id), data = payload, headers = self.ajx_headers, cookies = self.cookies)
 
-	
+
 	def delete_my_comment(self, photo_id, comment_id):
 		pass
 
@@ -167,7 +178,7 @@ class Operations:
 		if (response.status_code != 200):
 			return None
 		return json.loads(response.content.decode('utf-8'))['user']
-		
+
 
 	def get_my_followers(self):
 		pass
@@ -183,4 +194,3 @@ class Operations:
 
 	def block_user(self, user_id):
 		pass
-		
