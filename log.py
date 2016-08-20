@@ -7,5 +7,4 @@ class FileOutput:
 
 	def log(self, text):
 		pass
-		# self.target.write(text)
 		
