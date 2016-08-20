@@ -5,7 +5,7 @@ import json
 class Operations:
 	# url's
 	base_url = 'https://www.instagram.com/'
-	url_post_login = 'https://www.instagram.com/accounts/login/ajax/'
+	login_url = 'https://www.instagram.com/accounts/login/?force_classic_login&hl=pl'
 	logout_url = 'https://www.instagram.com/accounts/logout/' # requires csrfmiddlewaretoken as payload
 	like_url_tmpl = 'https://www.instagram.com/web/likes/{0}/like/'
 	unlike_url_tmpl = 'https://www.instagram.com/web/likes/{0}/unlike/'
@@ -47,13 +47,9 @@ class Operations:
 		payload['csrfmiddlewaretoken'] = response.cookies['csrftoken']
 
 		self.prepare_request(response)
-		response = self.session.post(self.url_post_login, data = payload, headers = self.headers)
+		response = self.session.post(self.login_url, data = payload, headers = self.headers, allow_redirects = True)
 		if (response.status_code != 200):
-			print('code: {0}, could not POST: {1}'.format(response.status_code, self.url_post_login))
-			return None
-		is_logged = json.loads(response.content.decode('utf-8'))['authenticated']
-		if (not is_logged):
-			print('Check your credentials, could not log in!')
+			print('code: {0}, could not POST: {1}'.format(response.status_code, self.login_url))
 			return None
 		return response
 
