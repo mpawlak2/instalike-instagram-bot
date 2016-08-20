@@ -6,6 +6,7 @@ class Operations:
 	# url's
 	base_url = 'https://www.instagram.com/'
 	login_url = 'https://www.instagram.com/accounts/login/?force_classic_login&hl=pl'
+	post_ajx_login_url = 'https://www.instagram.com/accounts/login/ajax/'
 	logout_url = 'https://www.instagram.com/accounts/logout/' # requires csrfmiddlewaretoken as payload
 	like_url_tmpl = 'https://www.instagram.com/web/likes/{0}/like/'
 	unlike_url_tmpl = 'https://www.instagram.com/web/likes/{0}/unlike/'
@@ -31,11 +32,10 @@ class Operations:
 	cookies = dict()
 
 
-	def log_in(self, user, password):
+	def log_in(self, username, password):
 		payload = {
-			'username' : user,
-			'password' : password,
-			'csrfmiddlewaretoken' : ''
+			'username' : username,
+			'password' : password
 		}
 
 		# get unique csrftoken from server
@@ -44,14 +44,22 @@ class Operations:
 			print('code: {0}, could not GET: {1}'.format(response.status_code, self.base_url))
 			return None
 
-		payload['csrfmiddlewaretoken'] = response.cookies['csrftoken']
-
 		self.prepare_request(response)
-		response = self.session.post(self.login_url, data = payload, headers = self.headers, allow_redirects = True)
+		response = self.session.post(self.post_ajx_login_url, data = payload, headers = self.ajx_headers, cookies = response.cookies)
 		if (response.status_code != 200):
 			print('code: {0}, could not POST: {1}'.format(response.status_code, self.login_url))
 			return None
+		# update csrftoken
+		self.prepare_request(response)
+
+		is_logged = json.loads(response.content.decode('utf-8'))['authenticated']
+		if (not is_logged):
+			print('Check credentials, also try to log in to your account manually to check if everything is fine then retry.')
+			return None
+		self.cookies = response.cookies
+
 		return response
+
 
 	def log_out(self):
 		return self.session.post(self.logout_url, headers = self.headers, cookies = self.cookies)
@@ -120,7 +128,10 @@ class Operations:
 		return self.session.post(self.unlike_url_tmpl.format(photo_id), headers = self.ajx_headers, cookies = self.cookies)
 
 	def follow(self, user_id):
-		return self.session.post(self.follow_url_tmpl.format(user_id), headers = self.ajx_headers, cookies = self.cookies)
+		response = self.session.post(self.follow_url_tmpl.format(user_id), headers = self.ajx_headers, cookies = self.cookies)
+		print(response.status_code)
+		return response
+
 
 	def unfollow(self, user_id):
 		return self.session.post(self.unfollow_url_tmpl.format(user_id), headers = self.ajx_headers, cookies = self.cookies)
