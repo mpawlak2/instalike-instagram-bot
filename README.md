@@ -150,3 +150,8 @@ If you have provided your username and password combination in `default.cfg` fil
 
 # external libs docs
 [py-postgresql docs](http://python.projects.pgfoundry.org/docs/1.1/)
+
+
+<hr/>
+
+interested in more advanced bot? contact me at mpawlak62@gmail.com
