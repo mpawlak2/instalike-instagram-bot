@@ -8,7 +8,11 @@ class DataSource:
 		if (not self or not password or not host or not database_name or self.disabled):
 			self.connection = None
 		else:
-			self.connection = postgresql.open('pq://{0}:{1}@{2}/{3}'.format(user, password, host, database_name))
+			try:
+				self.connection = postgresql.open('pq://{0}:{1}@{2}/{3}'.format(user, password, host, database_name))
+			except postgresql.exceptions.ClientCannotConnectError:
+				print('Error while connecting to database - database disabled.')
+				self.disabled = True
 
 	def execute(self, sql_query):
 		if(self.disabled):
