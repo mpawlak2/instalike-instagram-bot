@@ -82,6 +82,11 @@ class Configuration:
 		else:
 			self.banned_words_in_user_desc = list(map(lambda tag: tag.strip(), self.banned_words_in_user_desc.split(',')))
 
+		if (self.instafollow_max_unfollows_per_hour <= 0):
+			self.instafollow_max_unfollows_per_hour = 1
+			self.instafollow_unfollow_users = False
+			print('WARNING! MaxUnfollowsPerHour set to 0, disabled unfollowing functionality.')
+
 	def validate(self):
 		# override default.cfg username and password settings if provided via command line
 		if(len(self.args) > 0):
@@ -98,7 +103,7 @@ class Configuration:
 					self.instagram_username = arg
 				if(opt == '-p'):
 					self.instagram_password = arg
-		
+
 		self.check_Constraint(self.instafollow_unfollow_users and not self.enable_database, 'Unfollowing users wont work without database.', 1)
 		self.check_Constraint(self.instalike_max_likes_per_hour > 200, 'High likes per hour may result in blocked account.', 1)
 		self.check_Constraint(self.instafollow_max_follows_per_hour > 10, 'High follows per hour may result in blocked account.', 1)
@@ -120,4 +125,3 @@ class Configuration:
 			if(error_type == 2):
 				self.validated = False
 				print('Correct errors and start bot again.')
-
