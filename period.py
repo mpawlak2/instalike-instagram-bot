@@ -33,6 +33,7 @@ class PeriodRandomizer:
 		# working whole time or for certain amount of time. No need to generate random periods.
 		if(self.configuration.bot_work_whole_time):
 			return
+
 		self.periods = []
 
 		now = datetime.datetime.now()
@@ -95,10 +96,19 @@ class PeriodRandomizer:
 	def logged(self):
 		self.require_login = False
 
-	def is_active(self):
-		# working whole time, active.
-		if(self.configuration.bot_work_whole_time):
+	def is_workday(self):
+		now = datetime.datetime.now()
+		self.from_time = datetime.datetime(now.year, now.month, now.day, self.from_hour)
+		self.to_time = datetime.datetime(now.year, now.month, now.day, self.to_hour)
+		if(now > self.from_time and now < self.to_time):
 			return True
+		else:
+			if (self.next_info_print < time.time()):
+				print('Bot will work from morning.')
+				self.next_info_print = time.time() + 60
+			return False
+
+	def is_active_period(self):
 		if (len(self.periods) == 0):
 			if(self.from_time.day != datetime.datetime.now().day):
 				self.randomize()
@@ -107,7 +117,7 @@ class PeriodRandomizer:
 				if (self.next_info_print < time.time()):
 					print('work for day done, wait till midnight for next periods.')
 					self.next_info_print = time.time() + 60
-				return
+				return False
 
 		# print info about bot restart
 		for period in self.periods:
@@ -119,6 +129,15 @@ class PeriodRandomizer:
 			self.next_info_print = time.time() + 60
 
 		return False
+
+	def is_active(self):
+		# working whole time, active.
+		if(self.configuration.bot_work_whole_time):
+			if(self.configuration.bot_work_at_day):
+				return self.is_workday()
+			else:
+				return True
+		return self.is_active_period()
 
 	def restarts_in_s(self):
 		now = datetime.datetime.now()
@@ -134,13 +153,13 @@ class PeriodRandomizer:
 		if(self.configuration.bot_work_whole_time):
 			print('working whole time.')
 			return
-			
+
 		print('time periods, total: {0:.0f} minutes'.format(self.actual_length))
 
 		for period in self.periods:
 			period.get_times()
 
-		
+
 class Period:
 	def __init__(self, from_time, to_time):
 		self.start_time = from_time
