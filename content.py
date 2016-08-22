@@ -39,11 +39,11 @@ class ContentManager:
 				self.repository.merge_photo(photo_instance)
 				self.photos_from_model.append(photo_instance)
 
-			user_details = self.operation.get_user_details(photo_instance.owner_username.replace('\'',''))
-			if (user_details):
-				user_instance = model.User().from_json(user_details)
-				self.repository.merge_user(user_instance)
-				self.users_from_model.append(user_instance)
+				user_details = self.operation.get_user_details(photo_instance.owner_username.replace('\'',''))
+				if (user_details):
+					user_instance = model.User().from_json(user_details)
+					self.repository.merge_user(user_instance)
+					self.users_from_model.append(user_instance)
 
 		self.filter_photos()
 
