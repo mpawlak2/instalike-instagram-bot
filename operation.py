@@ -85,7 +85,7 @@ class Operations:
 			'accept-encoding' : 'gzip, deflate',
 			'accept' : 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
 			'x-csrftoken' : request_response.cookies['csrftoken'],
-			'x-instagram-ajax' : 1,
+			'x-instagram-ajax' : '1',
 			'x-request-with' : 'XMLHttpRequest'
 		}
 
@@ -129,7 +129,6 @@ class Operations:
 
 	def follow(self, user_id):
 		response = self.session.post(self.follow_url_tmpl.format(user_id), headers = self.ajx_headers, cookies = self.cookies)
-		print(response.status_code)
 		return response
 
 
