@@ -25,10 +25,6 @@ Edit `default.cfg` file
     <td>If option <code onmouseover='alert(1);'>BOT::WorkWholeTime</code> is set to <code>False</code> bot will work in 2 to 5 periods that sum up to that amount.</td>
   </tr>
   <tr>
-    <td>BOT::IntelligentWorkingHours</td>
-    <td>not working</td>
-  </tr>
-  <tr>
     <td>BOT::InstaLike</td>
     <td>If set to <code>True</code> bot will be liking photos.</td>
   </tr>
