@@ -27,6 +27,8 @@ class InstaBot:
 		# timing
 		self.next_frame = 0
 		self.start_time = time.time()
+		self.end_time = self.start_time + (self.configuration.bot_stop_after_minutes * 60)
+
 	
 	def log_in(self):
 		self.log('trying to log in ...')
@@ -70,5 +72,8 @@ class InstaBot:
 				if(self.configuration.enable_instafollow):
 						self.follow_bot.act()
 				self.activity_bot.act()
+			if(time.time() > self.end_time and self.configuration.bot_stop_after_minutes > 0):
+				self.log('Shuting down after {0} minute(s) of work'.format(self.configuration.bot_stop_after_minutes))
+				break;
 			time.sleep(1 / 60)
 
