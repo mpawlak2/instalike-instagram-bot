@@ -30,7 +30,6 @@ class Configuration:
 		self.bot_work_at_day = bot.getboolean('botworkatday', False)
 		self.bot_stop_after_minutes = int(bot.get('stopafternumerOfminutes', 0))
 		self.bot_work_hours = bot.get('workhoursperday', 6)
-		self.intelligent_hours = bot.get('intelligentworkinghours', False)
 		self.enable_instalike = bot.getboolean('instalike', True)
 		self.enable_instafollow = bot.getboolean('instafollow', True)
 		self.enable_instacomment = bot.getboolean('instacomment', False)
