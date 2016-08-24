@@ -28,7 +28,7 @@ class Configuration:
 		# BOT SECTION
 		self.bot_work_whole_time = bot.getboolean('workwholetime', False)
 		self.bot_work_at_day = bot.getboolean('botworkatday', False)
-		self.bot_stop_after_minutes = bot.get('stopafternumerOfminutes', 0)
+		self.bot_stop_after_minutes = int(bot.get('stopafternumerOfminutes', 0))
 		self.bot_work_hours = bot.get('workhoursperday', 6)
 		self.intelligent_hours = bot.get('intelligentworkinghours', False)
 		self.enable_instalike = bot.getboolean('instalike', True)
