@@ -2,3 +2,5 @@
 *.pyc
 __pycache__/
 *.txt
+sqlite3.dll
+sqlite*/
