@@ -17,6 +17,10 @@ Edit `default.cfg` file
     <td>If set to <code>True</code> bot will work whole time, no breaks. In other case periods will be in use.</td>
   </tr>
   <tr>
+    <td>BOT::BotWorkAtDay</td>
+    <td>If set to <code>True</code> bot will work from 7AM to 11PM. Requires option <code>BOT::WorkWholeTime</code> set to <code>True</code>.</td>
+  </tr>
+  <tr>
     <td>BOT::StopAfterNumerOfMinutes</td>
     <td>not working</td>
   </tr>
