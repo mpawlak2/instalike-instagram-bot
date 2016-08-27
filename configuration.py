@@ -4,15 +4,40 @@ import sys
 import getopt
 
 class Configuration:
-	def __init__(self, filename):
+	def __init__(self):
+		self.configuration_file = ''
 		self.validated = True
-		self.config = configparser.ConfigParser()
-		self.config.read(filename)
 
+	def initialize(self):
 		self.args = sys.argv[1:]
+		self.instagram_username = None
+		self.instagram_password = None
 
-		if(not self.config):
-			print('Could not open the file {0}'.format(filename))
+		# override default.cfg username and password settings if provided via command line
+		if(len(self.args) > 0):
+			try:
+				opts, args = getopt.getopt(self.args, 'u:p:c:')
+			except getopt.GetoptError:
+				print('Usage: main.py -u username -p password')
+				return False
+			for opt, arg in opts:
+				if(opt == '-u'):
+					self.instagram_username = arg
+				elif(opt == '-p'):
+					self.instagram_password = arg
+				elif(opt == '-c'):
+					self.configuration_file = arg
+
+		if(self.configuration_file == ''):
+			self.configuration_file = 'default.cfg'
+			print('Using default.cfg file.')
+
+		self.config = configparser.ConfigParser()
+		cfile = self.config.read(self.configuration_file)
+
+
+		if(len(cfile) == 0):
+			print('Could not open the file {0}'.format(self.configuration_file))
 			return False
 
 		instagram = self.config['INSTAGRAM']
@@ -44,8 +69,10 @@ class Configuration:
 		self.avoid_bans = ban.getboolean('donotgetbanned', False)
 
 		# INSTAGRAM SECTION
-		self.instagram_username = instagram.get('username', None)
-		self.instagram_password = instagram.get('password', None)
+		if(not self.instagram_username):
+			self.instagram_username = instagram.get('username', None)
+		if(not self.instagram_password):
+			self.instagram_password = instagram.get('password', None)
 
 		# DATABASE
 		self.enable_database = database.getboolean('usedatabase', True)
@@ -87,28 +114,15 @@ class Configuration:
 			self.instafollow_unfollow_users = False
 			print('WARNING! MaxUnfollowsPerHour set to 0, disabled unfollowing functionality.')
 
-	def validate(self):
-		# override default.cfg username and password settings if provided via command line
-		if(len(self.args) > 0):
-			try:
-				opts, args = getopt.getopt(self.args, 'u:p:')
-			except getopt.GetoptError:
-				print('Usage: main.py -u username -p password')
-				return False
-			if(len(opts) != 2):
-				print('Usage: main.py -u username -p password')
-				return False
-			for opt, arg in opts:
-				if(opt == '-u'):
-					self.instagram_username = arg
-				if(opt == '-p'):
-					self.instagram_password = arg
+		return True
 
+
+	def validate(self):
 		self.check_Constraint(self.instafollow_unfollow_users and not self.enable_database, 'Unfollowing users wont work without database.', 1)
 		self.check_Constraint(self.instalike_max_likes_per_hour > 200, 'High likes per hour may result in blocked account.', 1)
 		self.check_Constraint(self.instafollow_max_follows_per_hour > 10, 'High follows per hour may result in blocked account.', 1)
 		self.check_Constraint(self.instafollow_max_unfollows_per_hour > 10, 'High unfollows per hour may result in blocked account.', 1)
-		self.check_Constraint(not self.instagram_username or not self.instagram_password, 'You have to provide instagram username and password under INSTAGRAM section in default.cfg file.', 2)
+		self.check_Constraint(not self.instagram_username or not self.instagram_password, 'Provide Instagram login credentials.', 2)
 		self.check_Constraint(self.enable_database and (not self.database_user or not self.database_password), 'You have to provide database username and password or disable database use under DATABASE section in default.cfg file.', 2)
 		self.check_Constraint(self.enable_instalike and not self.instalike_tags, 'default.cfg, section: INSTALIKE, option: tags - you have to provide tags that bot can use to download media', 2)
 		self.check_Constraint(self.like_min_likes_on_photo > self.like_max_likes_on_photo, 'default.cfg, section: LIKEFILTER, option: MinLikesOnPhoto & MaxLikesOnPhoto - max likes should be greater than min likes.', 2)

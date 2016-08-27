@@ -11,9 +11,12 @@ import time
 
 class InstaBot:
 	def __init__(self):
-		self.configuration = configuration.Configuration('default.cfg')
-
+		self.configuration = configuration.Configuration()
 		self.operation = operation.Operations()
+
+	def initialize(self):
+		if(not self.configuration.initialize()):
+			return False
 		self.data_source = database.DataSource(self.configuration.database_user, self.configuration.database_password, self.configuration.database_address, self.configuration.database_name, self.configuration.enable_database)
 		self.repository = database.Repository(self.data_source)
 		self.content_manager = content.ContentManager(self.operation, self.repository, self.configuration)
@@ -29,6 +32,7 @@ class InstaBot:
 		self.start_time = time.time()
 		self.end_time = self.start_time + (self.configuration.bot_stop_after_minutes * 60)
 
+		return True
 	
 	def log_in(self):
 		self.log('trying to log in ...')
@@ -45,7 +49,8 @@ class InstaBot:
 		print(text)
 
 	def start(self):
-		# we need valid configuration in order for bot to work properly
+		if(not self.initialize()):
+			return False
 		if(not self.configuration.validate()):
 			return False
 
