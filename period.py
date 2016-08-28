@@ -6,8 +6,8 @@ class PeriodRandomizer:
 	def __init__(self, configuration):
 		self.configuration = configuration
 		# 0 - 23 format
-		self.from_hour = 7
-		self.to_hour = 23
+		self.from_hour = self.configuration.botting_start_hour
+		self.to_hour = self.configuration.botting_end_hour
 
 		self.from_time = None
 		self.to_time = None
@@ -104,7 +104,7 @@ class PeriodRandomizer:
 			return True
 		else:
 			if (self.next_info_print < time.time()):
-				print('Bot will work from morning.')
+				print('Bot will work from {0}'.format(self.from_time))
 				self.next_info_print = time.time() + 60
 			return False
 

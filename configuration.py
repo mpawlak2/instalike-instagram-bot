@@ -59,6 +59,9 @@ class Configuration:
 		self.enable_instafollow = bot.getboolean('instafollow', True)
 		self.enable_instacomment = bot.getboolean('instacomment', False)
 		self.enable_instamessage = bot.getboolean('instamessage', False)
+		self.botting_start_hour = int(bot.get('StartHour', 7))
+		self.botting_end_hour = int(bot.get('EndHour', 23))
+
 
 		# NOTIFICATIONS SECTION
 		self.notification_enable_email = notification.getboolean('enableemailsummarynotifications', False)
