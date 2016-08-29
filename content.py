@@ -1,4 +1,5 @@
 import random
+import sys
 import json
 
 import spam
@@ -26,12 +27,14 @@ class ContentManager:
 
 		for tag in self.tags:
 			try:
-				print('getting photos from tag {0}...'.format(tag))
+				self.log('getting photos from tag {0}...'.format(tag))
 				self.photos = self.operation.get_photos_by_tag(tag)
 			except TypeError:
-				print('oops! someting went wrong while fetching photos')
+				self.log('oops! someting went wrong while fetching photos')
 
 		# get details for each photo
+		if not self.photos:
+			return []
 		for photo in self.photos:
 			photo_details = self.operation.get_photo_details(photo['code'])
 			if (photo_details):
@@ -76,5 +79,11 @@ class ContentManager:
 
 	def filter_photos(self):
 		self.photos_from_model = self.spam_validator.validate_photos(self.photos_from_model)
-		print('downloaded {0} valid photos'.format(len(self.photos_from_model)))
+		self.log('downloaded {0} valid photos'.format(len(self.photos_from_model)))
 		
+
+	def log(self, text):
+		try:
+			print(text)
+		except Exception:
+			print('Error with text encoding. Try typing: export PYTHONIOENCODING=utf-8')
