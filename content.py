@@ -27,14 +27,14 @@ class ContentManager:
 
 		for tag in self.tags:
 			try:
-				self.log('getting photos from tag {0}...'.format(tag))
+				self.log('Getting photos from tag {0}...'.format(tag))
 				self.photos = self.operation.get_photos_by_tag(tag)
 			except TypeError:
-				self.log('oops! someting went wrong while fetching photos')
+				self.log('oops! someting went wrong while fetching photos.')
 
-		# get details for each photo
 		if not self.photos:
 			return []
+
 		for photo in self.photos:
 			photo_details = self.operation.get_photo_details(photo['code'])
 			if (photo_details):
