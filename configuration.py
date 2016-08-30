@@ -3,6 +3,8 @@ import configparser
 import sys
 import getopt
 
+
+
 class Configuration:
 	def __init__(self):
 		self.configuration_file = ''
@@ -33,8 +35,7 @@ class Configuration:
 			print('Using default.cfg file.')
 
 		self.config = configparser.ConfigParser()
-		cfile = self.config.read(self.configuration_file)
-
+		cfile = self.config.read(self.configuration_file, encoding = 'utf-8')
 
 		if(len(cfile) == 0):
 			print('Could not open the file {0}'.format(self.configuration_file))
@@ -61,7 +62,6 @@ class Configuration:
 		self.enable_instamessage = bot.getboolean('instamessage', False)
 		self.botting_start_hour = int(bot.get('StartHour', 7))
 		self.botting_end_hour = int(bot.get('EndHour', 23))
-
 
 		# NOTIFICATIONS SECTION
 		self.notification_enable_email = notification.getboolean('enableemailsummarynotifications', False)
