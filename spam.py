@@ -22,12 +22,11 @@ class SpamDetector:
 
 	def validate_photos(self, photos):
 		filtered_photos = []
-		self.log('validating {0} photos'.format(len(photos)))
+
 		for photo in photos:
 			if (self.validate_photo(photo)):
 				filtered_photos.append(photo)
 
-		self.log('filtered {0} valid photos out of {1}'.format(len(filtered_photos), len(photos)))
 		return filtered_photos
 
 	# check if photo caption contains specified words

@@ -79,7 +79,7 @@ class ContentManager:
 
 	def filter_photos(self):
 		self.photos_from_model = self.spam_validator.validate_photos(self.photos_from_model)
-		self.log('downloaded {0} valid photos'.format(len(self.photos_from_model)))
+		self.log('Downloaded {0} valid media.'.format(len(self.photos_from_model)))
 		
 
 	def log(self, text):
