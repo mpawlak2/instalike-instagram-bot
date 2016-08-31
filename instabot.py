@@ -32,17 +32,24 @@ class InstaBot:
 		self.start_time = time.time()
 		self.end_time = self.start_time + (self.configuration.bot_stop_after_minutes * 60)
 
+		if(not self.configuration.validate()):
+			return False
+
+		# generate 'random' periods of time
+		self.period_randomizer.randomize()
+		self.period_randomizer.info()
+
 		return True
 	
 	def log_in(self):
-		self.log('trying to log in ...')
-		response = self.operation.log_in(self.configuration.instagram_username.lower(), self.configuration.instagram_password)
+		self.log('Trying to log in ...')
+		response = self.operation.log_in(self.configuration.instagram_username, self.configuration.instagram_password)
 
 		if (response):
-			self.log('logged in')
+			self.log('Logged in')
 			return True
 		else:
-			self.log('oops! could not log in.')
+			self.log('Oops! could not log in.')
 		return False
 
 	def log(self, text):
@@ -51,15 +58,9 @@ class InstaBot:
 	def start(self):
 		if(not self.initialize()):
 			return False
-		if(not self.configuration.validate()):
-			return False
-
-		# generate 'random' periods of time
-		self.period_randomizer.randomize()
-		self.period_randomizer.info()
 
 		while(not self.log_in()):
-			print('failed to log in wait for 5min')
+			self.log('failed to log in wait for 5min')
 			time.sleep(5 * 60)
 
 		while(True):
