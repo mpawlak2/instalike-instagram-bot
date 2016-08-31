@@ -32,12 +32,14 @@ class InstaLike:
 		response = self.operation.like(photo.id)
 		if(not response):
 			return False
-		self.repository.like(photo, response.status_code)
 
 		if(response.status_code != 200):
 			self.failed_to_like()
 			return False
+
+		self.repository.like(photo, response.status_code)
 		self.photo_liked()
+		
 		return True
 
 	def act(self):
