@@ -51,7 +51,7 @@ class ContentManager:
 		self.mediaList = self.spam_validator.validate_photos(self.mediaList)
 		self.mediaList = random.sample(self.mediaList, media_amount)
 
-		self.log('Downloaded {0} media from tag {1}'.format(len(self.mediaList), bytag))
+		self.log('Downloaded {0} valid media from tag {1}'.format(len(self.mediaList), bytag))
 		return True
 
 	def get_photos(self):
