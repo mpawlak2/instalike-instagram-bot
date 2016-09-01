@@ -23,20 +23,31 @@ class ContentManager:
 
 	def get_next_media(self):
 		if(len(self.mediaList) == 0):
-			self.scrap_media()
+			if(not self.scrap_tag_media()):
+				return None
+
+		return self.mediaList.pop(0)
 
 	def scrap_tag_media(self):
 		bytag = self.tags.pop(0)
 		self.tags.append(bytag)
 
-		basicMedia = self.operation.get_photos_by_tag(bytag)
+		tag_media = self.operation.get_photos_by_tag(bytag)
 
-		if(basicMedia):
-			for media in basicMedia:
+		if(tag_media):
+			for media in tag_media:
 				media_details = self.operation.get_photo_details(media['code'])
 				if(media_details):
 					media_instance = model.Photo().from_json(media_details)
 					self.mediaList.append(media_instance)
+		else:
+			return False
+
+		if(len(self.mediaList) == 0):
+			return False
+
+		self.log('Downloaded media from tag {0}'.format(bytag))
+		return True
 
 	def get_photos(self):
 		self.photos_from_model = []
