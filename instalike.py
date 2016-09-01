@@ -43,21 +43,18 @@ class InstaLike:
 		return True
 
 	def act(self):
-		if (len(self.instagrams) == 0):
-			self.instagrams = self.content_manager.get_photos()
-			self.update_time(30,50)
-
+		# if (len(self.instagrams) == 0):
+		# 	self.instagrams = self.content_manager.get_photos()
+		# 	self.update_time(30,50)
 		if (not self.can_act()):
 			return
 
 		if (time.time() < self.next_like_time):
 			return
 
-		if(len(self.instagrams) > 0):
-			photo = self.content_manager.get_next_media()
-			self.like(photo)
-		else:
-			print('Error getting photos from tags')
+
+		media = self.content_manager.get_next_media()
+		self.like(media)
 
 		self.update_time(self.like_time_delta - (self.like_time_delta // 2), self.like_time_delta + (self.like_time_delta // 2))
 
