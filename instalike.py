@@ -48,9 +48,9 @@ class InstaLike:
 
 		media = self.content_manager.get_next_media()
 		self.like(media)
-
 		self.like_timeout()
 
+	# Has to be reworked.
 	def can_act(self):
 		self.t1 = time.time()
 		# hour elapsed
@@ -66,7 +66,7 @@ class InstaLike:
 	def like_timeout(self):
 		min_timeout = self.like_time_delta - (self.like_time_delta // 2)
 		max_timeout = self.like_time_delta + (self.like_time_delta // 2)
-		
+
 		next_in = random.randint(min_timeout, max_timeout)
 		self.next_like_time = time.time() + next_in
 		self.get_stats()
@@ -76,8 +76,8 @@ class InstaLike:
 		self.hourly_likes += 1
 
 	def failed_to_like(self):
-		self.hourly_likes += 1
 		self.failed_likes += 1
+		self.hourly_likes += 1
 
 	def get_stats(self):
 		self.t1 = time.time()
