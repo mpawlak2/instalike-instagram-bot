@@ -29,6 +29,7 @@ class ContentManager:
 		return self.mediaList.pop(0)
 
 	def scrap_tag_media(self):
+		media_amount = random.randint(3, 10)
 		bytag = self.tags.pop(0)
 		self.tags.append(bytag)
 
@@ -46,7 +47,11 @@ class ContentManager:
 		if(len(self.mediaList) == 0):
 			return False
 
-		self.log('Downloaded media from tag {0}'.format(bytag))
+		# Validate and pick random photos.
+		self.mediaList = self.spam_validator.validate_photos(self.mediaList)
+		self.mediaList = random.sample(self.mediaList, media_amount)
+
+		self.log('Downloaded {0} media from tag {1}'.format(len(self.mediaList), bytag))
 		return True
 
 	def get_photos(self):
