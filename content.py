@@ -19,6 +19,25 @@ class ContentManager:
 		self.users_from_model = []
 		self.activities = []
 
+		self.mediaList = []
+
+	def get_next_media(self):
+		if(len(self.mediaList) == 0):
+			self.scrap_media()
+
+	def scrap_tag_media(self):
+		bytag = self.tags.pop(0)
+		self.tags.append(bytag)
+
+		basicMedia = self.operation.get_photos_by_tag(bytag)
+
+		if(basicMedia):
+			for media in basicMedia:
+				media_details = self.operation.get_photo_details(media['code'])
+				if(media_details):
+					media_instance = model.Photo().from_json(media_details)
+					self.mediaList.append(media_instance)
+
 	def get_photos(self):
 		self.photos_from_model = []
 		self.users_from_model = []
