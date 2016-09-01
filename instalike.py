@@ -28,8 +28,8 @@ class InstaLike:
 		self.t0 = time.time()
 		self.t1 = 0
 
-	def like(self, photo):
-		response = self.operation.like(photo.id)
+	def like(self, media):
+		response = self.operation.like(media.id)
 		if(not response):
 			return False
 
@@ -37,7 +37,7 @@ class InstaLike:
 			self.failed_to_like()
 			return False
 
-		self.repository.like(photo, response.status_code)
+		self.repository.like(media, response.status_code)
 		self.photo_liked()
 		
 		return True
@@ -54,7 +54,7 @@ class InstaLike:
 			return
 
 		if(len(self.instagrams) > 0):
-			photo = self.instagrams.pop()
+			photo = self.content_manager.get_next_media()
 			self.like(photo)
 		else:
 			print('Error getting photos from tags')
