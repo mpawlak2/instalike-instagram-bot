@@ -11,8 +11,6 @@ class InstaLike:
 		self.repository = repository
 		self.configuration = configuration
 
-		self.instagrams = []
-
 		# CONFIGURATION BELOW
 		self.max_likes_per_hour = self.configuration.instalike_max_likes_per_hour
 		
