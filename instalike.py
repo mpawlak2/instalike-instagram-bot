@@ -49,7 +49,7 @@ class InstaLike:
 		media = self.content_manager.get_next_media()
 		self.like(media)
 
-		self.like_timeout(self.like_time_delta - (self.like_time_delta // 2), self.like_time_delta + (self.like_time_delta // 2))
+		self.like_timeout()
 
 	def can_act(self):
 		self.t1 = time.time()
@@ -63,8 +63,11 @@ class InstaLike:
 			return False
 		return True
 
-	def like_timeout(self, mini, maxi):
-		next_in = random.randint(mini, maxi)
+	def like_timeout(self):
+		min_timeout = self.like_time_delta - (self.like_time_delta // 2)
+		max_timeout = self.like_time_delta + (self.like_time_delta // 2)
+		
+		next_in = random.randint(min_timeout, max_timeout)
 		self.next_like_time = time.time() + next_in
 		self.get_stats()
 
