@@ -143,7 +143,7 @@ If you have provided your username and password combination in `default.cfg` fil
 
 
 # requirements
-- python 3.5+
+- python 3+
 - postgresql 9.5
 - `python -m pip install requests`
 - `python -m pip install py-postgresql`
