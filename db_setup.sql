@@ -1,4 +1,5 @@
-create table users(id bigint primary key,
+-- Create relations.
+create table if not exists users(id bigint primary key,
 		    username varchar(500),
 		    has_blocked_viewer boolean,
 		    follows_count integer,
@@ -14,7 +15,7 @@ create table users(id bigint primary key,
 		    is_verified boolean,
 		    biography varchar(1000));
 
-create table photos 
+create table if not exists photos 
 	(id bigint primary key,
 	code varchar(100) unique,
 	width int,
@@ -26,16 +27,24 @@ create table photos
 	loc varchar(500));--,
 	--owner_fk integer REFERENCES users(id));
 
-create table opcodes (
+create table if not exists opcodes (
 		id integer primary key,
 		op_name varchar(100)
 	);
-
+truncate table opcodes;
 insert into opcodes (id, op_name) values (1, 'like'), (2, 'unlike'), (3, 'follow'), (4, 'unfollow'), (5, 'block user'), (6, 'comment');
 	
-create table likes(id serial primary key, photo_id bigint REFERENCES photos (id), status_code int, like_time timestamp);
+create table if not exists likes(id serial primary key, photo_id bigint REFERENCES photos (id), status_code int, like_time timestamp);
 
-create table unfollow_queue(user_id bigint NOT NULL, unfollow_time timestamp without time zone, CONSTRAINT unfollow_queue_pkey PRIMARY KEY (user_id));
+create table if not exists unfollow_queue(user_id bigint NOT NULL, unfollow_time timestamp without time zone, CONSTRAINT unfollow_queue_pkey PRIMARY KEY (user_id));
+
+create table if not exists followers (id serial primary key, user_id bigint REFERENCES users (id), is_following boolean);
+
+create table if not exists following (id serial primary key, user_id bigint REFERENCES users (id), status_code integer, start_following timestamp, stop_following timestamp);
+
+create table if not exists unfollows(id serial primary key, user_id bigint, status_code integer, unfollow_time timestamp);
+
+create table if not exists public.activities(id serial primary key, activity_type integer, user_id bigint, activity_time timestamp);
 
 create or replace function merge_photo(
 	_id bigint,
@@ -77,7 +86,7 @@ begin
 end
 $$ language plpgsql;
 
-CREATE OR REPLACE FUNCTION public.like_photo(
+create or replace function like_photo(
     _photo_id bigint,
     _status_code integer)
   RETURNS boolean AS
@@ -94,11 +103,7 @@ end
 $BODY$
   LANGUAGE plpgsql;
 
-
-
-create table followers (id serial primary key, user_id bigint REFERENCES users (id), is_following boolean);
-
-CREATE OR REPLACE FUNCTION public.merge_user(
+create or replace function merge_user(
     _id bigint,
     _username varchar,
     _has_blocked_viewer boolean,
@@ -139,8 +144,8 @@ begin
 end
 $$ LANGUAGE plpgsql;
 
-create table following (id serial primary key, user_id bigint REFERENCES users (id), status_code integer, start_following timestamp, stop_following timestamp);
-create or replace function public.follow_user(_user_id bigint, _status_code int) 
+
+create or replace function follow_user(_user_id bigint, _status_code int) 
 returns boolean as
 $$
 begin
@@ -150,9 +155,8 @@ end
 $$ language plpgsql;
 
 
--- activity
-create table public.activities(id serial primary key, activity_type integer, user_id bigint, activity_time timestamp);
-CREATE OR REPLACE FUNCTION public.register_activity(
+
+CREATE OR REPLACE FUNCTION register_activity(
     _type integer,
     _user_id bigint,
     _activity_time double precision)
@@ -172,12 +176,6 @@ $BODY$
   LANGUAGE plpgsql;
 
 
--- creating tables 
-create table if not exists unfollows(id serial primary key, user_id bigint, status_code integer, unfollow_time timestamp);
-
-
-
--- functions
 create or replace function unfollow(_user_id bigint, _status_code int) 
 returns void as
 $$
@@ -186,7 +184,7 @@ begin
 end
 $$ language plpgsql;
 
-CREATE OR REPLACE FUNCTION public.unfollow(
+create or replace function unfollow(
     _user_id bigint,
     _status_code integer)
   RETURNS void AS
@@ -204,7 +202,6 @@ $BODY$
 ALTER FUNCTION public.unfollow(bigint, integer)
   OWNER TO postgres;
 
--- Update unfollow queue
 create or replace function update_unfollow_queue(_days integer)
   RETURNS integer AS
 $BODY$
@@ -225,14 +222,10 @@ select into added_users count(*) - added_users from unfollow_queue;
 return added_users;
 end;
 $BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION public.update_unfollow_queue(integer)
-  OWNER TO postgres;
+  LANGUAGE plpgsql;
 
 
--- get users to unfollow
-CREATE OR REPLACE FUNCTION public.get_users_to_unfollow()
+CREATE OR REPLACE FUNCTION get_users_to_unfollow()
   RETURNS json AS
 $BODY$
 begin
