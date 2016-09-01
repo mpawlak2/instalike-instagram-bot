@@ -1,4 +1,5 @@
 import time
+import datetime
 import random
 
 import model
@@ -16,6 +17,8 @@ class InstaLike:
 		# Timing.
 		self.next_like_time = 0
 		self.like_time_delta = (60 * 60) // self.max_likes_per_hour
+
+		self.working_day = datetime.date.today().day
 
 		# Instance stats.
 		self.likes = 0
