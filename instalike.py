@@ -47,7 +47,10 @@ class InstaLike:
 			return
 
 		media = self.content_manager.get_next_media()
-		self.like(media)
+		if (media):
+			self.like(media)
+		else:
+			self.log('Could not get media.')
 		self.like_timeout()
 
 	# Has to be reworked.
