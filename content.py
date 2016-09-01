@@ -49,14 +49,19 @@ class ContentManager:
 		else:
 			return False
 
-		if(len(self.mediaList) == 0):
-			return False
-
 		# Validate and pick random photos.
 		self.mediaList = self.spam_validator.validate_photos(self.mediaList)
+
+		if (media_amount > len(self.mediaList)):
+			media_amount = len(self.mediaList)
+
 		self.mediaList = random.sample(self.mediaList, media_amount)
 
 		self.log('Picked {0} media from tag {1}'.format(len(self.mediaList), bytag))
+
+		if(len(self.mediaList) == 0):
+			return False
+
 		return True
 
 	def get_photos(self):
