@@ -18,7 +18,7 @@ Edit `default.cfg` file
   </tr>
   <tr>
     <td>BOT::BotWorkAtDay</td>
-    <td>If set to <code>True</code> bot will work from 7AM to 11PM. Requires option <code>BOT::WorkWholeTime</code> set to <code>True</code>.</td>
+    <td>If set to <code>True</code> bot will work from between specified hours. Requires option <code>BOT::WorkWholeTime</code> set to <code>True</code>.</td>
   </tr>
   <tr>
     <td>BOT::StopAfterNumerOfMinutes</td>
@@ -27,6 +27,14 @@ Edit `default.cfg` file
   <tr>
     <td>BOT::WorkHoursPerDay</td>
     <td>If option <code onmouseover='alert(1);'>BOT::WorkWholeTime</code> is set to <code>False</code> bot will work in 2 to 5 periods that sum up to that amount.</td>
+  </tr>
+  <tr>
+    <td>BOT::StartHour</td>
+    <td>Requires option <code>BOT::WorkAtDay</code> set to <code>True</code>. Specify hour at which bot should start working.</td>
+  </tr>
+  <tr>
+    <td>BOT::EndHour</td>
+    <td>Requires option <code>BOT::WorkAtDay</code> set to <code>True</code>. Specify hour at which bot should stop working.</td>
   </tr>
   <tr>
     <td>BOT::InstaLike</td>
