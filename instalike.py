@@ -11,14 +11,13 @@ class InstaLike:
 		self.repository = repository
 		self.configuration = configuration
 
-		# CONFIGURATION BELOW
 		self.max_likes_per_hour = self.configuration.instalike_max_likes_per_hour
 		
-		# timing stuff
+		# Timing.
 		self.next_like_time = 0
 		self.like_time_delta = (60 * 60) // self.max_likes_per_hour
 
-		# instance stats
+		# Instance stats.
 		self.likes = 0
 		self.failed_likes = 0
 		self.hourly_likes = 0
