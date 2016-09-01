@@ -97,6 +97,7 @@ class Configuration:
 		# BLACKLIST
 		self.banned_tags = blacklist.get('PhotoTagsList', None)
 		self.banned_words_in_user_desc = blacklist.get('UserDescription', None)
+		self.username_blacklist = blacklist.get('UsernameBlacklist', [])
 
 		# LIKEFILTER
 		self.like_min_likes_on_photo = int(likefilter.get('MinLikesOnPhoto', 0))
@@ -106,6 +107,9 @@ class Configuration:
 			self.banned_tags = []
 		else:
 			self.banned_tags = list(map(lambda tag: '#' + tag.strip(), self.banned_tags.split(',')))
+
+		if (len(self.username_blacklist) > 0):
+			self.username_blacklist = list(map(lambda username: username.strip(), self.username_blacklist.split(',')))
 
 		if (not self.banned_words_in_user_desc):
 			self.banned_words_in_user_desc = []

@@ -7,7 +7,7 @@ class SpamDetector:
 	def __init__(self, op_object, repository, configuration):
 		self.operation = op_object
 		self.repository = repository
-		self.photo_vaidator = PhotoValidator(configuration.banned_tags, configuration.banned_words_in_user_desc, configuration.like_min_likes_on_photo, configuration.like_max_likes_on_photo)
+		self.photo_vaidator = PhotoValidator(configuration.banned_tags, configuration.username_blacklist, configuration.like_min_likes_on_photo, configuration.like_max_likes_on_photo)
 		self.user_validator = UserValidator(configuration.banned_words_in_user_desc)
 
 	def is_user_fake(self, user_id):
@@ -42,7 +42,7 @@ class SpamDetector:
 			self.log('photo removed - already liked')
 			return False
 
-		if (self.photo_vaidator.illegal_owner_name(photo)):
+		if (self.photo_vaidator.validate_username(photo)):
 			self.log('photo removed - illegal owners name')
 			return False
 
@@ -98,14 +98,13 @@ class UserValidator:
 
 
 class PhotoValidator:
-	def __init__(self, banned_tags, banned_description, min_likes, max_likes):
+	def __init__(self, banned_tags, username_blacklist, min_likes, max_likes):
 		# LIKES
 		# ignore photos containing these tags, may regex here
 		self.like_photo_caption_blacklist = banned_tags
 
-		# do not like photo if owner's username contains one of these words
-		self.like_username_blacklist = banned_description
-
+		self.username_blacklist = username_blacklist
+		
 		# do not like photo with more that this value likes, 0 - no limit
 		self.like_max_likes = max_likes
 		self.like_min_likes = min_likes
@@ -113,10 +112,9 @@ class PhotoValidator:
 	def is_already_liked(self, photo):
 		return photo.viewer_has_liked
 
-	def illegal_owner_name(self, photo):
-		for bad_name in self.like_username_blacklist:
-			match = re.search(bad_name, photo.owner_username)
-			if (match):
+	def validate_username(self, photo):
+		for username in self.username_blacklist:
+			if (photo.owner_username == username):
 				return True
 		return False
 
