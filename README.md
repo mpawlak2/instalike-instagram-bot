@@ -125,6 +125,10 @@ Edit `default.cfg` file
     <td>Specify tags that you would like to avoid. e.g. <code>comma, separated, list, format</code></td>
   </tr>
   <tr>
+    <td>BLACKLIST::UserNameBlacklist</td>
+    <td>Don't like media posted by user with these names. Don't follow users with these names. Comma separated list e.g. <code>mickey15, hulk12, lover2020</code></td>
+  </tr>
+  <tr>
     <td>BLACKLIST::UserDescription</td>
     <td>Avoid users whose description contains any of these words. e.g. <code>comma, separated, list, format</code></td>
   </tr>
