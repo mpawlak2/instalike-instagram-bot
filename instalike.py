@@ -49,7 +49,6 @@ class InstaLike:
 		if (time.time() < self.next_like_time):
 			return
 
-
 		media = self.content_manager.get_next_media()
 		self.like(media)
 
@@ -90,7 +89,7 @@ class InstaLike:
 		self.log('failed likes: {0}'.format(self.failed_likes))
 		self.log('estimated likes per hour: {0:.0f}'.format(per_hour))
 		self.log('next like in: {0:.0f}s'.format(self.next_like_time - time.time()))
-		self.log('photos to like: {0}'.format(len(self.instagrams)))
+		self.log('photos to like: {0}'.format(self.content_manager.get_media_count()))
 
 	def log(self, text):
 		print(text)

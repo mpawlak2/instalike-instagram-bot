@@ -21,6 +21,10 @@ class ContentManager:
 
 		self.mediaList = []
 
+
+	def get_media_count(self):
+		return len(self.mediaList)
+
 	def get_next_media(self):
 		if(len(self.mediaList) == 0):
 			if(not self.scrap_tag_media()):
@@ -29,6 +33,7 @@ class ContentManager:
 		return self.mediaList.pop(0)
 
 	def scrap_tag_media(self):
+		self.log('Scrapping & Validating media...')
 		media_amount = random.randint(3, 10)
 		bytag = self.tags.pop(0)
 		self.tags.append(bytag)
