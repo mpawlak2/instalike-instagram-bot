@@ -18,7 +18,7 @@ Edit `default.cfg` file
   </tr>
   <tr>
     <td>BOT::BotWorkAtDay</td>
-    <td>If set to <code>True</code> bot will work from 7AM to 11PM. Requires option <code>BOT::WorkWholeTime</code> set to <code>True</code>.</td>
+    <td>If set to <code>True</code> bot will work from between specified hours. Requires option <code>BOT::WorkWholeTime</code> set to <code>True</code>.</td>
   </tr>
   <tr>
     <td>BOT::StopAfterNumerOfMinutes</td>
@@ -27,6 +27,14 @@ Edit `default.cfg` file
   <tr>
     <td>BOT::WorkHoursPerDay</td>
     <td>If option <code onmouseover='alert(1);'>BOT::WorkWholeTime</code> is set to <code>False</code> bot will work in 2 to 5 periods that sum up to that amount.</td>
+  </tr>
+  <tr>
+    <td>BOT::StartHour</td>
+    <td>Requires option <code>BOT::WorkAtDay</code> set to <code>True</code>. Specify hour at which bot should start working.</td>
+  </tr>
+  <tr>
+    <td>BOT::EndHour</td>
+    <td>Requires option <code>BOT::WorkAtDay</code> set to <code>True</code>. Specify hour at which bot should stop working.</td>
   </tr>
   <tr>
     <td>BOT::InstaLike</td>
@@ -123,6 +131,10 @@ Edit `default.cfg` file
   <tr>
     <td>BLACKLIST::PhotoTagsList</td>
     <td>Specify tags that you would like to avoid. e.g. <code>comma, separated, list, format</code></td>
+  </tr>
+  <tr>
+    <td>BLACKLIST::UserNameBlacklist</td>
+    <td>Don't like media posted by user with these names. Don't follow users with these names. Comma separated list e.g. <code>mickey15, hulk12, lover2020</code></td>
   </tr>
   <tr>
     <td>BLACKLIST::UserDescription</td>
