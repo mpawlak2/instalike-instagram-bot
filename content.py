@@ -60,6 +60,7 @@ class ContentManager:
 		self.log('Picked {0} media from tag {1}'.format(len(self.mediaList), bytag))
 
 		if(len(self.mediaList) == 0):
+			self.log('No valid media found for tag {0}'.format(bytag))
 			return False
 
 		return True
