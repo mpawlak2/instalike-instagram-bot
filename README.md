@@ -37,6 +37,10 @@ Edit `default.cfg` file
     <td>Requires option <code>BOT::WorkAtDay</code> set to <code>True</code>. Specify hour at which bot should stop working.</td>
   </tr>
   <tr>
+    <td>BOT::LogDBOperations</td>
+    <td>Whether or not to log db queries. <code>True</code> or <code>False</code>.</td>
+  </tr>
+  <tr>
     <td>BOT::InstaLike</td>
     <td>If set to <code>True</code> bot will be liking photos.</td>
   </tr>
