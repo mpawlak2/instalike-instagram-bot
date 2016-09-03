@@ -42,8 +42,7 @@ class InstaFollow:
 		if (time.time() < self.next_follow_time):
 			return
 
-		self.users = self.content_manager.get_users()
-		user = self.users.pop()
+		user = self.content_manager.get_next_user()
 		response = self.operation.follow(user.id)
 		self.repository.follow(user, response.status_code)
 
@@ -113,7 +112,7 @@ class InstaFollow:
 		self.log('next follow in: {0:.0f}s'.format(self.next_follow_time - time.time()))
 		if(self.unfollow_users):
 			self.log('next unfollow in: {0:.0f}s'.format(0 if self.next_unfollow_time == 0 else self.next_unfollow_time - time.time()))
-		self.log('users to follow: {0}'.format(len(self.users)))
+		self.log('users to follow: {0}'.format(self.content_manager.get_user_count()))
 		if(self.unfollow_users):
 			self.log('users to unfollow: {0}'.format(len(self.user_ids_to_unfollow)))
 

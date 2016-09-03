@@ -35,6 +35,9 @@ class ContentManager:
 
 		return self.mediaList.pop(0)
 
+	def get_user_count(self):
+		return len(self.userList)
+
 	def get_next_user(self):
 		if(len(self.unfilteredMediaList) == 0):
 			if (not self.scrap_tag_media()):
