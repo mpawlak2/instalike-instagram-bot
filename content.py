@@ -49,7 +49,7 @@ class ContentManager:
 
 	def scrap_users(self):
 		self.log('Scrapping & Validating users...')
-		media_amount = random.randint(3, 10)
+		user_amount = random.randint(3, 10)
 
 		for media in self.unfilteredMediaList:
 			user = self.operation.get_user_details(media.owner_username.replace('\'',''))
@@ -60,10 +60,10 @@ class ContentManager:
 
 		# Validate user.
 		self.userList = self.spam_validator.validate_users(self.userList)
-		if (media_amount > len(self.userList)):
-			media_amount = len(self.userList)
+		if (user_amount > len(self.userList)):
+			user_amount = len(self.userList)
 
-		self.userList = random.sample(self.userList)
+		self.userList = random.sample(self.userList, user_amount)
 
 		if(len(self.userList) == 0):
 			self.log('Could not get valid users.')
