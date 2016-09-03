@@ -62,6 +62,7 @@ class Configuration:
 		self.enable_instamessage = bot.getboolean('instamessage', False)
 		self.botting_start_hour = int(bot.get('StartHour', 7))
 		self.botting_end_hour = int(bot.get('EndHour', 23))
+		self.log_db_operations = bot.getboolean('LogDBOperations', False)
 
 		# NOTIFICATIONS SECTION
 		self.notification_enable_email = notification.getboolean('enableemailsummarynotifications', False)

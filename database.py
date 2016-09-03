@@ -27,9 +27,10 @@ class DataSource:
 
 		
 class Repository:
-	def __init__(self, data_source):
+	def __init__(self, data_source, configuration):
+		self.configuration = configuration
 		self.data_source = data_source
-		self.logger = log.FileOutput('db_log.txt')
+		self.logger = log.FileOutput('db_log.txt', self.configuration.log_db_operations)
 
 	def merge_user(self, user_model):
 		sql_query = '''select merge_user(
