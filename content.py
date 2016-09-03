@@ -20,6 +20,9 @@ class ContentManager:
 		self.activities = []
 
 		self.mediaList = []
+		self.unfilteredMediaList = []
+
+		self.userList = [] # List of media used to find users.
 
 
 	def get_media_count(self):
@@ -31,6 +34,42 @@ class ContentManager:
 				return None
 
 		return self.mediaList.pop(0)
+
+	def get_next_user(self):
+		if(len(self.unfilteredMediaList) == 0):
+			if (not self.scrap_tag_media()):
+				return None
+
+		if(len(self.userList) == 0):
+			if(not self.scrap_users()):
+				self.log('Error getting users.')
+				return None
+
+		return self.userList.pop(0)
+
+	def scrap_users(self):
+		self.log('Scrapping & Validating users...')
+		media_amount = random.randint(3, 10)
+
+		for media in self.unfilteredMediaList:
+			user = self.operation.get_user_details(media.owner_username.replace('\'',''))
+			if (user):
+				user_instance = model.User().from_json(user)
+				self.repository.merge_user(user_instance)
+				self.userList.append(user_instance)
+
+		# Validate user.
+		self.userList = self.spam_validator.validate_users(self.userList)
+		if (media_amount > len(self.userList)):
+			media_amount = len(self.userList)
+
+		self.userList = random.sample(self.userList)
+
+		if(len(self.userList) == 0):
+			self.log('Could not get valid users.')
+			return False
+
+		return True
 
 	def scrap_tag_media(self):
 		self.log('Scrapping & Validating media...')
@@ -45,12 +84,12 @@ class ContentManager:
 				media_details = self.operation.get_photo_details(media['code'])
 				if(media_details):
 					media_instance = model.Photo().from_json(media_details)
-					self.mediaList.append(media_instance)
+					self.unfilteredMediaList.append(media_instance)
 		else:
 			return False
 
 		# Validate and pick random photos.
-		self.mediaList = self.spam_validator.validate_photos(self.mediaList)
+		self.mediaList = self.spam_validator.validate_photos(self.unfilteredMediaList)
 
 		if (media_amount > len(self.mediaList)):
 			media_amount = len(self.mediaList)
