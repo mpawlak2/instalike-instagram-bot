@@ -43,8 +43,9 @@ class InstaFollow:
 			return
 
 		user = self.content_manager.get_next_user()
-		response = self.operation.follow(user.id)
-		self.repository.follow(user, response.status_code)
+		if(user != None):
+			response = self.operation.follow(user.id)
+			self.repository.follow(user, response.status_code)
 
 		if (response.status_code != 200):
 			self.failed_follow()
