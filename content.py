@@ -23,6 +23,7 @@ class ContentManager:
 		self.unfilteredMediaList = []
 
 		self.userList = [] # List of media used to find users.
+		self.unfollowUserList = [] # List of user ID.
 
 
 	def get_media_count(self):
@@ -148,6 +149,21 @@ class ContentManager:
 
 	def get_users(self):
 		return self.users_from_model
+
+	def get_next_user_to_unfollow(self):
+		if(len(self.unfollowUserList) == 0):			
+			if(not self.load_users_to_unfollow()):
+				return None
+
+		return self.unfollowUserList.pop(0)
+
+	def load_users_to_unfollow(self):
+		response = self.repository.get_users_to_unfollow()
+		if(response):
+			self.unfollowUserList = json.loads(response)
+			return True
+
+		return False
 
 	def get_users_to_unfollow(self):
 		response = self.repository.get_users_to_unfollow()
