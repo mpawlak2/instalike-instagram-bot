@@ -87,6 +87,7 @@ class Configuration:
 
 		# INSTALIKE
 		self.instalike_max_likes_per_hour = int(instalike.get('maxlikesperhour', 160))
+		self.instalike_like_feed = instalike.getboolean('likefeedmedia', False)
 		self.instalike_tags = instalike.get('tags', None)
 
 		# INSTAFOLLOW

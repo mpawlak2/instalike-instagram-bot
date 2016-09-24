@@ -31,7 +31,7 @@ class ContentManager:
 
 	def get_next_media(self):
 		if(len(self.mediaList) == 0):
-			if(not self.scrap_tag_media() and not self.scrap_feed_media()):
+			if(not self.scrap_media()):
 				return None
 
 		return self.mediaList.pop(0)
@@ -41,7 +41,7 @@ class ContentManager:
 
 	def get_next_user(self):
 		if(len(self.unfilteredMediaList) == 0):
-			if (not self.scrap_tag_media() and not self.scrap_feed_media()):
+			if (not self.scrap_media()):
 				return None
 
 		if(len(self.userList) == 0):
@@ -75,9 +75,19 @@ class ContentManager:
 
 		return True
 
-	def scrap_tag_media(self):
+	def scrap_media(self):
 		self.log('Scrapping & Validating media...')
-		
+
+		response = False
+		if(self.configuration.instalike_like_feed):
+			response = self.scrap_feed_media() and response
+		response = self.scrap_tag_media() and response
+
+		return response
+
+	def scrap_tag_media(self):
+		self.log('Tag media...')
+
 		bytag = self.tags.pop(0)
 		self.tags.append(bytag)
 
@@ -86,6 +96,8 @@ class ContentManager:
 		return self.process_media(tag_media)
 
 	def scrap_feed_media(self):
+		self.log('Feed media...')
+
 		feed_media = self.operation.get_feed_media()
 
 		return self.process_media(feed_media)
@@ -102,12 +114,12 @@ class ContentManager:
 			return False
 
 		# Validate and pick random photos.
-		self.mediaList = self.spam_validator.validate_photos(self.unfilteredMediaList)
+		media_list = self.spam_validator.validate_photos(self.unfilteredMediaList)
 
-		if (media_amount > len(self.mediaList)):
-			media_amount = len(self.mediaList)
+		if (media_amount > len(media_list)):
+			media_amount = len(media_list)
 
-		self.mediaList = random.sample(self.mediaList, media_amount)
+		self.mediaList.extend(random.sample(media_list, media_amount))
 
 		if(len(self.mediaList) == 0):
 			return False
