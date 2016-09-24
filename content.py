@@ -31,7 +31,7 @@ class ContentManager:
 
 	def get_next_media(self):
 		if(len(self.mediaList) == 0):
-			if(not self.scrap_tag_media()):
+			if(not self.scrap_tag_media() and not self.scrap_feed_media()):
 				return None
 
 		return self.mediaList.pop(0)
@@ -41,7 +41,7 @@ class ContentManager:
 
 	def get_next_user(self):
 		if(len(self.unfilteredMediaList) == 0):
-			if (not self.scrap_tag_media()):
+			if (not self.scrap_tag_media() and not self.scrap_feed_media()):
 				return None
 
 		if(len(self.userList) == 0):
@@ -86,7 +86,9 @@ class ContentManager:
 		return self.process_media(tag_media)
 
 	def scrap_feed_media(self):
-		pass
+		feed_media = self.operation.get_feed_media()
+
+		return self.process_media(feed_media)
 
 	def process_media(self, media_array):
 		media_amount = random.randint(3, 10)
