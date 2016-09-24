@@ -156,6 +156,18 @@ class Operations:
 
 		return json.loads(response.content.decode('utf-8'))['tag']['media']['nodes']
 
+	def get_feed_media(self):
+		response = self.session.get(self.base_url, headers = self.headers)
+		if(response.status_code != 200):
+			return None
+
+		# Find feed media in html file.
+		feed_media = re.search('window._sharedData = ({.*});', response.content.decode('utf-8'))
+		if(feed_media):
+			json_feed = json.loads(feed_media.group(1))['entry_data']['FeedPage'][0]['feed']['media']
+			return json_feed
+		return None
+
 	def get_activity(self):
 		response = self.session.get(self.get_account_activity_url, headers = self.headers)
 
