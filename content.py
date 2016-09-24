@@ -77,14 +77,21 @@ class ContentManager:
 
 	def scrap_tag_media(self):
 		self.log('Scrapping & Validating media...')
-		media_amount = random.randint(3, 10)
+		
 		bytag = self.tags.pop(0)
 		self.tags.append(bytag)
 
 		tag_media = self.operation.get_photos_by_tag(bytag)
 
-		if(tag_media):
-			for media in tag_media:
+		return self.process_media(tag_media)
+
+	def scrap_feed_media(self):
+		pass
+
+	def process_media(self, media_array):
+		media_amount = random.randint(3, 10)
+		if(media_array):
+			for media in media_array:
 				media_details = self.operation.get_photo_details(media['code'])
 				if(media_details):
 					media_instance = model.Photo().from_json(media_details)
@@ -100,13 +107,11 @@ class ContentManager:
 
 		self.mediaList = random.sample(self.mediaList, media_amount)
 
-		self.log('Picked {0} media from tag {1}'.format(len(self.mediaList), bytag))
-
 		if(len(self.mediaList) == 0):
-			self.log('No valid media found for tag {0}'.format(bytag))
 			return False
 
 		return True
+
 
 	def get_photos(self):
 		self.photos_from_model = []
