@@ -80,8 +80,8 @@ class ContentManager:
 
 		response = False
 		if(self.configuration.instalike_like_feed):
-			response = self.scrap_feed_media() and response
-		response = self.scrap_tag_media() and response
+			response = self.scrap_feed_media() or response
+		response = self.scrap_tag_media() or response
 
 		return response
 
