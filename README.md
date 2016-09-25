@@ -1,3 +1,5 @@
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4ZCR74EKJKPDA)
+
 ![some likes](https://s32.postimg.org/53zwfkat1/Screenshot_2016_05_25_05_20_06_1.png)
 
 # avaiable features
@@ -155,7 +157,7 @@ Edit `default.cfg` file
 </table>
 
 # starting bot
-If you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`
+If you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`. You can create new configuration file by copying `default.cfg`, then you can pass it on startup like that: `python main.py -u username -p password -c filename` where `filename` is name of new configuration file.
 
 
 # requirements
@@ -166,8 +168,3 @@ If you have provided your username and password combination in `default.cfg` fil
 
 # external libs docs
 [py-postgresql docs](http://python.projects.pgfoundry.org/docs/1.1/)
-
-
-<hr/>
-
-interested in more advanced bot? contact me at mpawlak62@gmail.com
