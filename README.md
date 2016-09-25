@@ -118,10 +118,15 @@ Edit `default.cfg` file
     <td>INSTALIKE::MaxLikesPerHour</td>
     <td>Estimate what max likes per hour should be, based on this setting wait times are calculated. <code>200</code> is default.</td>
   </tr>
+    <tr>
+  <td>INSTALIKE::LikeFeedMedia</td>
+  <td>If set to <code>True</code> bot will also scrap media from your feed.</td>
+  </tr>
   <tr>
     <td>INSTALIKE::Tags</td>
     <td>Specify tags that bot will use to find and like photos or follow users. Make sure to put comma between tags e.g. <code>tag1, tag2, tag3, tag4</code></td>
   </tr>
+
   <tr>
     <td>INSTAFOLLOW::MaxFollowsPerHour</td>
     <td>Max users that will be followed per hour. Default value is <code>8</code></td>
