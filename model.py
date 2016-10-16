@@ -36,20 +36,12 @@ class Photo:
 			self.viewer_has_liked = json_node['likes'].get('viewer_has_liked', False)
 		self.is_video = json_node.get('is_video', False)
 		self.display_src = self.mark_as_text(json_node['display_src'])
-		self.location = self.mark_as_text(self.try_get_location(json_node))
+		if(json_node.get('location')):
+			self.location = self.mark_as_text(json_node.get('location').get('name', 'null'))
 		self.caption = self.mark_as_text(json_node.get('caption', 'null'))
 		self.owner_id = json_node['owner'].get('id', 'null')
 		self.owner_username = self.mark_as_text(json_node['owner'].get('username', 'null'))
 		return self
-
-	def try_get_location(self, json_node):
-		loc = json_node.get('location', 'null')
-		if (loc == 'null' or loc == None):
-			return 'null'
-		loc = loc.get('name', 'null')
-		if (loc == 'null'):
-			return 'null'
-		return loc
 
 	def mark_as_text(self, text):
 		if (text == None or text == 'null'):

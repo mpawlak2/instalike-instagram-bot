@@ -28,6 +28,9 @@ class TestPhoto(TestCase):
                             "id": "3333333333333333333",
                             "display_src": "https://scontent-waw1-1.cdninstagram.com/whatever/whatever"}'''))
         self.assertTrue(test_photo != None)
+        self.assertTrue(test_photo.width == 1080)
+        self.assertTrue(test_photo.height == 1349)
+        self.assertTrue(test_photo.code == 'XxxXXxxXxxx')
 
     def test_should_not_create_photo_without_id(self):
         test_photo = Photo().from_json(json.loads('''
