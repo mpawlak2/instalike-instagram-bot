@@ -4,3 +4,4 @@ __pycache__/
 *.txt
 sqlite3.dll
 sqlite*/
+.idea/
