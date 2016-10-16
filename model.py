@@ -15,19 +15,31 @@ class Photo:
 		self.owner_username = 'null'
 
 	def from_json(self, json_node):
-		self.width = json_node['dimensions'].get('width', 0)
-		self.height = json_node['dimensions'].get('height', 0)
-		self.code = self.mark_as_text(json_node['code'])
+		if (json_node == None):
+			return None
+
+		if(not json_node.get('id', None)):
+			return None
+
+		# This is required.
+		self.id = json_node.get('id)')
+
+		dimensions = json_node.get('dimensions', None)
+		if(dimensions):
+			self.width = dimensions.get('width', 0)
+			self.height = dimensions.get('height', 0)
+
+		self.code = self.mark_as_text(json_node.get('code', ''))
 		self.is_ad = json_node.get('is_ad', False)
-		self.likes_count = json_node['likes']['count']
-		self.viewer_has_liked = json_node['likes'].get('viewer_has_liked', False)
-		self.is_video = json_node['is_video']
-		self.id = json_node['id']
+		if(json_node.get('likes', None)):
+			self.likes_count = json_node['likes']['count']
+			self.viewer_has_liked = json_node['likes'].get('viewer_has_liked', False)
+		self.is_video = json_node.get('is_video', False)
 		self.display_src = self.mark_as_text(json_node['display_src'])
 		self.location = self.mark_as_text(self.try_get_location(json_node))
 		self.caption = self.mark_as_text(json_node.get('caption', 'null'))
 		self.owner_id = json_node['owner'].get('id', 'null')
-		self.owner_username = self.mark_as_text(json_node['owner'].get('username', 'null')) # nie mozna wyszukac uzytownika po 'username' powinno byc tylko username
+		self.owner_username = self.mark_as_text(json_node['owner'].get('username', 'null'))
 		return self
 
 	def try_get_location(self, json_node):
@@ -65,6 +77,8 @@ class User:
 		self.biography = 'null'
 
 	def from_json(self, json_node):
+		if (json_node == None):
+			return None
 		self.username = self.mark_as_text(json_node.get('username', 'null'))
 		self.has_blocked_viewer = json_node.get('has_blocked_viewer', False)
 		self.follows_count = json_node['follows'].get('count', 0)
