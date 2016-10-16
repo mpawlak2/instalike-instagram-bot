@@ -27,10 +27,17 @@ class TestPhoto(TestCase):
                             "is_video": false,
                             "id": "3333333333333333333",
                             "display_src": "https://scontent-waw1-1.cdninstagram.com/whatever/whatever"}'''))
-        self.assertTrue(test_photo != None)
+
+        self.assertIsNotNone(test_photo)
         self.assertTrue(test_photo.width == 1080)
         self.assertTrue(test_photo.height == 1349)
+        self.assertTrue(test_photo.owner_id == '11111111')
+        self.assertTrue(test_photo.caption == '#sunday#black#girl#selfie')
+        self.assertTrue(test_photo.likes_count == 12)
+        self.assertFalse(test_photo.is_video)
+        self.assertTrue(test_photo.id == '3333333333333333333')
         self.assertTrue(test_photo.code == 'XxxXXxxXxxx')
+        self.assertTrue(test_photo.display_src == 'https://scontent-waw1-1.cdninstagram.com/whatever/whatever')
 
     def test_should_not_create_photo_without_id(self):
         test_photo = Photo().from_json(json.loads('''
@@ -46,4 +53,5 @@ class TestPhoto(TestCase):
                                 "is_video": false,
                                 "id": "",
                                 "display_src": "https://scontent-waw1-1.cdninstagram.com/whatever/whatever"}'''))
-        self.assertTrue(test_photo == None)
+
+        self.assertIsNone(test_photo)

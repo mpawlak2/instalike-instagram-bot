@@ -22,25 +22,25 @@ class Photo:
 			return None
 
 		# This is required.
-		self.id = json_node.get('id)')
+		self.id = json_node.get('id')
 
 		dimensions = json_node.get('dimensions', None)
 		if(dimensions):
 			self.width = dimensions.get('width', 0)
 			self.height = dimensions.get('height', 0)
 
-		self.code = self.mark_as_text(json_node.get('code', ''))
+		self.code = json_node.get('code', '')
 		self.is_ad = json_node.get('is_ad', False)
 		if(json_node.get('likes', None)):
 			self.likes_count = json_node['likes']['count']
 			self.viewer_has_liked = json_node['likes'].get('viewer_has_liked', False)
 		self.is_video = json_node.get('is_video', False)
-		self.display_src = self.mark_as_text(json_node['display_src'])
+		self.display_src = json_node['display_src']
 		if(json_node.get('location')):
-			self.location = self.mark_as_text(json_node.get('location').get('name', 'null'))
-		self.caption = self.mark_as_text(json_node.get('caption', 'null'))
+			self.location = json_node.get('location').get('name', 'null')
+		self.caption = json_node.get('caption', 'null')
 		self.owner_id = json_node['owner'].get('id', 'null')
-		self.owner_username = self.mark_as_text(json_node['owner'].get('username', 'null'))
+		self.owner_username = json_node['owner'].get('username', 'null')
 		return self
 
 	def mark_as_text(self, text):
