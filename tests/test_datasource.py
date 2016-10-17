@@ -15,7 +15,10 @@ class TestPersist(TestCase):
 
     def test_shouldCreateDataSource(self):
         dataSource = self.makeDataSource()
+        dataSource.connect()
+        connection = dataSource.getConnection()
 
+        self.assertIsNotNone(connection)
         self.assertIsNotNone(dataSource)
 
     def test_shouldNotConnectIfNoUserSpecified(self):
@@ -23,7 +26,9 @@ class TestPersist(TestCase):
         dataSource.username = None
 
         response = dataSource.connect()
+        connection = dataSource.getConnection()
 
+        self.assertIsNone(connection)
         self.assertFalse(response)
 
     def test_shouldNotConnectIfNoPasswordSpecified(self):
@@ -31,7 +36,9 @@ class TestPersist(TestCase):
         dataSource.password = None
 
         response = dataSource.connect()
+        connection = dataSource.getConnection()
 
+        self.assertIsNone(connection)
         self.assertFalse(response)
 
     def test_shouldNotConnectIfNoHostSpecified(self):
@@ -39,7 +46,9 @@ class TestPersist(TestCase):
         dataSource.host = None
 
         response = dataSource.connect()
+        connection = dataSource.getConnection()
 
+        self.assertIsNone(connection)
         self.assertFalse(response)
 
     def test_shouldNotConnectIfNoDatabaseSpecified(self):
@@ -47,14 +56,18 @@ class TestPersist(TestCase):
         dataSource.database = None
 
         response = dataSource.connect()
+        connection = dataSource.getConnection()
 
+        self.assertIsNone(connection)
         self.assertFalse(response)
 
     def test_dataSourceShouldConnectToDatabase(self):
         dataSource = self.makeDataSource()
 
         response = dataSource.connect()
+        connection = dataSource.getConnection()
 
+        self.assertIsNotNone(connection)
         self.assertTrue(response)
 
     def test_shouldNotConnectIfInvalidUser(self):
@@ -62,7 +75,9 @@ class TestPersist(TestCase):
         dataSource.username = 'xxxx'
 
         response = dataSource.connect()
+        connection = dataSource.getConnection()
 
+        self.assertIsNone(connection)
         self.assertFalse(response)
 
     def test_shouldNotConnectIfInvalidPassword(self):
@@ -70,7 +85,9 @@ class TestPersist(TestCase):
         dataSource.password = 'xxxx'
 
         response = dataSource.connect()
+        connection = dataSource.getConnection()
 
+        self.assertIsNone(connection)
         self.assertFalse(response)
 
     def test_shouldNotConnectIfInvalidDatabase(self):
@@ -78,5 +95,7 @@ class TestPersist(TestCase):
         dataSource.password = 'xxxx'
 
         response = dataSource.connect()
+        connection = dataSource.getConnection()
 
+        self.assertIsNone(connection)
         self.assertFalse(response)

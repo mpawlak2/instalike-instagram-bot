@@ -20,15 +20,5 @@ class DataSource:
 
         return True
 
-    def execute(self, sql_query):
-        pass
-        # if (self.disabled):
-        #     return
-        # self.connection.execute(sql_query)
-
-    def prepare_procedure(self, procedure_signature):
-        pass
-        # if (self.disabled):
-        #     return None
-        # proc = self.connection.proc(procedure_signature)
-        # return proc
+    def getConnection(self):
+        return self.connection
