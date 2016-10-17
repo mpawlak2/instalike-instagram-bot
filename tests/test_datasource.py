@@ -1,16 +1,14 @@
 from unittest import TestCase
 
 from datasource import DataSource
-from persistlayer import PersistLayer
-from repository import Repository
 
 
 class TestPersist(TestCase):
     def makeDataSource(self):
-        user = 'user'
-        password = 'password'
-        host = 'host'
-        dbname = 'dbname'
+        user = 'postgres'
+        password = 'postgres'
+        host = 'localhost'
+        dbname = 'instamanager'
 
         dataSource = DataSource(user, password, host, dbname)
         return dataSource
