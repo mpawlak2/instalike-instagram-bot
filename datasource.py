@@ -1,6 +1,10 @@
 class DataSource:
-    def __init__(self, user, password, host, database_name):
-        pass
+    def __init__(self, user, password, host, database):
+        self.username = user
+        self.password = password
+        self.host = host
+        self.database = database
+
         # self.disabled = not use_database
         #
         # if (not self or not password or not host or not database_name or self.disabled):

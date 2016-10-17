@@ -28,3 +28,8 @@ class TestPersist(TestCase):
         dataSource = self.makeDataSource()
 
         self.assertIsNotNone(dataSource)
+
+    def test_dataSourceShouldConnectToDatabase(self):
+        dataSource = self.makeDataSource()
+
+
