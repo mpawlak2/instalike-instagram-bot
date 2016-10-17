@@ -26,7 +26,7 @@ class DataSource:
 		return proc
 
 		
-class Repository:
+class OLDRepository:
 	def __init__(self, data_source, configuration):
 		self.configuration = configuration
 		self.data_source = data_source
