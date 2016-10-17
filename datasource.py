@@ -6,7 +6,7 @@ class DataSource:
         self.database = database
 
     def connect(self):
-        if(self.username == None):
+        if self.username is None or self.password is None or self.host is None or self.database is None:
             return False
         return True
 

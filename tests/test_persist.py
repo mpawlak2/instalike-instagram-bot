@@ -37,6 +37,29 @@ class TestPersist(TestCase):
 
         self.assertFalse(response)
 
+    def test_shouldNotConnectIfNoPasswordSpecified(self):
+        dataSource = self.makeDataSource()
+        dataSource.password = None
+
+        response = dataSource.connect()
+
+        self.assertFalse(response)
+
+    def test_shouldNotConnectIfNoHostSpecified(self):
+        dataSource = self.makeDataSource()
+        dataSource.host = None
+
+        response = dataSource.connect()
+
+        self.assertFalse(response)
+
+    def test_shouldNotConnectIfNoDatabaseSpecified(self):
+        dataSource = self.makeDataSource()
+        dataSource.database = None
+
+        response = dataSource.connect()
+
+        self.assertFalse(response)
 
     def test_dataSourceShouldConnectToDatabase(self):
         dataSource = self.makeDataSource()
