@@ -1,11 +1,13 @@
 class DataSource:
-    def __init__(self, user, password, host, database):
-        self.username = user
+    def __init__(self, username, password, host, database):
+        self.username = username
         self.password = password
         self.host = host
         self.database = database
 
     def connect(self):
+        if(self.username == None):
+            return False
         return True
 
         # if (not self or not password or not host or not database_name or self.disabled):

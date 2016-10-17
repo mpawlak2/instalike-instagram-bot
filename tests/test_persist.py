@@ -29,6 +29,15 @@ class TestPersist(TestCase):
 
         self.assertIsNotNone(dataSource)
 
+    def test_shouldNotConnectIfNoUserSpecified(self):
+        dataSource = self.makeDataSource()
+        dataSource.username = None
+
+        response = dataSource.connect()
+
+        self.assertFalse(response)
+
+
     def test_dataSourceShouldConnectToDatabase(self):
         dataSource = self.makeDataSource()
 
