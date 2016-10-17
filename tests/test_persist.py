@@ -1,5 +1,6 @@
 from unittest import TestCase
 
+from datasource import DataSource
 from persistlayer import PersistLayer
 from repository import Repository
 
@@ -12,3 +13,14 @@ class TestPersist(TestCase):
         testRepo = Repository()
 
         self.assertIsNotNone(testRepo, 'Test repo is None')
+        self.assertIsInstance(testRepo, Repository)
+
+    def test_shouldCreateDataSource(self):
+        user = 'user'
+        password = 'password'
+        host = 'host'
+        dbname = 'dbname'
+
+        dataSource = DataSource(user, password, host, dbname)
+
+        self.assertIsNotNone(dataSource)
