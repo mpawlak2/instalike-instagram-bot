@@ -32,4 +32,8 @@ class TestPersist(TestCase):
     def test_dataSourceShouldConnectToDatabase(self):
         dataSource = self.makeDataSource()
 
+        response = dataSource.connect()
+
+        self.assertTrue(response)
+
 

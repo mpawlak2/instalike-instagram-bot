@@ -5,8 +5,9 @@ class DataSource:
         self.host = host
         self.database = database
 
-        # self.disabled = not use_database
-        #
+    def connect(self):
+        return True
+
         # if (not self or not password or not host or not database_name or self.disabled):
         #     self.connection = None
         # else:
