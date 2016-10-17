@@ -1,3 +1,5 @@
+import postgresql
+
 class DataSource:
     def __init__(self, username, password, host, database):
         self.username = username
@@ -5,19 +7,18 @@ class DataSource:
         self.host = host
         self.database = database
 
+        self.connection = None
+
     def connect(self):
         if self.username is None or self.password is None or self.host is None or self.database is None:
             return False
-        return True
 
-        # if (not self or not password or not host or not database_name or self.disabled):
-        #     self.connection = None
-        # else:
-        #     try:
-        #         self.connection = postgresql.open('pq://{0}:{1}@{2}/{3}'.format(user, password, host, database_name))
-        #     except postgresql.exceptions.ClientCannotConnectError:
-        #         print('Error while connecting to database - database disabled.')
-        #         self.disabled = True
+        try:
+            self.connection = postgresql.open('pq://{0}:{1}@{2}/{3}'.format(self.username, self.password, self.host, self.database))
+        except postgresql.exceptions.ClientCannotConnectError:
+            return False
+
+        return True
 
     def execute(self, sql_query):
         pass

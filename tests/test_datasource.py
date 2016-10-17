@@ -57,4 +57,26 @@ class TestPersist(TestCase):
 
         self.assertTrue(response)
 
+    def test_shouldNotConnectIfInvalidUser(self):
+        dataSource = self.makeDataSource()
+        dataSource.username = 'xxxx'
 
+        response = dataSource.connect()
+
+        self.assertFalse(response)
+
+    def test_shouldNotConnectIfInvalidPassword(self):
+        dataSource = self.makeDataSource()
+        dataSource.password = 'xxxx'
+
+        response = dataSource.connect()
+
+        self.assertFalse(response)
+
+    def test_shouldNotConnectIfInvalidDatabase(self):
+        dataSource = self.makeDataSource()
+        dataSource.password = 'xxxx'
+
+        response = dataSource.connect()
+
+        self.assertFalse(response)
