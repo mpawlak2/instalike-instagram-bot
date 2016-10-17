@@ -15,12 +15,16 @@ class TestPersist(TestCase):
         self.assertIsNotNone(testRepo, 'Test repo is None')
         self.assertIsInstance(testRepo, Repository)
 
-    def test_shouldCreateDataSource(self):
+    def makeDataSource(self):
         user = 'user'
         password = 'password'
         host = 'host'
         dbname = 'dbname'
 
         dataSource = DataSource(user, password, host, dbname)
+        return dataSource
+
+    def test_shouldCreateDataSource(self):
+        dataSource = self.makeDataSource()
 
         self.assertIsNotNone(dataSource)
