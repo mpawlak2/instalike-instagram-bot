@@ -22,7 +22,7 @@ class Photo:
 			return None
 
 		# This is required.
-		self.id = json_node.get('id)')
+		self.id = json_node.get('id')
 
 		dimensions = json_node.get('dimensions', None)
 		if(dimensions):
