@@ -70,7 +70,7 @@ class ContentManager:
 		self.userList = random.sample(self.userList, user_amount)
 
 		if(len(self.userList) == 0):
-			self.log('Could not get valid users.')
+			self.log('could not get valid users.')
 			return False
 
 		return True
@@ -86,7 +86,7 @@ class ContentManager:
 		return response
 
 	def scrap_tag_media(self):
-		self.log('Tag media...')
+		self.log('tag media...')
 
 		bytag = self.tags.pop(0)
 		self.tags.append(bytag)
@@ -96,7 +96,7 @@ class ContentManager:
 		return self.process_media(tag_media)
 
 	def scrap_feed_media(self):
-		self.log('Feed media...')
+		self.log('feed media...')
 
 		feed_media = self.operation.get_feed_media()
 
@@ -135,7 +135,7 @@ class ContentManager:
 
 		for tag in self.tags:
 			try:
-				self.log('Getting photos from tag {0}...'.format(tag))
+				self.log('getting photos from tag {0}...'.format(tag))
 				self.photos = self.operation.get_photos_by_tag(tag)
 			except TypeError:
 				self.log('oops! someting went wrong while fetching photos.')
@@ -202,11 +202,11 @@ class ContentManager:
 
 	def filter_photos(self):
 		self.photos_from_model = self.spam_validator.validate_photos(self.photos_from_model)
-		self.log('Downloaded {0} valid media.'.format(len(self.photos_from_model)))
+		self.log('downloaded {0} valid media.'.format(len(self.photos_from_model)))
 		
 
 	def log(self, text):
 		try:
 			print(text)
 		except Exception:
-			print('Error with text encoding. Try typing: export PYTHONIOENCODING=utf-8')
+			print('error with text encoding. Try typing: export PYTHONIOENCODING=utf-8')
