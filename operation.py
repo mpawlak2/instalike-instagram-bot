@@ -164,7 +164,7 @@ class Operations:
 		# Find feed media in html file.
 		feed_media = re.search('window._sharedData = ({.*});', response.content.decode('utf-8'))
 		if(feed_media):
-			json_feed = json.loads(feed_media.group(1))['entry_data']['FeedPage'][0]['feed']['media']['nodes']
+			json_feed = json.loads(feed_media.group(1))['entry_data']['FeedPage'][0]['graphql']['user']['edge_web_feed_timeline']['edges']
 			return json_feed
 		return None
 

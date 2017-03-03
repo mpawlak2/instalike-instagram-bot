@@ -100,13 +100,17 @@ class ContentManager:
 
 		feed_media = self.operation.get_feed_media()
 
-		return self.process_media(feed_media)
+		return self.process_media(feed_media, 0)
 
-	def process_media(self, media_array):
+	def process_media(self, media_array, feed = 1):
 		media_amount = random.randint(3, 10)
 		if(media_array):
 			for media in media_array:
-				media_details = self.operation.get_photo_details(media['code'])
+				if feed == 0:
+					media_details = self.operation.get_photo_details(media['node']['shortcode'])
+				else:
+					media_details = self.operation.get_photo_details(media['code'])
+
 				if(media_details):
 					media_instance = model.Photo().from_json(media_details)
 					self.unfilteredMediaList.append(media_instance)
