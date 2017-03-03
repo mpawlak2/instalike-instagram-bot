@@ -76,7 +76,7 @@ class ContentManager:
 		return True
 
 	def scrap_media(self):
-		self.log('Scrapping & Validating media...')
+		self.log('scrapping & validating media...')
 
 		response = False
 		if(self.configuration.instalike_like_feed):
