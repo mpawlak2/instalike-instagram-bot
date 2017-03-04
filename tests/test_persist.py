@@ -7,7 +7,7 @@ from repository import Repository
 
 class TestPersist(TestCase):
     def test_shouldNotInstantiateAbstractClass(self):
-        self.assertRaises(NotImplementedError, PersistLayer)
+        self.assertRaises(TypeError, PersistLayer)
 
     def test_shouldInstantiateConcreteClass(self):
         testRepo = Repository()
