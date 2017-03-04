@@ -2,6 +2,7 @@ import postgresql
 
 from dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
 
+""" Data source to postgres database. """
 class PGDataSource:
     def __init__(self, username, password, host, database):
         self.username = username
