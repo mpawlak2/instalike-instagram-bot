@@ -1,0 +1,2 @@
+class NotInitializedDataSourceException(Exception):
+    pass
