@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import model
 
-""" If you wish to have new persistence plugin - implement these methods. """
+""" If you wish to have new persistence plugin derive from this class and implement these methods. """
 class InstalikeDataLayer(ABC):
     @abstractmethod
     def persist_user(self, user: model.User):
