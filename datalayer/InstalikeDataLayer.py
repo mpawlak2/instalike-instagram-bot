@@ -1,5 +1,9 @@
-from abc import ABC
+from abc import ABC, abstractmethod
+
+import model
 
 
 class InstalikeDataLayer(ABC):
-    pass
+    @abstractmethod
+    def persist_user(self, user: model.User):
+        pass
