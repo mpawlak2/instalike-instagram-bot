@@ -30,8 +30,8 @@ class InstaFollow:
 		self.next_follow_time = 0
 		self.next_unfollow_time = 0
 
-		self.follow_time_delta = 60 * 60 // self.max_follows_per_hour
-		self.unfllow_time_delta = 60 * 60 // self.max_unfollows_per_hour
+		self.follow_time_delta = 60 * 60 // (1 if self.max_follows_per_hour == 0 else self.max_follows_per_hour)
+		self.unfllow_time_delta = 60 * 60 // (1 if self.max_unfollows_per_hour == 0 else self.max_unfollows_per_hour)
 
 		self.next_unfollow_queue_update = 0 # when to update users that bot will unfollow
 

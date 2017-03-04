@@ -30,6 +30,7 @@ class InstaLike:
 
 	def like(self, media):
 		response = self.operation.like(media.id)
+
 		if(not response):
 			self.failed_to_like()
 			return False
