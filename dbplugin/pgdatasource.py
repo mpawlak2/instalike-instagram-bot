@@ -1,14 +1,16 @@
 import postgresql
 
 from dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
+from logger.logger import Logger
 
 """ Data source to postgres database. """
 class PGDataSource:
-    def __init__(self, username, password, host, database):
+    def __init__(self, username, password, host, database, logger: Logger = None):
         self.username = username
         self.password = password
         self.host = host
         self.database = database
+        self.logger = logger
 
         self.connection = None
 
@@ -21,6 +23,8 @@ class PGDataSource:
         except postgresql.exceptions.ClientCannotConnectError:
             return False
 
+        if self.logger is not None:
+            self.logger.log('Connected to Postgresql database.')
         return True
 
     def getConnection(self):
