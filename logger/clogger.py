@@ -1,3 +1,7 @@
+import datetime
+
+
 class CLogger:
     def log(self, message):
-        print('[')
+        now = datetime.datetime.now()
+        print('[{0}]: {1}'.format(now, message))
