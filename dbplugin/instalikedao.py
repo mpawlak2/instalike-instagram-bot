@@ -3,6 +3,9 @@ from datalayer.InstalikeDataLayer import InstalikeDataLayer
 
 
 class InstalikeDAO(InstalikeDataLayer):
+    def __init__(self, datasource = None):
+        self.datasource = datasource
+
     def set_datasource(self, datasource):
         self.datasource = datasource
 
