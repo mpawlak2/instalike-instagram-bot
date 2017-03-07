@@ -35,6 +35,9 @@ class InstalikeDataLayer(ABC):
 
 
 class InstalikeSQLDAO(InstalikeDataLayer):
+    def __init__(self):
+        sqlite_db.connect()
+
     def persist_user(self, user: model.User):
         sql_query = '''select merge_user(
         						_id := {0},
@@ -87,7 +90,10 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         self.data_source.get_connection().execute(sql_query)
 
     def persist_photo(self, photo: model.Photo):
-        photo_model = Photo(width = photo.width,
+        if Photo.select().where(Photo.code == photo.code).exists():
+            photo_model = Photo.get(Photo.code == photo.code)
+        else:
+            photo_model = Photo(width = photo.width,
                             height = photo.height,
                             code = photo.code,
                             is_ad = photo.is_ad,
