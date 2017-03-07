@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from datalayer.InstalikeDataLayer import InstalikeDataLayer
+from datalayer.datalayer import InstalikeDataLayer
 
 
 class TestInstalikeDataLayer(TestCase):
