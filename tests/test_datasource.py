@@ -4,7 +4,7 @@ from datalayer import PGDataSource, NotInitializedDataSourceException
 
 
 class TestPersist(TestCase):
-    def makeDataSource(self):
+    def make_data_source(self):
         user = 'postgres'
         password = 'postgres'
         host = 'localhost'
@@ -14,7 +14,7 @@ class TestPersist(TestCase):
         return data_source
 
     def test_shouldCreateDataSource(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
         data_source.connect()
         connection = data_source.getConnection()
 
@@ -22,7 +22,7 @@ class TestPersist(TestCase):
         self.assertIsNotNone(data_source)
 
     def test_shouldRaiseNotInitializedDataSourceException(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
 
         try:
             data_source.getConnection()
@@ -31,55 +31,55 @@ class TestPersist(TestCase):
             pass
 
     def test_shouldNotConnectIfNoUserSpecified(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
         data_source.username = None
 
         response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfNoPasswordSpecified(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
         data_source.password = None
 
         response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfNoHostSpecified(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
         data_source.host = None
 
         response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfNoDatabaseSpecified(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
         data_source.database = None
 
         response = data_source.connect()
         self.assertFalse(response)
 
     def test_dataSourceShouldConnectToDatabase(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
 
         response = data_source.connect()
         self.assertTrue(response)
 
     def test_shouldNotConnectIfInvalidUser(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
         data_source.username = 'xxxx'
 
         response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfInvalidPassword(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
         data_source.password = 'xxxx'
 
         response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfInvalidDatabase(self):
-        data_source = self.makeDataSource()
+        data_source = self.make_data_source()
         data_source.password = 'xxxx'
 
         response = data_source.connect()
