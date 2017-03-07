@@ -22,7 +22,7 @@ class TestInstalikeDataLayer(TestCase):
 
     def test_should_persist_photo(self):
         test_photo = Photo().from_json(json.loads('''
-                            {"code": "tedas",
+                            {"code": "tedwefeqwfa4s",
                             "dimensions": {"width": 1080, "height": 1349},
                             "comments_disabled": false,
                             "owner": {"id": "11111111"},

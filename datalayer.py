@@ -6,6 +6,51 @@ from abc import ABC, abstractmethod
 sqlite_db = SqliteDatabase('instalike.db')
 sqlite_db.connect()
 
+
+# Model Definitions
+class BaseModel(Model):
+    class Meta:
+        database = sqlite_db
+
+
+class Photo(BaseModel):
+    width = IntegerField()
+    height = IntegerField()
+    code = CharField(primary_key=True)
+    is_ad = BooleanField(null=True)
+    likes_count = IntegerField()
+    viewer_has_liked = BooleanField(null=True)
+    is_video = BooleanField(null=True)
+    display_src = CharField(null=True)
+    location = CharField(null=True)
+    owner_id = IntegerField(null=True)
+    caption = CharField(null=True)
+    owner_name = CharField(null=True)
+
+
+class User(BaseModel):
+    name = CharField()
+    has_blocked_viewer = BooleanField()
+    follows_count = IntegerField()
+    followers_count = IntegerField()
+    external_url = CharField()
+    follows_viewer = BooleanField()
+    profile_pic_url = CharField()
+    is_private = BooleanField()
+    full_name = CharField()
+    posts_count = IntegerField()
+    blocked_by_viewer = BooleanField()
+    followed_by_viewer = BooleanField()
+    is_verified = BooleanField()
+    biography = CharField()
+
+
+if not Photo.table_exists():
+    Photo.create_table()
+
+if not User.table_exists():
+    User.create_table()
+
 """ If you wish to have new persistence plugin derive from this class and implement these methods. """
 
 
@@ -88,61 +133,33 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         self.data_source.get_connection().execute(sql_query)
 
     def persist_photo(self, photo: model.Photo):
+        update = False
         if Photo.select().where(Photo.code == photo.code).exists():
+            update = True
             photo_model = Photo.get(Photo.code == photo.code)
-        else:
-            photo_model = Photo(width = photo.width,
-                            height = photo.height,
-                            code = photo.code,
-                            is_ad = photo.is_ad,
-                            likes_count = photo.likes_count,
-                            viewer_has_liked = photo.viewer_has_liked,
-                            is_video = photo.is_video,
-                            display_src = photo.display_src,
-                            location = photo.location)
 
-        photo_model.save()
+            photo_model.width = photo.width
+            photo_model.height = photo.height
+            photo_model.is_ad = photo.is_ad
+            photo_model.likes_count = photo.likes_count
+            photo_model.viewer_has_like = photo.viewer_has_liked
+            photo_model.is_video = photo.is_video
+            photo_model.display_src = photo.display_src
+            photo_model.location = photo.location
+        else:
+            photo_model = Photo(width=photo.width,
+                                height=photo.height,
+                                code=photo.code,
+                                is_ad=photo.is_ad,
+                                likes_count=photo.likes_count,
+                                viewer_has_liked=photo.viewer_has_liked,
+                                is_video=photo.is_video,
+                                display_src=photo.display_src,
+                                location=photo.location)
+
+        return photo_model.save() if update else photo_model.save(force_insert=True)
 
     def persist_unfollow(self, user: model.User):
         sql_query = 'select unfollow(_user_id := {0}, _status_code := 200)'.format(user.id)
 
         self.data_source.get_connection().execute(sql_query)
-
-
-# Model Definitions
-
-class BaseModel(Model):
-    class Meta:
-        database = sqlite_db
-
-
-class Photo(BaseModel):
-    width = IntegerField()
-    height = IntegerField()
-    code = CharField()
-    is_ad = BooleanField()
-    likes_count = IntegerField()
-    viewer_has_liked = BooleanField()
-    is_video = BooleanField()
-    display_src = CharField()
-    location = CharField()
-    owner_id = IntegerField()
-    caption = CharField()
-    owner_name = CharField()
-
-
-class User(BaseModel):
-    name = CharField()
-    has_blocked_viewer = BooleanField()
-    follows_count = IntegerField()
-    followers_count = IntegerField()
-    external_url = CharField()
-    follows_viewer = BooleanField()
-    profile_pic_url = CharField()
-    is_private = BooleanField()
-    full_name = CharField()
-    posts_count = IntegerField()
-    blocked_by_viewer = BooleanField()
-    followed_by_viewer = BooleanField()
-    is_verified = BooleanField()
-    biography = CharField()
