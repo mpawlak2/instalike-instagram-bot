@@ -14,73 +14,73 @@ class TestPersist(TestCase):
         return data_source
 
     def test_shouldCreateDataSource(self):
-        dataSource = self.makeDataSource()
-        dataSource.connect()
-        connection = dataSource.getConnection()
+        data_source = self.makeDataSource()
+        data_source.connect()
+        connection = data_source.getConnection()
 
         self.assertIsNotNone(connection)
-        self.assertIsNotNone(dataSource)
+        self.assertIsNotNone(data_source)
 
     def test_shouldRaiseNotInitializedDataSourceException(self):
-        dataSource = self.makeDataSource()
+        data_source = self.makeDataSource()
 
         try:
-            dataSource.getConnection()
-            self.fail('Calling dataSource.GetConnection() should have thrown exception NotInitializedDataSource.')
+            data_source.getConnection()
+            self.fail('Calling data_source.GetConnection() should have thrown exception NotInitializedDataSource.')
         except NotInitializedDataSourceException as e:
             pass
 
     def test_shouldNotConnectIfNoUserSpecified(self):
-        dataSource = self.makeDataSource()
-        dataSource.username = None
+        data_source = self.makeDataSource()
+        data_source.username = None
 
-        response = dataSource.connect()
+        response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfNoPasswordSpecified(self):
-        dataSource = self.makeDataSource()
-        dataSource.password = None
+        data_source = self.makeDataSource()
+        data_source.password = None
 
-        response = dataSource.connect()
+        response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfNoHostSpecified(self):
-        dataSource = self.makeDataSource()
-        dataSource.host = None
+        data_source = self.makeDataSource()
+        data_source.host = None
 
-        response = dataSource.connect()
+        response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfNoDatabaseSpecified(self):
-        dataSource = self.makeDataSource()
-        dataSource.database = None
+        data_source = self.makeDataSource()
+        data_source.database = None
 
-        response = dataSource.connect()
+        response = data_source.connect()
         self.assertFalse(response)
 
     def test_dataSourceShouldConnectToDatabase(self):
-        dataSource = self.makeDataSource()
+        data_source = self.makeDataSource()
 
-        response = dataSource.connect()
+        response = data_source.connect()
         self.assertTrue(response)
 
     def test_shouldNotConnectIfInvalidUser(self):
-        dataSource = self.makeDataSource()
-        dataSource.username = 'xxxx'
+        data_source = self.makeDataSource()
+        data_source.username = 'xxxx'
 
-        response = dataSource.connect()
+        response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfInvalidPassword(self):
-        dataSource = self.makeDataSource()
-        dataSource.password = 'xxxx'
+        data_source = self.makeDataSource()
+        data_source.password = 'xxxx'
 
-        response = dataSource.connect()
+        response = data_source.connect()
         self.assertFalse(response)
 
     def test_shouldNotConnectIfInvalidDatabase(self):
-        dataSource = self.makeDataSource()
-        dataSource.password = 'xxxx'
+        data_source = self.makeDataSource()
+        data_source.password = 'xxxx'
 
-        response = dataSource.connect()
+        response = data_source.connect()
         self.assertFalse(response)
