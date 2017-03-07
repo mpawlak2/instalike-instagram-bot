@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 
 # SQLite database connection
 sqlite_db = SqliteDatabase('instalike.db')
+sqlite_db.connect()
 
 """ If you wish to have new persistence plugin derive from this class and implement these methods. """
 
@@ -35,9 +36,6 @@ class InstalikeDataLayer(ABC):
 
 
 class InstalikeSQLDAO(InstalikeDataLayer):
-    def __init__(self):
-        sqlite_db.connect()
-
     def persist_user(self, user: model.User):
         sql_query = '''select merge_user(
         						_id := {0},
