@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 import model
 
 """ If you wish to have new persistence plugin derive from this class and implement these methods. """
+
+
 class InstalikeDataLayer(ABC):
     @abstractmethod
     def persist_user(self, user: model.User):
@@ -31,5 +33,3 @@ class InstalikeDataLayer(ABC):
     @abstractmethod
     def get_users_to_unfollow(self, day_range):
         pass
-
-
