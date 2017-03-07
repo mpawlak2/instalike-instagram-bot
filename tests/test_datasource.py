@@ -1,7 +1,8 @@
 from unittest import TestCase
 
-from dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
-from dbplugin.pgdatasource import PGDataSource
+from datalayer.dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
+
+from datalayer.dbplugin.pgdatasource import PGDataSource
 
 
 class TestPersist(TestCase):
