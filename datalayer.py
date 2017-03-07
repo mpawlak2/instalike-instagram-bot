@@ -33,21 +33,11 @@ class InstalikeDataLayer(ABC):
         pass
 
     @abstractmethod
-    def persist_activity(self, activity: model.Activity):
-        pass
-
-    @abstractmethod
     def get_users_to_unfollow(self, day_range):
         pass
 
 
 class InstalikeSQLDAO(InstalikeDataLayer):
-    def __init__(self, data_source):
-        self.data_source = data_source
-
-    def persist_activity(self, activity: model.Activity):
-        pass
-
     def persist_user(self, user: model.User):
         sql_query = '''select merge_user(
         						_id := {0},
@@ -121,37 +111,3 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         sql_query = 'select unfollow(_user_id := {0}, _status_code := 200)'.format(user.id)
 
         self.data_source.get_connection().execute(sql_query)
-
-
-class PGDataSource:
-    def __init__(self, username, password, host, database, logger: Logger = None):
-        self.username = username
-        self.password = password
-        self.host = host
-        self.database = database
-        self.logger = logger
-
-        self.connection = None
-
-    def connect(self):
-        if self.username is None or self.password is None or self.host is None or self.database is None:
-            return False
-
-        try:
-            self.connection = postgresql.open(
-                'pq://{0}:{1}@{2}/{3}'.format(self.username, self.password, self.host, self.database))
-        except postgresql.exceptions.ClientCannotConnectError:
-            return False
-
-        if self.logger is not None:
-            self.logger.log('Connected to Postgresql database.')
-        return True
-
-    def get_connection(self):
-        if self.connection is None:
-            raise NotInitializedDataSourceException('Connection was not initialized.')
-        return self.connection
-
-
-class NotInitializedDataSourceException(Exception):
-    pass
