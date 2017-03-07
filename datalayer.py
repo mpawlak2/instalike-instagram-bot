@@ -85,7 +85,10 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         pass
 
     def persist_like(self, photo: model.Photo):
-        pass
+        sql_query = 'select like_photo(_photo_id := {0}, _status_code := 200)'
+        sql_query = sql_query.format(photo.id)
+
+        self.data_source.execute(sql_query)
 
     def persist_follow(self, user: model.User):
         pass
