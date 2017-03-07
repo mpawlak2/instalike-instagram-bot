@@ -79,7 +79,7 @@ class InstalikeSQLDAO(InstalikeDataLayer):
             user.is_verified,
             user.biography)
 
-        self.data_source.execute(sql_query)
+        self.data_source.get_connection().get_connection().execute(sql_query)
 
     def get_users_to_unfollow(self, day_range):
         pass
@@ -88,13 +88,13 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         sql_query = 'select like_photo(_photo_id := {0}, _status_code := 200)'
         sql_query = sql_query.format(photo.id)
 
-        self.data_source.execute(sql_query)
+        self.data_source.get_connection().execute(sql_query)
 
     def persist_follow(self, user: model.User):
         sql_query = 'select follow_user(_user_id := {0}, _status_code := 200)'
         sql_query = sql_query.format(user.id)
 
-        self.data_source.execute(sql_query)
+        self.data_source.get_connection().execute(sql_query)
 
     def persist_photo(self, photo: model.Photo):
         sql_query = '''select merge_photo(
@@ -112,12 +112,12 @@ class InstalikeSQLDAO(InstalikeDataLayer):
                                      photo.likes_count, photo.viewer_has_liked, photo.is_video, photo.display_src,
                                      photo.location)
 
-        self.data_source.execute(sql_query)
+        self.data_source.get_connection().execute(sql_query)
 
     def persist_unfollow(self, user: model.User):
         sql_query = 'select unfollow(_user_id := {0}, _status_code := 200)'.format(user.id)
 
-        self.data_source.execute(sql_query)
+        self.data_source.get_connection().execute(sql_query)
 
 
 class PGDataSource:
@@ -144,7 +144,7 @@ class PGDataSource:
             self.logger.log('Connected to Postgresql database.')
         return True
 
-    def getConnection(self):
+    def get_connection(self):
         if self.connection is None:
             raise NotInitializedDataSourceException('Connection was not initialized.')
         return self.connection
