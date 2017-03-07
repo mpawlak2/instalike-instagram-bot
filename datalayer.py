@@ -87,22 +87,17 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         self.data_source.get_connection().execute(sql_query)
 
     def persist_photo(self, photo: model.Photo):
-        sql_query = '''select merge_photo(
-        							_id := {0},
-        							_width := {1},
-        							_height := {2},
-        							_code := {3},
-        							_is_ad := {4},
-        							_likes_count := {5},
-        							_viewer_has_liked := {6},
-        							_is_video := {7},
-        							_display_src := {8},
-        							_location := {9})'''
-        sql_query = sql_query.format(photo.id, photo.width, photo.height, photo.code, photo.is_ad,
-                                     photo.likes_count, photo.viewer_has_liked, photo.is_video, photo.display_src,
-                                     photo.location)
+        photo_model = Photo(width = photo.width,
+                            height = photo.height,
+                            code = photo.code,
+                            is_ad = photo.is_ad,
+                            likes_count = photo.likes_count,
+                            viewer_has_liked = photo.viewer_has_liked,
+                            is_video = photo.is_video,
+                            display_src = photo.display_src,
+                            location = photo.location)
 
-        self.data_source.get_connection().execute(sql_query)
+        photo_model.save()
 
     def persist_unfollow(self, user: model.User):
         sql_query = 'select unfollow(_user_id := {0}, _status_code := 200)'.format(user.id)
