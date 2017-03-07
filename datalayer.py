@@ -91,7 +91,10 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         self.data_source.execute(sql_query)
 
     def persist_follow(self, user: model.User):
-        pass
+        sql_query = 'select follow_user(_user_id := {0}, _status_code := 200)'
+        sql_query = sql_query.format(user.id)
+
+        self.data_source.execute(sql_query)
 
     def persist_photo(self, photo: model.Photo):
         sql_query = '''select merge_photo(
