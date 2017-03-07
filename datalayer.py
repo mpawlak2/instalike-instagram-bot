@@ -1,9 +1,12 @@
-from abc import ABC, abstractmethod
-
 import postgresql
-
 import model
+from abc import ABC, abstractmethod
+from peewee import SqliteDatabase
 from logger.logger import Logger
+
+# SQLite database connection
+sqlite_db = SqliteDatabase('instalike.db')
+
 
 """ If you wish to have new persistence plugin derive from this class and implement these methods. """
 

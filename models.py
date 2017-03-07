@@ -1,13 +1,10 @@
 from peewee import *
+from datalayer import sqlite_db
 
 
 class BaseModel(Model):
     class Meta:
-        database = SqliteDatabase('instalike.db')
-
-        def __init__(self):
-            self.database.connect()
-
+        database = sqlite_db
 
 class Photo(BaseModel):
     width = IntegerField()
