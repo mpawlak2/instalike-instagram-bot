@@ -4,6 +4,8 @@ from datalayer.dbplugin.exceptions.NotInitializedDataSourceException import NotI
 from logger.logger import Logger
 
 """ Data source to postgres database. """
+
+
 class PGDataSource:
     def __init__(self, username, password, host, database, logger: Logger = None):
         self.username = username
@@ -19,7 +21,8 @@ class PGDataSource:
             return False
 
         try:
-            self.connection = postgresql.open('pq://{0}:{1}@{2}/{3}'.format(self.username, self.password, self.host, self.database))
+            self.connection = postgresql.open(
+                'pq://{0}:{1}@{2}/{3}'.format(self.username, self.password, self.host, self.database))
         except postgresql.exceptions.ClientCannotConnectError:
             return False
 
