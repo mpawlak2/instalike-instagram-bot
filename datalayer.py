@@ -115,7 +115,9 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         self.data_source.execute(sql_query)
 
     def persist_unfollow(self, user: model.User):
-        pass
+        sql_query = 'select unfollow(_user_id := {0}, _status_code := 200)'.format(user.id)
+
+        self.data_source.execute(sql_query)
 
 
 class PGDataSource:
