@@ -1,8 +1,7 @@
 from unittest import TestCase
 
-from datalayer.dbplugin.instalikedao import InstalikeDAO
-
-from datalayer.dbplugin.pgdatasource import PGDataSource
+from dbplugin.pgdatasource import PGDataSource
+from dbplugin.instalikedao import InstalikeDAO
 
 
 class TestInstalikeDAO(TestCase):

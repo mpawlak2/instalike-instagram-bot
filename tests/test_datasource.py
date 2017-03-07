@@ -1,8 +1,7 @@
 from unittest import TestCase
 
-from datalayer.dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
-
-from datalayer.dbplugin.pgdatasource import PGDataSource
+from dbplugin.pgdatasource import PGDataSource
+from dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
 
 
 class TestPersist(TestCase):
@@ -10,10 +9,10 @@ class TestPersist(TestCase):
         user = 'postgres'
         password = 'postgres'
         host = 'localhost'
-        dbname = 'instalike'
+        db_name = 'instalike'
 
-        dataSource = PGDataSource(user, password, host, dbname)
-        return dataSource
+        data_source = PGDataSource(user, password, host, db_name)
+        return data_source
 
     def test_shouldCreateDataSource(self):
         dataSource = self.makeDataSource()

@@ -1,6 +1,6 @@
 import postgresql
 
-from datalayer.dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
+from dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
 from logger.logger import Logger
 
 """ Data source to postgres database. """

@@ -1,5 +1,5 @@
 import model
-from datalayer.datalayer import InstalikeDataLayer
+from datalayer import InstalikeDataLayer
 
 
 class InstalikeDAO(InstalikeDataLayer):
