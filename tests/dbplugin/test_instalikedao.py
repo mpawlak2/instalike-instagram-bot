@@ -1,7 +1,6 @@
 from unittest import TestCase
 
-from dbplugin.pgdatasource import PGDataSource
-from dbplugin.instalikedao import InstalikeDAO
+from datalayer import PGDataSource, InstalikeSQLDAO
 
 
 class TestInstalikeDAO(TestCase):
@@ -16,11 +15,11 @@ class TestInstalikeDAO(TestCase):
 
     def test_classInstalikeDAOImplementsAllMethods(self):
         try:
-            object = InstalikeDAO(self.makeDataSource())
+            object = InstalikeSQLDAO(self.makeDataSource())
         except TypeError:
             self.fail('Error instantiating InstalikeDAO class.')
 
     def test_shouldNotCreateInstalikeDAOWithoutDatasource(self):
         datasource = self.makeDataSource()
-        dao = InstalikeDAO(datasource)
+        dao = InstalikeSQLDAO(datasource)
         self.assertIsNotNone(dao)
