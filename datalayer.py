@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 import postgresql
 
 import model
-from dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
 from logger.logger import Logger
 
 """ If you wish to have new persistence plugin derive from this class and implement these methods. """
@@ -126,3 +125,7 @@ class PGDataSource:
         if self.connection is None:
             raise NotInitializedDataSourceException('Connection was not initialized.')
         return self.connection
+
+
+class NotInitializedDataSourceException(Exception):
+    pass

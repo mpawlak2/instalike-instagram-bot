@@ -1,7 +1,6 @@
 from unittest import TestCase
 
-from datalayer import PGDataSource
-from dbplugin.exceptions.NotInitializedDataSourceException import NotInitializedDataSourceException
+from datalayer import PGDataSource, NotInitializedDataSourceException
 
 
 class TestPersist(TestCase):
