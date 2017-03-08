@@ -85,4 +85,13 @@ class TestInstalikeDataLayer(TestCase):
 
         self.assertEqual(rows, 1)
 
+    def test_should_not_persist_unfollow_if_not_following(self):
+        test_user = self.create_test_user()
+        test_user.id = 2
+
+        dao = InstalikeSQLDAO()
+        rows = dao.persist_unfollow(test_user)
+
+        self.assertEqual(rows, 0)
+
 
