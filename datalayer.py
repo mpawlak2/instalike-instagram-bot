@@ -16,9 +16,10 @@ class BaseModel(Model):
 
 
 class Photo(BaseModel):
+    id = IntegerField(primary_key=True)
     width = IntegerField()
     height = IntegerField()
-    code = CharField(primary_key=True)
+    code = CharField()
     is_ad = BooleanField(null=True)
     likes_count = IntegerField()
     viewer_has_liked = BooleanField(null=True)
@@ -152,9 +153,9 @@ class InstalikeSQLDAO(InstalikeDataLayer):
 
     def persist_photo(self, photo: model.Photo):
         update = False
-        if Photo.select().where(Photo.code == photo.code).exists():
+        if Photo.select().where(Photo.id == photo.id).exists():
             update = True
-            photo_model = Photo.get(Photo.code == photo.code)
+            photo_model = Photo.get(Photo.id == photo.id)
 
             photo_model.width = photo.width
             photo_model.height = photo.height
@@ -165,7 +166,8 @@ class InstalikeSQLDAO(InstalikeDataLayer):
             photo_model.display_src = photo.display_src
             photo_model.location = photo.location
         else:
-            photo_model = Photo(width=photo.width,
+            photo_model = Photo(id=photo.id,
+                                width=photo.width,
                                 height=photo.height,
                                 code=photo.code,
                                 is_ad=photo.is_ad,
