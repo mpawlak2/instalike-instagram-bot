@@ -45,7 +45,7 @@ class InstaFollow:
 		user = self.content_manager.get_next_user()
 		if(user != None):
 			response = self.operation.follow(user.id)
-			self.repository.follow(user, response.status_code)
+			self.repository.persist_follow(user)
 
 		if (response.status_code != 200):
 			self.failed_follow()
@@ -66,7 +66,7 @@ class InstaFollow:
 		if(len(self.user_ids_to_unfollow) > 0):
 			user_id = self.user_ids_to_unfollow.pop()
 			response = self.operation.unfollow(user_id)
-			self.repository.unfollow(user_id, response.status_code)
+			self.repository.persist_unfollow(user_id, response.status_code)
 
 			if (response.status_code != 200):
 				self.failed_unfollow()

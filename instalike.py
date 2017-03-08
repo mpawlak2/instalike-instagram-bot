@@ -39,7 +39,7 @@ class InstaLike:
 			self.failed_to_like()
 			return False
 
-		self.repository.like(media, response.status_code)
+		self.repository.persist_like(media)
 		self.photo_liked()
 		
 		return True

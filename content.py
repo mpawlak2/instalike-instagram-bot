@@ -59,7 +59,7 @@ class ContentManager:
 			user = self.operation.get_user_details(media.owner_username.replace('\'',''))
 			if (user):
 				user_instance = model.User().from_json(user)
-				self.repository.merge_user(user_instance)
+				self.repository.persist_user(user_instance)
 				self.userList.append(user_instance)
 
 		# Validate user.
