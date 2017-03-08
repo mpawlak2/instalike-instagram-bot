@@ -52,17 +52,29 @@ class User(BaseModel):
     creation_date = DateTimeField()
     mod_date = DateTimeField()
 
+
+class Like(BaseModel):
+    id = PrimaryKeyField()
+    photo_id = IntegerField()
+    event_time = DateTimeField()
+
+
 if recreate_tables:
     if Photo.table_exists():
         Photo.drop_table()
     if User.table_exists():
         User.drop_table()
+    if Like.table_exists():
+        Like.drop_table()
 
 if not Photo.table_exists():
     Photo.create_table()
 
 if not User.table_exists():
     User.create_table()
+
+if not Like.table_exists():
+    Like.create_table()
 
 """ If you wish to have new persistence plugin derive from this class and implement these methods. """
 
@@ -140,10 +152,9 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         pass
 
     def persist_like(self, photo: model.Photo):
-        sql_query = 'select like_photo(_photo_id := {0}, _status_code := 200)'
-        sql_query = sql_query.format(photo.id)
+        like_model = Like(photo_id=photo.id, event_time=datetime.datetime.today())
 
-        self.data_source.get_connection().execute(sql_query)
+        return like_model.save()
 
     def persist_follow(self, user: model.User):
         sql_query = 'select follow_user(_user_id := {0}, _status_code := 200)'
