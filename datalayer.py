@@ -1,3 +1,4 @@
+import datetime
 from peewee import *
 import model
 from abc import ABC, abstractmethod
@@ -27,6 +28,8 @@ class Photo(BaseModel):
     owner_id = IntegerField(null=True)
     caption = CharField(null=True)
     owner_name = CharField(null=True)
+    creation_date = DateTimeField()
+    mod_date = DateTimeField()
 
 
 class User(BaseModel):
@@ -149,7 +152,10 @@ class InstalikeSQLDAO(InstalikeDataLayer):
                                 viewer_has_liked=photo.viewer_has_liked,
                                 is_video=photo.is_video,
                                 display_src=photo.display_src,
-                                location=photo.location)
+                                location=photo.location,
+                                creation_date=datetime.datetime.today())
+
+        photo_model.mod_date = datetime.datetime.today()
 
         return photo_model.save() if update else photo_model.save(force_insert=True)
 
