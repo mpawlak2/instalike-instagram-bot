@@ -48,6 +48,8 @@ class User(BaseModel):
     followed_by_viewer = BooleanField()
     is_verified = BooleanField(null=True)
     biography = CharField(null=True)
+    creation_date = DateTimeField()
+    mod_date = DateTimeField()
 
 if recreate_tables:
     if Photo.table_exists():
@@ -95,22 +97,41 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         update = False
         if User.select().where(User.id == user.id).exists():
             update = True
+            user_model = User.get(User.id == user.id)
 
-        user_model = User(id=user.id,
-                          name=user.username,
-                          has_blocked_viewer=user.has_blocked_viewer,
-                          follows_count=user.follows_count,
-                          followers_count=user.followed_by_count,
-                          external_url=user.external_url,
-                          follows_viewer=user.follows_viewer,
-                          profile_pic_url=user.profile_pic_url,
-                          is_private=user.is_private,
-                          full_name=user.full_name,
-                          posts_count=user.posts_count,
-                          blocked_by_viewer=user.blocked_by_viewer,
-                          followed_by_viewer=user.followed_by_viewer,
-                          is_verified=user.is_verified,
-                          biography=user.biography)
+            user_model.name = user.username
+            user_model.has_blocked_viewer = user.has_blocked_viewer
+            user_model.follows_count = user.follows_count
+            user_model.followers_count = user.followed_by_count
+            user_model.external_url = user.external_url
+            user_model.follows_viewer = user.follows_viewer
+            user_model.profile_pic_url = user.profile_pic_url
+            user_model.is_private = user.is_private
+            user_model.full_name = user.full_name
+            user_model.posts_count = user.posts_count
+            user_model.blocked_by_viewer = user.blocked_by_viewer
+            user_model.followed_by_viewer = user.followed_by_viewer
+            user_model.is_verified = user.is_verified
+            user_model.biography = user.biograph
+        else:
+            user_model = User(id=user.id,
+                              name=user.username,
+                              has_blocked_viewer=user.has_blocked_viewer,
+                              follows_count=user.follows_count,
+                              followers_count=user.followed_by_count,
+                              external_url=user.external_url,
+                              follows_viewer=user.follows_viewer,
+                              profile_pic_url=user.profile_pic_url,
+                              is_private=user.is_private,
+                              full_name=user.full_name,
+                              posts_count=user.posts_count,
+                              blocked_by_viewer=user.blocked_by_viewer,
+                              followed_by_viewer=user.followed_by_viewer,
+                              is_verified=user.is_verified,
+                              biography=user.biography,
+                              creation_date=datetime.datetime.today())
+
+        user_model.mod_date = datetime.datetime.today()
 
         return user_model.save() if update else user_model.save(force_insert=True)
 
