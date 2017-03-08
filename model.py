@@ -41,14 +41,8 @@ class Photo:
         self.caption = json_node.get('caption', 'null')
         self.owner_id = json_node['owner'].get('id', 'null')
         self.owner_username = json_node['owner'].get('username', 'null')
-        return self
 
-    def mark_as_text(self, text):
-        if (text == None or text == 'null'):
-            return 'null'
-        else:
-            text = text.replace('\'', '')
-        return '\'' + text + '\''
+        return self
 
 
 class User:
