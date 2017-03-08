@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 # SQLite database connection
 sqlite_db = SqliteDatabase('instalike.db')
 sqlite_db.connect()
+recreate_tables = True
 
 
 # Model Definitions
@@ -45,6 +46,11 @@ class User(BaseModel):
     is_verified = BooleanField(null=True)
     biography = CharField(null=True)
 
+if recreate_tables:
+    if Photo.table_exists():
+        Photo.drop_table()
+    if User.table_exists():
+        User.drop_table()
 
 if not Photo.table_exists():
     Photo.create_table()
@@ -83,40 +89,27 @@ class InstalikeDataLayer(ABC):
 
 class InstalikeSQLDAO(InstalikeDataLayer):
     def persist_user(self, user: model.User):
-        sql_query = '''select merge_user(
-        						_id := {0},
-        						_username := {1},
-        						_has_blocked_viewer := {2},
-        						_follows_count := {3},
-        						_followed_by_count := {4},
-        						_external_url := {5},
-        						_follows_viewer := {6},
-        						_profile_pic_url := {7},
-        						_is_private := {8},
-        						_full_name := {9},
-        						_posts_count := {10},
-        						_blocked_by_viewer := {11},
-        						_followed_by_viewer := {12},
-        						_is_verified := {13},
-        						_biography := {14})'''
-        sql_query = sql_query.format(
-            user.id,
-            user.username,
-            user.has_blocked_viewer,
-            user.follows_count,
-            user.followed_by_count,
-            user.external_url,
-            user.follows_viewer,
-            user.profile_pic_url,
-            user.is_private,
-            user.full_name,
-            user.posts_count,
-            user.blocked_by_viewer,
-            user.followed_by_viewer,
-            user.is_verified,
-            user.biography)
+        update = False
+        if User.select().where(User.id == user.id).exists():
+            update = True
 
-        self.data_source.get_connection().get_connection().execute(sql_query)
+        user_model = User(id=user.id,
+                          name=user.username,
+                          has_blocked_viewer=user.has_blocked_viewer,
+                          follows_count=user.follows_count,
+                          followers_count=user.followed_by_count,
+                          external_url=user.external_url,
+                          follows_viewer=user.follows_viewer,
+                          profile_pic_url=user.profile_pic_url,
+                          is_private=user.is_private,
+                          full_name=user.full_name,
+                          posts_count=user.posts_count,
+                          blocked_by_viewer=user.blocked_by_viewer,
+                          followed_by_viewer=user.followed_by_viewer,
+                          is_verified=user.is_verified,
+                          biography=user.biography)
+
+        return user_model.save() if update else user_model.save(force_insert=True)
 
     def get_users_to_unfollow(self, day_range):
         pass
