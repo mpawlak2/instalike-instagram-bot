@@ -169,7 +169,7 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         return like_model.save()
 
     def persist_follow(self, user: model.User):
-        follow_model = Follow(user_id = user.id, event_time = datetime.datetime.today(), followed = True)
+        follow_model = Follow(user_id=user.id, event_time = datetime.datetime.today(), followed = True)
 
         return follow_model.save()
 
