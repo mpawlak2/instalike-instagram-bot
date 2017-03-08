@@ -59,6 +59,12 @@ class Like(BaseModel):
     event_time = DateTimeField()
 
 
+class Follow(BaseModel):
+    id = PrimaryKeyField()
+    user_id = IntegerField()
+    event_time = DateTimeField()
+
+
 if recreate_tables:
     if Photo.table_exists():
         Photo.drop_table()
@@ -66,6 +72,8 @@ if recreate_tables:
         User.drop_table()
     if Like.table_exists():
         Like.drop_table()
+    if Follow.table_exists():
+        Follow.drop_table()
 
 if not Photo.table_exists():
     Photo.create_table()
@@ -75,6 +83,9 @@ if not User.table_exists():
 
 if not Like.table_exists():
     Like.create_table()
+
+if not Follow.table_exists():
+    Follow.create_table()
 
 """ If you wish to have new persistence plugin derive from this class and implement these methods. """
 
