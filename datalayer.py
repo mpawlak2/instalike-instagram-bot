@@ -63,6 +63,7 @@ class Follow(BaseModel):
     id = PrimaryKeyField()
     user_id = IntegerField()
     event_time = DateTimeField()
+    followed = BooleanField()
 
 
 if recreate_tables:
@@ -168,7 +169,7 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         return like_model.save()
 
     def persist_follow(self, user: model.User):
-        follow_model = Follow(user_id = user.id, event_time = datetime.datetime.today())
+        follow_model = Follow(user_id = user.id, event_time = datetime.datetime.today(), followed = True)
 
         return follow_model.save()
 
@@ -204,6 +205,13 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         return photo_model.save() if update else photo_model.save(force_insert=True)
 
     def persist_unfollow(self, user: model.User):
-        sql_query = 'select unfollow(_user_id := {0}, _status_code := 200)'.format(user.id)
+        if Follow.select().where(Follow.user_id == user.id).exists():
+            follow_model = Follow.get(Follow.user_id == user.id)
+            if follow_model.followed:
+                follow_model.followed = False
+            else:
+                return 0
 
-        self.data_source.get_connection().execute(sql_query)
+            return follow_model.save()
+
+        return 0
