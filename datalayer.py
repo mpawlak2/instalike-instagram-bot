@@ -168,7 +168,9 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         return like_model.save()
 
     def persist_follow(self, user: model.User):
-        pass
+        follow_model = Follow(user_id = user.id, event_time = datetime.datetime.today())
+
+        return follow_model.save()
 
     def persist_photo(self, photo: model.Photo):
         update = False
