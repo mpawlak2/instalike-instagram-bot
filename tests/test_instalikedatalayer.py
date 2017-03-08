@@ -40,3 +40,6 @@ class TestInstalikeDataLayer(TestCase):
 
         self.assertEqual(rows, 1)
 
+    def test_should_persist_user(self):
+        pass
+
