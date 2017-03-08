@@ -29,20 +29,21 @@ class Photo(BaseModel):
 
 
 class User(BaseModel):
+    id = IntegerField(primary_key=True)
     name = CharField()
-    has_blocked_viewer = BooleanField()
+    has_blocked_viewer = BooleanField(null=True)
     follows_count = IntegerField()
     followers_count = IntegerField()
-    external_url = CharField()
+    external_url = CharField(null=True)
     follows_viewer = BooleanField()
-    profile_pic_url = CharField()
+    profile_pic_url = CharField(null=True)
     is_private = BooleanField()
-    full_name = CharField()
+    full_name = CharField(null=True)
     posts_count = IntegerField()
     blocked_by_viewer = BooleanField()
     followed_by_viewer = BooleanField()
-    is_verified = BooleanField()
-    biography = CharField()
+    is_verified = BooleanField(null=True)
+    biography = CharField(null=True)
 
 
 if not Photo.table_exists():
