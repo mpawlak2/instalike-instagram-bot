@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 # SQLite database connection
 _sqlite_db = SqliteDatabase('instalike.db')
 _sqlite_db.connect()
-_recreate_tables = False
+_recreate_tables = True
 
 
 # Model Definitions
@@ -161,7 +161,11 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         return user_model.save() if update else user_model.save(force_insert=True)
 
     def get_users_to_unfollow(self, day_range):
-        users = Follow.select().where(Follow.event_time >= (datetime.datetime.today() - datetime.timedelta(days=day_range)) and Follow.followed)
+        days_ago = datetime.datetime.today() - datetime.timedelta(days=day_range)
+        print(day_range)
+        print(days_ago)
+        users = Follow.select().where((Follow.event_time <= days_ago) & Follow.followed)
+
         return [user.user_id for user in users]
 
     def persist_like(self, photo: model.Photo):
