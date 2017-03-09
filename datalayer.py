@@ -4,15 +4,15 @@ import model
 from abc import ABC, abstractmethod
 
 # SQLite database connection
-sqlite_db = SqliteDatabase('instalike.db')
-sqlite_db.connect()
-recreate_tables = True
+_sqlite_db = SqliteDatabase('instalike.db')
+_sqlite_db.connect()
+_recreate_tables = False
 
 
 # Model Definitions
 class BaseModel(Model):
     class Meta:
-        database = sqlite_db
+        database = _sqlite_db
 
 
 class Photo(BaseModel):
@@ -66,7 +66,7 @@ class Follow(BaseModel):
     followed = BooleanField()
 
 
-if recreate_tables:
+if _recreate_tables:
     if Photo.table_exists():
         Photo.drop_table()
     if User.table_exists():
