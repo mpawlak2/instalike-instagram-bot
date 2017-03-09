@@ -65,7 +65,7 @@ class InstaLike:
             self.t0 = time.time()
             self.hourly_likes = 0
             return True
-        elif (self.hourly_likes > self.max_likes_per_hour):
+        elif self.hourly_likes > self.max_likes_per_hour:
             return False
         return True
 
