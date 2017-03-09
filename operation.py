@@ -39,21 +39,21 @@ class Operations:
 
         # get unique csrftoken from server
         response = self.session.get(self.base_url)
-        if (response.status_code != 200):
+        if response.status_code != 200:
             print('code: {0}, could not GET: {1}'.format(response.status_code, self.base_url))
             return None
 
         self.prepare_request(response)
         response = self.session.post(self.post_ajx_login_url, data=payload, headers=self.ajx_headers,
                                      cookies=response.cookies)
-        if (response.status_code != 200):
+        if response.status_code != 200:
             print('code: {0}, could not POST: {1}'.format(response.status_code, self.login_url))
             return None
         # update csrftoken
         self.prepare_request(response)
 
         is_logged = json.loads(response.content.decode('utf-8'))['authenticated']
-        if (not is_logged):
+        if not is_logged:
             print(
                 'Check credentials, also try to log in to your account manually to check if everything is fine then retry.')
             return None
@@ -118,7 +118,7 @@ class Operations:
         try:
             response = self.session.post(self.like_url_tmpl.format(media.get_id()), headers=self.ajx_headers,
                                          cookies=self.cookies)
-            if (response.status_code != 200):
+            if response.status_code != 200:
                 print('code: {0}, could not POST {1}'.format(response.status_code,
                                                              self.like_url_tmpl.format(media.get_id())))
                 return None
@@ -153,19 +153,19 @@ class Operations:
 
     def get_photos_by_tag(self, tag):
         response = self.session.get(self.tag_url.format(tag), headers=self.headers)
-        if (response.status_code != 200):
+        if response.status_code != 200:
             return None
 
         return json.loads(response.content.decode('utf-8'))['tag']['media']['nodes']
 
     def get_feed_media(self):
         response = self.session.get(self.base_url, headers=self.headers)
-        if (response.status_code != 200):
+        if response.status_code != 200:
             return None
 
         # Find feed media in html file.
         feed_media = re.search('window._sharedData = ({.*});', response.content.decode('utf-8'))
-        if (feed_media):
+        if feed_media:
             json_feed = \
             json.loads(feed_media.group(1))['entry_data']['FeedPage'][0]['graphql']['user']['edge_web_feed_timeline'][
                 'edges']
@@ -175,7 +175,7 @@ class Operations:
     def get_activity(self):
         response = self.session.get(self.get_account_activity_url, headers=self.headers)
 
-        if (response.status_code != 200):
+        if response.status_code != 200:
             return None
 
         try:
@@ -184,7 +184,7 @@ class Operations:
             return None
 
         activityFeed = decoded.get('activityFeed', None)
-        if (not activityFeed):
+        if not activityFeed:
             return None
 
         return activityFeed.get('stories', None)
@@ -192,14 +192,14 @@ class Operations:
     def get_photo_details(self, photo_code):
         response = self.session.get(self.photo_details_url_tmpl.format(photo_code), headers=self.headers)
 
-        if (response.status_code != 200):
+        if response.status_code != 200:
             return None
         return json.loads(response.content.decode('utf-8'))['media']
 
     def get_user_details(self, user_name):
         response = self.session.get(self.user_details_url_tmpl.format(user_name), headers=self.headers)
 
-        if (response.status_code != 200):
+        if response.status_code != 200:
             return None
         return json.loads(response.content.decode('utf-8'))['user']
 
