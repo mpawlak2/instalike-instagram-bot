@@ -161,8 +161,8 @@ class InstalikeSQLDAO(InstalikeDataLayer):
         return user_model.save() if update else user_model.save(force_insert=True)
 
     def get_users_to_unfollow(self, day_range):
-        return Follow.select()\
-            .where(Follow.event_time >= (datetime.datetime.today() - datetime.timedelta(days=day_range)) and Follow.followed)
+        users = Follow.select().where(Follow.event_time >= (datetime.datetime.today() - datetime.timedelta(days=day_range)) and Follow.followed)
+        return [user.user_id for user in users]
 
     def persist_like(self, photo: model.Photo):
         like_model = Like(photo_id=photo.id, event_time=datetime.datetime.today())
