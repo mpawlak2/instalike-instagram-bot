@@ -1,9 +1,10 @@
 import time
 from random import randint
+from datalayer import InstalikeDataLayer
 
 
 class InstaFollow:
-    def __init__(self, operation, repository, content_manager, configuration):
+    def __init__(self, operation, repository: InstalikeDataLayer, content_manager, configuration):
         self.operation = operation
         self.repository = repository
         self.content_manager = content_manager
@@ -16,7 +17,7 @@ class InstaFollow:
         self.unfollow_after_days = self.configuration.instafollow_unfollow_after_days  # unfollow people after # days
         # users
         self.users = []
-        self.user_ids_to_unfollow = []
+        self.to_unfollow = []
 
         # instance stats
         self.follows = 0
@@ -59,11 +60,11 @@ class InstaFollow:
         if not self.unfollow_users or (time.time() < self.next_unfollow_time):
             return
 
-        if (len(self.user_ids_to_unfollow) == 0):
-            self.user_ids_to_unfollow = self.content_manager.get_users_to_unfollow()
+        if len(self.to_unfollow) == 0:
+            self.to_unfollow = self.repository.get_users_to_unfollow(self.configuration.instafollow_unfollow_after_days)
 
-        if (len(self.user_ids_to_unfollow) > 0):
-            user_id = self.user_ids_to_unfollow.pop()
+        if len(self.to_unfollow) > 0:
+            user_id = self.to_unfollow.pop()
             response = self.operation.unfollow(user_id)
             self.repository.persist_unfollow(user_id, response.status_code)
 
@@ -111,7 +112,7 @@ class InstaFollow:
                 0 if self.next_unfollow_time == 0 else self.next_unfollow_time - time.time()))
         self.log('users to follow: {0}'.format(self.content_manager.get_user_count()))
         if (self.unfollow_users):
-            self.log('users to unfollow: {0}'.format(len(self.user_ids_to_unfollow)))
+            self.log('users to unfollow: {0}'.format(len(self.to_unfollow)))
 
     def log(self, text):
         print(text)
