@@ -199,7 +199,7 @@ class Operations:
     def get_user_details(self, user_name):
         response = self.session.get(self.user_details_url_tmpl.format(user_name), headers=self.headers)
 
-        if response.status_code != 200:
+        if response.status_code != 200 or not response.content:
             return None
         return json.loads(response.content.decode('utf-8'))['user']
 
