@@ -56,10 +56,8 @@ class InstaFollow:
         self.update_follow_timer()
 
     def unfollow(self):
-        if (not self.unfollow_users or (time.time() < self.next_unfollow_time)):
+        if not self.unfollow_users or (time.time() < self.next_unfollow_time):
             return
-
-        self.update_unfollow_queue()
 
         if (len(self.user_ids_to_unfollow) == 0):
             self.user_ids_to_unfollow = self.content_manager.get_users_to_unfollow()
@@ -75,12 +73,6 @@ class InstaFollow:
                 self.unfollowed()
             self.update_unfollow_timer()
 
-    def update_unfollow_queue(self):
-        if (self.next_unfollow_queue_update < time.time()):
-            response = self.repository.update_unfollow_queue(self.configuration.instafollow_unfollow_after_days)
-            if (response):
-                self.log('### Unfollow queue updated, added {0} users.'.format(response))
-            self.next_unfollow_queue_update = time.time() + 60 * 60 * 6  # on bot start and then every 6 hours
 
     def act(self):
         self.follow()
