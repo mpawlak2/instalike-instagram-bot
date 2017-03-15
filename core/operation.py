@@ -1,3 +1,14 @@
+import json
+
+
+class Account:
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def to_json(self):
+        return json.dumps({'username' : self.username, 'password' : self.password})
+
 class Operations:
     def log_in(self, account):
         pass
