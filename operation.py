@@ -54,8 +54,7 @@ class Operations:
 
         is_logged = json.loads(response.content.decode('utf-8'))['authenticated']
         if not is_logged:
-            print(
-                'Check credentials, also try to log in to your account manually to check if everything is fine then retry.')
+            print('Check credentials, also try to log in to your account manually to check if everything is fine then retry.')
             return None
         self.cookies = response.cookies
 
@@ -201,7 +200,15 @@ class Operations:
 
         if response.status_code != 200 or not response.content:
             return None
-        return json.loads(response.content.decode('utf-8'))['user']
+
+        try:
+            ret = json.loads(response.content.decode('utf-8'))['user']
+            return ret
+        except Exception as e:
+            print(response.content)
+            print(e)
+            print(response.content.decode('utf-8'))
+
 
     def get_my_followers(self):
         pass
