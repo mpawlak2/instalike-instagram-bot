@@ -1,4 +1,11 @@
 import unittest
 
+from core.operation import Operations
+
+
 class TestOperations(unittest.TestCase):
-    pass
+
+    def test_create_operations_class(self):
+        ops = Operations()
+
+        self.assertIsNotNone(ops)
