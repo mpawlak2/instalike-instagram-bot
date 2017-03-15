@@ -31,7 +31,6 @@ class InstaActivity:
 				self.follows += 1
 			if (activity.type == 1):
 				self.likes += 1
-			self.repository.register_activity(activity)
 
 	def act(self):
 		if (self.next_activity_check < time.time()):

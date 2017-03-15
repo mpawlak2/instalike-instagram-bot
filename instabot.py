@@ -1,5 +1,5 @@
+import datalayer
 import operation
-import database
 import period
 import content
 import instafollow
@@ -17,8 +17,7 @@ class InstaBot:
 	def initialize(self):
 		if(not self.configuration.initialize()):
 			return False
-		self.data_source = database.DataSource(self.configuration.database_user, self.configuration.database_password, self.configuration.database_address, self.configuration.database_name, self.configuration.enable_database)
-		self.repository = database.Repository(self.data_source, self.configuration)
+		self.repository = datalayer.InstalikeSQLDAO()
 		self.content_manager = content.ContentManager(self.operation, self.repository, self.configuration)
 		self.period_randomizer = period.PeriodRandomizer(self.configuration)
 

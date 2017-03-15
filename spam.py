@@ -51,7 +51,7 @@ class SpamDetector:
 			return False
 		
 		# persist photos that you actually may like
-		self.repository.merge_photo(photo)
+		self.repository.persist_photo(photo)
 
 		return True
 
