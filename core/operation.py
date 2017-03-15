@@ -22,3 +22,6 @@ class Operations:
 
     def block_user(self, user_id):
         pass
+
+    def send_direct_message(self, user_id, message):
+        pass
