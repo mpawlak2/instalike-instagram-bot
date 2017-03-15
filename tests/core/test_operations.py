@@ -9,6 +9,11 @@ class TestAccount(unittest.TestCase):
 
         self.assertIsNotNone(acc)
 
+    def test_return_json(self):
+        acc = Account('user', 'pass')
+
+        self.assertEqual(acc.to_json(), '{"username": "user", "password": "pass"}')
+
 class TestOperations(unittest.TestCase):
 
     def test_create_operations_object(self):
