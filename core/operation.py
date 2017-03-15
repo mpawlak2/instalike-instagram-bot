@@ -1,5 +1,5 @@
 class Operations:
-    def log_id(self, account):
+    def log_in(self, account):
         pass
 
     def log_out(self, account):
