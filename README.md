@@ -1,14 +1,15 @@
-# instalike - instagram bot (works without api)
+# Instalike - Instagram bot (works without api)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4ZCR74EKJKPDA)
 
-![some likes](https://s32.postimg.org/53zwfkat1/Screenshot_2016_05_25_05_20_06_1.png)
+![Some likes](https://s32.postimg.org/53zwfkat1/Screenshot_2016_05_25_05_20_06_1.png)
 
-# avaiable features
-- automated likes
-- automated follows
-- automated unfollows (requires database connection)
+# Available features
+- Automated likes
+- Automated follows
+- Automated unfollows (requires database connection)
+- **Compatible with PythonAnywhere - end of README**
 
-# configuration guide
+# Configuration Guide
 Edit `default.cfg` file
 <table>
   <tr>
@@ -162,14 +163,28 @@ Edit `default.cfg` file
   </tr>
 </table>
 
-# starting bot
-If you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`. You can create new configuration file by copying `default.cfg`, then you can pass it on startup like that: `python main.py -u username -p password -c filename` where `filename` is name of new configuration file.
+# Starting bot
+If you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`.
+
+You can create a new configuration file by copying `default.cfg`, and then you can pass it on startup like that: `python main.py -u username -p password -c filename` - where `filename` is the name of the new configuration file.
 
 
-# requirements
+# Requirements
 - python 3+
 - `python -m pip install requests`
 - `python -m pip install peewee`
 
-# external libs docs
-[peewee docs](http://docs.peewee-orm.com/en/latest/peewee/quickstart.html)
+# PythonAnywhere setup
+
+Set up a PythonAnywhere account and start a bash console.
+Clone the repository and then move to the directory:
+$ git clone https://github.com/mpawlak2/instalike-instagram-bot.git
+$ cd instalike-instagram-bot.git
+Install requirements **like this**:
+$ pip3 install -U requests --user
+$ pip3 install -U peewee --user
+The installation is now complete. Now, you can edit **default.cfg** file or run the bot using the following command:
+$ python3 main.py -u username -p password
+
+# External libs docs
+[Peewee documentation](http://docs.peewee-orm.com/en/latest/peewee/quickstart.html)
