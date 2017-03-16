@@ -93,30 +93,6 @@ Edit `default.cfg` file
     <td>Instagram password.</td>
   </tr>
   <tr>
-    <td>DATABASE::UseDatabase</td>
-    <td>If set to <code>True</code> all operations will be persisted in postgresql database that you must have installed. Below are setting. Set to <code>False</code> if you dont have database installed.</td>
-  </tr>
-  <tr>
-    <td>DATABASE::DatabaseName</td>
-    <td>Name of database you want to use.</td>
-  </tr>
-  <tr>
-    <td>DATABASE::UserName</td>
-    <td>Database user.</td>
-  </tr>
-  <tr>
-    <td>DATABASE::Password</td>
-    <td>Database password.</td>
-  </tr>
-  <tr>
-    <td>DATABASE::Address</td>
-    <td>Database host, <code>localhost</code> is default.</td>
-  </tr>
-  <tr>
-    <td>DATABASE::LogOperations</td>
-    <td>not working</td>
-  </tr>
-  <tr>
     <td>INSTALIKE::MaxLikesPerHour</td>
     <td>Estimate what max likes per hour should be, based on this setting wait times are calculated. <code>200</code> is default.</td>
   </tr>
