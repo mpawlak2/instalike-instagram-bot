@@ -1,14 +1,14 @@
-# instalike - instagram bot (works without api)
+# Instalike - Instagram bot (works without api)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4ZCR74EKJKPDA)
 
-![some likes](https://s32.postimg.org/53zwfkat1/Screenshot_2016_05_25_05_20_06_1.png)
+![Some likes](https://s32.postimg.org/53zwfkat1/Screenshot_2016_05_25_05_20_06_1.png)
 
-# avaiable features
-- automated likes
-- automated follows
-- automated unfollows (requires database connection)
+# Available features
+- Automated likes
+- Automated follows
+- Automated unfollows (requires database connection)
 
-# configuration guide
+# Configuration Guide
 Edit `default.cfg` file
 <table>
   <tr>
@@ -162,14 +162,16 @@ Edit `default.cfg` file
   </tr>
 </table>
 
-# starting bot
-If you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`. You can create new configuration file by copying `default.cfg`, then you can pass it on startup like that: `python main.py -u username -p password -c filename` where `filename` is name of new configuration file.
+# Starting bot
+If you have provided your username and password combination in `default.cfg` file then start with `python main.py` otherwise use `python main.py -u username -p password`.
+
+You can create a new configuration file by copying `default.cfg`, and then you can pass it on startup like that: `python main.py -u username -p password -c filename` - where `filename` is the name of the new configuration file.
 
 
-# requirements
+# Requirements
 - python 3+
 - `python -m pip install requests`
 - `python -m pip install peewee`
 
-# external libs docs
-[peewee docs](http://docs.peewee-orm.com/en/latest/peewee/quickstart.html)
+# External libs docs
+[Peewee documentation](http://docs.peewee-orm.com/en/latest/peewee/quickstart.html)
