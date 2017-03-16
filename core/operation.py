@@ -11,7 +11,7 @@ class Account:
 
 class Operations:
     def log_in(self, account):
-        pass
+        return True
 
     def log_out(self, account):
         pass
