@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 # SQLite database connection
 _sqlite_db = SqliteDatabase('instalike.db')
 _sqlite_db.connect()
-_recreate_tables = True
+_recreate_tables = False
 
 
 # Model Definitions
