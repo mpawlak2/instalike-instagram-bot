@@ -7,6 +7,7 @@
 - Automated likes
 - Automated follows
 - Automated unfollows (requires database connection)
+- **Compatible with PythonAnywhere - end of README**
 
 # Configuration Guide
 Edit `default.cfg` file
@@ -172,6 +173,18 @@ You can create a new configuration file by copying `default.cfg`, and then you c
 - python 3+
 - `python -m pip install requests`
 - `python -m pip install peewee`
+
+# PythonAnywhere setup
+
+Set up a PythonAnywhere account and start a bash console.
+Clone the repository and then move to the directory:
+$ git clone https://github.com/mpawlak2/instalike-instagram-bot.git
+$ cd instalike-instagram-bot.git
+Install requirements **like this**:
+$ pip3 install -U requests --user
+$ pip3 install -U peewee --user
+The installation is now complete. Now, you can edit **default.cfg** file or run the bot using the following command:
+$ python3 main.py -u username -p password
 
 # External libs docs
 [Peewee documentation](http://docs.peewee-orm.com/en/latest/peewee/quickstart.html)
