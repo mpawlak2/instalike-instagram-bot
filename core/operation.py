@@ -3,6 +3,10 @@ import json
 import requests
 
 API_URL = 'https://i.instagram.com/api/v1'
+CONTENT_TYPE = 'application/x-www-form-urlencoded'
+USER_AGENT = 'Instagram 10.3.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)'
+
+
 
 
 class Account:
@@ -70,5 +74,14 @@ class Operations:
 
         return response.cookies
 
-    def send_request(self, url):
+    def send_request(self, url, account=None):
+        headers = {
+            'User-Agent': USER_AGENT,
+            'Accept': '*/*',
+            'Content-Type': CONTENT_TYPE,
+            'Accept-Language': 'en-US'
+        }
+
+        self.session.headers = headers
+
         pass
