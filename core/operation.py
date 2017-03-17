@@ -60,5 +60,9 @@ class Operations:
 
     # Instagram API
     def get_csrftoken(self):
-        response = requests.get(API_URL + '/si/fetch_headers/')
+        try:
+            response = requests.get(API_URL + '/si/fetch_headers/')
+        except Exception as e:
+            return None
+
         return response.cookies
