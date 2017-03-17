@@ -61,7 +61,4 @@ class Operations:
     # Instagram API
     def get_csrftoken(self):
         response = requests.get(API_URL + '/si/fetch_headers/')
-
-        print(response.status_code)
-
         return response.cookies
