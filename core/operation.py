@@ -70,3 +70,6 @@ class Operations:
             return None
 
         return response.cookies
+
+    def send_request(self, url):
+        pass
