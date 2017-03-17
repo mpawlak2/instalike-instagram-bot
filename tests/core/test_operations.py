@@ -33,7 +33,12 @@ class TestOperations(unittest.TestCase):
         self.assertFalse(ops.log_in(Account('fakeacc', 'fakepass')))
 
     def test_account_assignment(self):
-        pass
+        ops = Operations()
+
+        self.assertFalse(ops.log_in())
+        self.assertIsNone(ops.account)
+        self.assertTrue(ops.log_in(Account('legitacc', 'legitpass')))
+        self.assertIsNotNone(ops.account)
 
     def test_get_csrftoken(self):
         ops = Operations()
