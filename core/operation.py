@@ -62,7 +62,6 @@ class Operations:
     def send_direct_message(self, user_id, message):
         pass
 
-    # Instagram API
     def get_csrftoken(self):
         try:
             response = requests.get(API_URL + '/si/fetch_headers/')
