@@ -42,5 +42,7 @@ class TestOperations(unittest.TestCase):
 
     def test_get_csrftoken(self):
         ops = Operations()
+        ops.log_in(Account('fake', 'fake'))
 
+        self.assertIsNotNone(ops.account.csrftoken)
         self.assertIsNotNone(ops.get_csrftoken())

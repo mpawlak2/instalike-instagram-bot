@@ -29,6 +29,9 @@ class Operations:
         else:
             self.account = account
 
+        if self.account.csrftoken is None:
+            self.account.csrftoken = self.get_csrftoken()
+
         return True
 
     def log_out(self, account):
