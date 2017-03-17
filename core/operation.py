@@ -1,7 +1,13 @@
 import json
 
+import requests
+
+API_URL = 'https://i.instagram.com/api/v1'
+
 
 class Account:
+    csrftoken = None
+
     def __init__(self, username, password):
         self.username = username
         self.password = password
@@ -9,8 +15,20 @@ class Account:
     def to_json(self):
         return json.dumps({'username': self.username, 'password': self.password})
 
+
 class Operations:
-    def log_in(self, account):
+    account = None
+
+    def __init__(self):
+        self.session = requests.Session()
+
+    def log_in(self, account=None):
+        if account is None:
+            if self.account is None:
+                return False
+        else:
+            self.account = account
+
         return True
 
     def log_out(self, account):
@@ -36,3 +54,11 @@ class Operations:
 
     def send_direct_message(self, user_id, message):
         pass
+
+    # Instagram API
+    def get_csrftoken(self):
+        response = requests.get(API_URL + '/si/fetch_headers/')
+
+        print(response.status_code)
+
+        return response.cookies
