@@ -88,11 +88,12 @@ class Operations:
 
         if self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data())):
             self.account.logged_in = True
+            logging.info('logged in as {0}'.format(self.account.username))
             return True
 
         return False
 
-    def log_out(self, account):
+    def log_out(self):
         pass
 
     def like_media(self, photo_id):
