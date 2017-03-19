@@ -29,6 +29,7 @@ class TestOperations(unittest.TestCase):
         ops = Operations()
 
         self.assertTrue(ops.log_in(Account('alojzykk', '1q@W3e$R')))
+        self.assertTrue(ops.log_in())
 
     def test_log_in_fail(self):
         ops = Operations()
@@ -38,6 +39,7 @@ class TestOperations(unittest.TestCase):
     def test_account_assignment(self):
         ops = Operations()
 
+        self.assertFalse(ops.log_in())
         self.assertFalse(ops.log_in())
         self.assertIsNone(ops.account)
 
