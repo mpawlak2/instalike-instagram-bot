@@ -73,7 +73,7 @@ class Operations:
     def get_csrftoken(self):
         self.send_request(API_URL + '/si/fetch_headers/')
 
-        return self.response.cookies
+        return self.response.cookies['csrftoken']
 
     def generate_device_id(self, seed):
         volatile_seed = '12345'
@@ -105,6 +105,11 @@ class Operations:
             self.response = None
             logging.warning('{0} request responded with status code {1}'.format('POST' if post_data is not None else 'GET', response.status_code))
             return None
+
+        try:
+            json.loads(response.text)
+        except Exception as e:
+            logging.debug('response content is not in JSON format, response: {0}', response.text)
 
         return response
 
