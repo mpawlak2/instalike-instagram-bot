@@ -81,7 +81,7 @@ class Operations:
         if self.account.csrftoken is None:
             return False
 
-        self.send_request(API_URL + '/accounts/login/', post_data=(self.account.get_login_data()))
+        self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data()))
 
         return True
 
@@ -118,6 +118,7 @@ class Operations:
         logging.info('sending request ' + url)
         self.session.headers.update({
             'Connection': 'close',
+            'Cookie2': '$Version=1',
             'User-Agent': USER_AGENT,
             'Accept': '*/*',
             'Content-Type': CONTENT_TYPE,
@@ -148,6 +149,8 @@ class Operations:
         return self.response
 
     def sign_payload(self, payload):
-        return '?ig_sig_key_version=4&signed_body=' + hmac.new(PRIVATE_KEY.encode('utf-8'), payload.encode('utf-8'), hashlib.sha256).hexdigest() + '.' + payload
+        signed_payload = 'ig_sig_key_version=4&signed_body=' + hmac.new(PRIVATE_KEY.encode('utf-8'), payload.encode('utf-8'), hashlib.sha256).hexdigest() + '.' + payload
+        logging.debug('signed payload: ' + signed_payload)
+        return signed_payload
 
 
