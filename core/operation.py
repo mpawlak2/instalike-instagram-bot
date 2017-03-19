@@ -4,12 +4,12 @@ import json
 import requests
 import logging
 import uuid
-
+import hmac
 
 API_URL = 'https://i.instagram.com/api/v1'
 CONTENT_TYPE = 'application/x-www-form-urlencoded'
 USER_AGENT = 'Instagram 10.3.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)'
-
+PRIVATE_KEY = '012a54f51c49aa8c5c322416ab1410909add32c966bbaa0fe3dc58ac43fd7ede'
 
 
 
@@ -17,6 +17,7 @@ class Account:
     csrftoken = None
     __phone_id = None
     __device_id = None
+    __guid = None
 
     def __init__(self, username, password):
         self.username = username
@@ -26,15 +27,15 @@ class Account:
         return json.dumps({'username': self.username, 'password': self.password})
 
     def get_login_data(self):
-        return {
+        return json.dumps({
             'phone_id': self.get_phone_id(),
             '_csrftoken': self.csrftoken,
             'username': self.username,
             'password': self.password,
             'device_id': self.get_device_id(),
-            'guid': '??',
+            'guid': self.get_guid(),
             'login_attempt_count': '0'
-        }
+        })
 
     def get_phone_id(self, no_dash=False):
         if self.__phone_id is None:
@@ -49,10 +50,14 @@ class Account:
             user_seed = m.hexdigest()
             m.update('0192837465'.encode('utf-8') + user_seed.encode('utf-8'))
             self.__device_id = 'android-' + m.hexdigest()[:16]
-
             logging.info('generated device id: {0}'.format(self.__phone_id))
 
         return self.__device_id
+
+    def get_guid(self):
+        if self.__guid is None:
+            self.__guid = str(uuid.uuid4())
+        return self.__guid
 
 
 class Operations:
@@ -75,6 +80,8 @@ class Operations:
         # could not get csrftoken
         if self.account.csrftoken is None:
             return False
+
+        self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data()))
 
         return True
 
@@ -129,7 +136,7 @@ class Operations:
             self.response = response
         else:
             self.response = None
-            logging.warning('{0} request responded with status code {1}'.format('POST' if post_data is not None else 'GET', response.status_code))
+            logging.warning('{0} request responded with status code: {1}, content: {2}'.format('POST' if post_data is not None else 'GET', response.status_code, response.text))
             return None
 
         try:
@@ -137,6 +144,9 @@ class Operations:
         except Exception as e:
             logging.debug('response content is not in JSON format, response: {0}, exception: {1}', response.text, str(e))
 
-        return response
+        return self.response
+
+    def sign_payload(self, payload):
+        return hmac.new(PRIVATE_KEY.encode('utf-8'), payload.encode('utf-8'), hashlib.sha256).hexdigest() + '.' + payload
 
 

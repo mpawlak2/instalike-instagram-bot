@@ -66,3 +66,9 @@ class TestOperations(unittest.TestCase):
 
         print(acc.get_phone_id())
 
+
+    def test_guid(self):
+        acc = Account('testacc', 'testpass')
+
+        self.assertIsNotNone(acc.get_guid())
+
