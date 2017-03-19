@@ -111,9 +111,7 @@ class Operations:
         pass
 
     def get_csrftoken(self):
-        self.send_request(API_URL + '/si/fetch_headers/')
-
-        return self.response.cookies['csrftoken']
+        return self.send_request(API_URL + '/si/fetch_headers/').cookies['csrftoken']
 
     def send_request(self, url, account=None, post_data=None):
         logging.info('sending request ' + url)
