@@ -52,3 +52,12 @@ class TestOperations(unittest.TestCase):
 
         self.assertIsNotNone(ops.send_request('https://i.instagram.com/api/v1/si/fetch_headers/'))
         self.assertIsNotNone(ops.response)
+
+    def test_device_id(self):
+        acc = Account('testacc', 'testpass')
+
+        # should return same device id when same username.
+        device_id = acc.get_device_id()
+        acc.__device_id = None
+        self.assertEqual(device_id, acc.get_device_id())
+

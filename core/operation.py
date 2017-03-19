@@ -3,6 +3,7 @@ import json
 
 import requests
 import logging
+import uuid
 
 
 API_URL = 'https://i.instagram.com/api/v1'
@@ -14,6 +15,8 @@ USER_AGENT = 'Instagram 10.3.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW
 
 class Account:
     csrftoken = None
+    __phone_id = None
+    __device_id = None
 
     def __init__(self, username, password):
         self.username = username
@@ -21,6 +24,35 @@ class Account:
 
     def to_json(self):
         return json.dumps({'username': self.username, 'password': self.password})
+
+    def get_login_data(self):
+        return {
+            'phone_id': self.get_phone_id(),
+            '_csrftoken': self.csrftoken,
+            'username': self.username,
+            'password': self.password,
+            'device_id': self.get_device_id(),
+            'guid': '??',
+            'login_attempt_count': '0'
+        }
+
+    def get_phone_id(self):
+        if self.__phone_id is None:
+            self.__phone_id = uuid.uuid4()
+            logging.info('generated phone id: {0}'.format(self.__phone_id))
+        return self.__phone_id
+
+    def get_device_id(self):
+        if self.__device_id is None:
+            m = hashlib.md5()
+            m.update(self.username.encode('utf-8'))
+            user_seed = m.hexdigest()
+            m.update('0192837465'.encode('utf-8') + user_seed.encode('utf-8'))
+            self.__device_id = 'android-' + m.hexdigest()[:16]
+
+            logging.info('generated device id: {0}'.format(self.__phone_id))
+
+        return self.__device_id
 
 
 class Operations:
@@ -74,12 +106,6 @@ class Operations:
         self.send_request(API_URL + '/si/fetch_headers/')
 
         return self.response.cookies['csrftoken']
-
-    def generate_device_id(self, seed):
-        volatile_seed = '12345'
-        m = hashlib.md5()
-        m.update(seed.encode('utf-8') + volatile_seed.encode('utf-8'))
-        return 'android-' + m.hexdigest()[:16]
 
     def send_request(self, url, account=None, post_data=None):
         self.session.headers.update({
