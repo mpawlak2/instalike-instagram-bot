@@ -18,6 +18,7 @@ class Account:
     __phone_id = None
     __device_id = None
     __guid = None
+    logged_in = False
 
     def __init__(self, username, password):
         self.username = username
@@ -82,6 +83,7 @@ class Operations:
             return False
 
         if self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data())):
+            self.account.logged_in = True
             return True
 
         return False
@@ -113,7 +115,7 @@ class Operations:
     def get_csrftoken(self):
         return self.send_request(API_URL + '/si/fetch_headers/').cookies['csrftoken']
 
-    def send_request(self, url, account=None, post_data=None):
+    def send_request(self, url, post_data=None):
         logging.info('sending request ' + url)
         self.session.headers.update({
             'Connection': 'close',
