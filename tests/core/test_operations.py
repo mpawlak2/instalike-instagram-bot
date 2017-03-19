@@ -67,11 +67,18 @@ class TestOperations(unittest.TestCase):
     def test_phone_id(self):
         acc = Account('testacc', 'testpass')
 
-        print(acc.get_phone_id())
+        self.assertIsNotNone(acc.get_phone_id())
 
 
     def test_guid(self):
         acc = Account('testacc', 'testpass')
 
         self.assertIsNotNone(acc.get_guid())
+
+    def test_logout(self):
+        ops = Operations()
+
+        self.assertTrue(ops.log_in(Account('alojzykk', '1q@W3e$R')))
+        self.assertTrue(ops.log_out())
+        self.assertTrue(ops.log_in())
 

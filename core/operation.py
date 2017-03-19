@@ -94,7 +94,10 @@ class Operations:
         return False
 
     def log_out(self):
-        pass
+        if not self.account.logged_in:
+            return True
+
+        return self.send_request(API_URL + '/accounts/logout/')
 
     def like_media(self, photo_id):
         pass
