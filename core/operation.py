@@ -36,11 +36,11 @@ class Account:
             'login_attempt_count': '0'
         }
 
-    def get_phone_id(self):
+    def get_phone_id(self, no_dash=False):
         if self.__phone_id is None:
-            self.__phone_id = uuid.uuid4()
+            self.__phone_id = str(uuid.uuid4())
             logging.info('generated phone id: {0}'.format(self.__phone_id))
-        return self.__phone_id
+        return self.__phone_id if not no_dash else self.__phone_id.replace('-', '')
 
     def get_device_id(self):
         if self.__device_id is None:

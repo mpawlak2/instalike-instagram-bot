@@ -61,3 +61,8 @@ class TestOperations(unittest.TestCase):
         acc.__device_id = None
         self.assertEqual(device_id, acc.get_device_id())
 
+    def test_phone_id(self):
+        acc = Account('testacc', 'testpass')
+
+        print(acc.get_phone_id())
+
