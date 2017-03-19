@@ -6,3 +6,4 @@ sqlite3.dll
 sqlite*/
 .idea/
 *.db
+tests/*.db
