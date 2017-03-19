@@ -75,6 +75,10 @@ class Operations:
         else:
             self.account = account
 
+        # Already logged in.
+        if self.account.logged_in:
+            return True
+
         if self.account.csrftoken is None:
             self.account.csrftoken = self.get_csrftoken()
 
