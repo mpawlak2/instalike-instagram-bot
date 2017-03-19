@@ -8,7 +8,7 @@ import hmac
 
 API_URL = 'https://i.instagram.com/api/v1'
 CONTENT_TYPE = 'application/x-www-form-urlencoded'
-USER_AGENT = 'Instagram 10.3.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)'
+USER_AGENT = 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW; armani; qcom; en_US)'
 PRIVATE_KEY = '012a54f51c49aa8c5c322416ab1410909add32c966bbaa0fe3dc58ac43fd7ede'
 
 
@@ -50,7 +50,7 @@ class Account:
             user_seed = m.hexdigest()
             m.update('0192837465'.encode('utf-8') + user_seed.encode('utf-8'))
             self.__device_id = 'android-' + m.hexdigest()[:16]
-            logging.info('generated device id: {0}'.format(self.__phone_id))
+            logging.info('generated device id: {0}'.format(self.__device_id))
 
         return self.__device_id
 
@@ -81,7 +81,7 @@ class Operations:
         if self.account.csrftoken is None:
             return False
 
-        self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data()))
+        self.send_request(API_URL + '/accounts/login/', post_data=(self.account.get_login_data()))
 
         return True
 
@@ -115,6 +115,7 @@ class Operations:
         return self.response.cookies['csrftoken']
 
     def send_request(self, url, account=None, post_data=None):
+        logging.info('sending request ' + url)
         self.session.headers.update({
             'Connection': 'close',
             'User-Agent': USER_AGENT,
@@ -147,6 +148,6 @@ class Operations:
         return self.response
 
     def sign_payload(self, payload):
-        return hmac.new(PRIVATE_KEY.encode('utf-8'), payload.encode('utf-8'), hashlib.sha256).hexdigest() + '.' + payload
+        return '?ig_sig_key_version=4&signed_body=' + hmac.new(PRIVATE_KEY.encode('utf-8'), payload.encode('utf-8'), hashlib.sha256).hexdigest() + '.' + payload
 
 
