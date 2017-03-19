@@ -88,7 +88,7 @@ class Operations:
 
         if self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data())):
             self.account.logged_in = True
-            logging.info('logged in as {0}'.format(self.account.username))
+            logging.info('logged in successfully as {0}'.format(self.account.username))
             return True
 
         return False
