@@ -1,8 +1,11 @@
 import json
 import unittest
 
+import logging
+
 from core.operation import Operations, Account
 
+logging.basicConfig(level=logging.DEBUG)
 
 class TestAccount(unittest.TestCase):
     def test_create_account(self):
@@ -25,7 +28,7 @@ class TestOperations(unittest.TestCase):
     def test_log_in(self):
         ops = Operations()
 
-        self.assertTrue(ops.log_in(Account('user', 'password')))
+        self.assertTrue(ops.log_in(Account('alojzykk', '1q@W3e$R')))
 
     def test_log_in_fail(self):
         ops = Operations()
@@ -37,8 +40,6 @@ class TestOperations(unittest.TestCase):
 
         self.assertFalse(ops.log_in())
         self.assertIsNone(ops.account)
-        self.assertTrue(ops.log_in(Account('legitacc', 'legitpass')))
-        self.assertIsNotNone(ops.account)
 
     def test_get_csrftoken(self):
         ops = Operations()

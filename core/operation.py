@@ -81,9 +81,10 @@ class Operations:
         if self.account.csrftoken is None:
             return False
 
-        self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data()))
+        if self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data())):
+            return True
 
-        return True
+        return False
 
     def log_out(self, account):
         pass
