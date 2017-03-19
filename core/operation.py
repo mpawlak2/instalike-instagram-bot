@@ -1,6 +1,9 @@
+import hashlib
 import json
 
 import requests
+import logging
+
 
 API_URL = 'https://i.instagram.com/api/v1'
 CONTENT_TYPE = 'application/x-www-form-urlencoded'
@@ -22,6 +25,7 @@ class Account:
 
 class Operations:
     account = None
+    response = None
 
     def __init__(self):
         self.session = requests.Session()
@@ -67,21 +71,41 @@ class Operations:
         pass
 
     def get_csrftoken(self):
-        try:
-            response = requests.get(API_URL + '/si/fetch_headers/')
-        except Exception as e:
-            return None
+        self.send_request(API_URL + '/si/fetch_headers/')
 
-        return response.cookies
+        return self.response.cookies
 
-    def send_request(self, url, account=None):
-        headers = {
+    def generate_device_id(self, seed):
+        volatile_seed = '12345'
+        m = hashlib.md5()
+        m.update(seed.encode('utf-8') + volatile_seed.encode('utf-8'))
+        return 'android-' + m.hexdigest()[:16]
+
+    def send_request(self, url, account=None, post_data=None):
+        self.session.headers.update({
+            'Connection': 'close',
             'User-Agent': USER_AGENT,
             'Accept': '*/*',
             'Content-Type': CONTENT_TYPE,
             'Accept-Language': 'en-US'
-        }
+        })
 
-        self.session.headers = headers
+        try:
+            if post_data is not None:
+                response = self.session.post(url, data=post_data)
+            else:
+                response = self.session.get(url)
+        except Exception as e:
+            logging.error(str(e))
+            return None
 
-        pass
+        if response.status_code == 200:
+            self.response = response
+        else:
+            self.response = None
+            logging.warning('{0} request responded with status code {1}'.format('POST' if post_data is not None else 'GET', response.status_code))
+            return None
+
+        return response
+
+
