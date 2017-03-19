@@ -109,7 +109,7 @@ class Operations:
         try:
             json.loads(response.text)
         except Exception as e:
-            logging.debug('response content is not in JSON format, response: {0}', response.text)
+            logging.debug('response content is not in JSON format, response: {0}, exception: {1}', response.text, str(e))
 
         return response
 
