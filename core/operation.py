@@ -133,7 +133,7 @@ class Operations:
             try:
                 media_json = json.loads(self.response.text)
             except Exception as e:
-                logging.warning('error downloading media from tag, exception: {0}'.format(e))
+                logging.error('error downloading media from tag, exception: {0}'.format(e))
                 return None
 
         return media_json
