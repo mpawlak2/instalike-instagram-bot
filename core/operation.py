@@ -120,6 +120,12 @@ class Operations:
     def send_direct_message(self, user_id, message):
         pass
 
+    def get_media_by_tag(self, tag):
+        pass
+
+    def get_media_from_feed(self):
+        pass
+
     def get_csrftoken(self):
         return self.send_request(API_URL + '/si/fetch_headers/').cookies['csrftoken']
 
