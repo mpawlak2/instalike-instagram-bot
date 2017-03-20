@@ -87,4 +87,4 @@ class TestOperations(unittest.TestCase):
         ops.log_in(Account('alojzykk', '1q@W3e$R'))
 
         self.assertIsNotNone(ops.get_media_by_tag('polishgirl'))
-        print(ops.get_media_by_tag('polishgirl'))
+        self.assertIsNotNone(json.dumps(ops.get_media_by_tag('polishgirl')))
