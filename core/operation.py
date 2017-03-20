@@ -19,6 +19,7 @@ class Account:
     __device_id = None
     __guid = None
     logged_in = False
+    user_id = None
 
     def __init__(self, username, password):
         self.username = username
@@ -88,7 +89,11 @@ class Operations:
 
         if self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data())):
             self.account.logged_in = True
-            logging.info('logged in successfully as {0}'.format(self.account.username))
+            self.account.user_id = json.loads(self.response.text)['logged_in_user']['pk']
+            self.account.rank_token = '{0}_{1}'.format(self.account.user_id, self.account.get_guid())
+            self.account.csrftoken = self.response.cookies['csrftoken']
+
+            logging.info('logged in successfully as {0}, response {1}'.format(self.account.username, self.response.text))
             return True
 
         return False
@@ -121,7 +126,15 @@ class Operations:
         pass
 
     def get_media_by_tag(self, tag):
-        pass
+        self.send_request(API_URL + '/feed/tag/{0}/?max_id={1}&rank_token={2}&ranked_content=true'.format(tag, '', self.account.rank_token))
+        if self.response is not None:
+            try:
+                media_json = json.loads(self.response.text)
+            except Exception as e:
+                logging.warning('error downloading media from tag, exception: {0}'.format(e))
+                return None
+
+        return media_json
 
     def get_media_from_feed(self):
         pass

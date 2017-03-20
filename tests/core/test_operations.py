@@ -82,3 +82,9 @@ class TestOperations(unittest.TestCase):
         self.assertTrue(ops.log_out())
         self.assertTrue(ops.log_in())
 
+    def test_get_media_from_tag(self):
+        ops = Operations()
+        ops.log_in(Account('alojzykk', '1q@W3e$R'))
+
+        self.assertIsNotNone(ops.get_media_by_tag('polishgirl'))
+        print(ops.get_media_by_tag('polishgirl'))
