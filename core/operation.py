@@ -108,8 +108,15 @@ class Operations:
 
         return self.send_request(API_URL + '/media/{0}/like/'.format(media_id), self.sign_payload(payload))
 
-    def unlike_media(self, photo_id):
-        pass
+    def unlike_media(self, media_id):
+        payload = json.dumps({
+            '_uuid': self.account.get_guid(),
+            '_uid': self.account.user_id,
+            '_csrftoken': self.account.csrftoken,
+            'media_id': media_id
+        })
+
+        return self.send_request(API_URL + '/media/{0}/unlike/'.format(media_id), self.sign_payload(payload))
 
     def follow_user(self, user_id):
         pass
