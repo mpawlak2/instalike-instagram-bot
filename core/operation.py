@@ -119,7 +119,15 @@ class Operations:
         return self.send_request(API_URL + '/media/{0}/unlike/'.format(media_id), self.sign_payload(payload))
 
     def follow_user(self, user_id):
-        pass
+        payload = json.dumps({
+            '_uuid': self.account.get_guid(),
+            '_uid': self.account.user_id,
+            '_csrftoken': self.account.csrftoken,
+            'user_id': user_id
+        })
+
+        return self.send_request(API_URL + '/friendships/create/{0}/'.format(user_id), self.sign_payload(payload))
+
 
     def unfollow_user(self, user_id):
         pass
