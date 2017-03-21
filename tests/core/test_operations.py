@@ -111,4 +111,10 @@ class TestOperations(unittest.TestCase):
         ops = Operations()
         ops.log_in(Account('alojzykk', '1q@W3e$R'))
 
-        self.assertIsNotNone(ops.unlike_media('3265491670'))
+        self.assertIsNotNone(ops.follow_user('3265491670'))
+
+    def test_unfollow_user(self):
+        ops = Operations()
+        ops.log_in(Account('alojzykk', '1q@W3e$R'))
+
+        self.assertIsNotNone(ops.unfollow_user('3265491670'))

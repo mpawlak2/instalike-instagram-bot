@@ -130,7 +130,14 @@ class Operations:
 
 
     def unfollow_user(self, user_id):
-        pass
+        payload = json.dumps({
+            '_uuid': self.account.get_guid(),
+            '_uid': self.account.user_id,
+            '_csrftoken': self.account.csrftoken,
+            'user_id': user_id
+        })
+
+        return self.send_request(API_URL + '/friendships/destroy/{0}/'.format(user_id), self.sign_payload(payload))
 
     def comment_media(self, media_id):
         pass
