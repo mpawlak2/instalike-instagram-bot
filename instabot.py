@@ -13,7 +13,7 @@ import time
 
 class InstaBot:
     def __init__(self):
-        logging.basicConfig(filename='instalike.log', filemode='w', level=logging.DEBUG, format='[%(asctime)s] %(levelname)s: %(message)s')
+        logging.basicConfig(filename='instalike.log', filemode='w', level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s')
 
         self.configuration = configuration.Configuration()
         self.operation = operation.Operations()
