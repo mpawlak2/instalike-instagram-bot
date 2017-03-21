@@ -17,6 +17,7 @@ class Account:
     __phone_id = None
     __device_id = None
     __guid = None
+    rank_token = None
     logged_in = False
     user_id = None
 
@@ -97,8 +98,15 @@ class Operations:
 
         return self.send_request(API_URL + '/accounts/logout/')
 
-    def like_media(self, photo_id):
-        pass
+    def like_media(self, media_id):
+        payload = json.dumps({
+            '_uuid': self.account.get_guid(),
+            '_uid': self.account.user_id,
+            '_csrftoken': self.account.csrftoken,
+            'media_id': media_id
+        })
+
+        return self.send_request(API_URL + '/media/{0}/like/'.format(media_id), self.sign_payload(payload))
 
     def unlike_media(self, photo_id):
         pass
@@ -167,7 +175,7 @@ class Operations:
             self.response = response
         else:
             self.response = None
-            logging.warning('{0} request responded with status code: {1}, content: {2}'.format(
+            logging.warning('{0} request responded with status code: {1}, message: {2}'.format(
                 'POST' if post_data is not None else 'GET', response.status_code, response.text))
             return None
 

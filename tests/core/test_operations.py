@@ -94,3 +94,9 @@ class TestOperations(unittest.TestCase):
         ops.log_in(Account('alojzykk', '1q@W3e$R'))
 
         self.assertIsNotNone(ops.get_media_from_feed())
+
+    def test_like_media(self):
+        ops = Operations()
+        ops.log_in(Account('alojzykk', '1q@W3e$R'))
+
+        self.assertIsNotNone(ops.like_media('3265491670'))
