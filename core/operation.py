@@ -12,7 +12,6 @@ USER_AGENT = 'Instagram 9.2.0 Android (18/4.3; 320dpi; 720x1280; Xiaomi; HM 1SW;
 PRIVATE_KEY = '012a54f51c49aa8c5c322416ab1410909add32c966bbaa0fe3dc58ac43fd7ede'
 
 
-
 class Account:
     csrftoken = None
     __phone_id = None
@@ -29,15 +28,9 @@ class Account:
         return json.dumps({'username': self.username, 'password': self.password})
 
     def get_login_data(self):
-        return json.dumps({
-            'phone_id': self.get_phone_id(),
-            '_csrftoken': self.csrftoken,
-            'username': self.username,
-            'password': self.password,
-            'device_id': self.get_device_id(),
-            'guid': self.get_guid(),
-            'login_attempt_count': '0'
-        })
+        return json.dumps({'phone_id': self.get_phone_id(), '_csrftoken': self.csrftoken, 'username': self.username,
+            'password': self.password, 'device_id': self.get_device_id(), 'guid': self.get_guid(),
+            'login_attempt_count': '0'})
 
     def get_phone_id(self, no_dash=False):
         if self.__phone_id is None:
@@ -93,7 +86,8 @@ class Operations:
             self.account.rank_token = '{0}_{1}'.format(self.account.user_id, self.account.get_guid())
             self.account.csrftoken = self.response.cookies['csrftoken']
 
-            logging.info('logged in successfully as {0}, response {1}'.format(self.account.username, self.response.text))
+            logging.info(
+                'logged in successfully as {0}, response {1}'.format(self.account.username, self.response.text))
             return True
 
         return False
@@ -128,7 +122,8 @@ class Operations:
     def get_media_by_tag(self, tag):
         media_json = None
 
-        self.send_request(API_URL + '/feed/tag/{0}/?max_id={1}&rank_token={2}&ranked_content=true'.format(tag, '', self.account.rank_token))
+        self.send_request(API_URL + '/feed/tag/{0}/?max_id={1}&rank_token={2}&ranked_content=true'.format(tag, '',
+                                                                                                          self.account.rank_token))
         if self.response is not None:
             try:
                 media_json = json.loads(self.response.text)
@@ -146,14 +141,9 @@ class Operations:
 
     def send_request(self, url, post_data=None):
         logging.info('sending request ' + url)
-        self.session.headers.update({
-            'Connection': 'close',
-            'Cookie2': '$Version=1',
-            'User-Agent': USER_AGENT,
-            'Accept': '*/*',
-            'Content-Type': CONTENT_TYPE,
-            'Accept-Language': 'en-US'
-        })
+        self.session.headers.update(
+            {'Connection': 'close', 'Cookie2': '$Version=1', 'User-Agent': USER_AGENT, 'Accept': '*/*',
+                'Content-Type': CONTENT_TYPE, 'Accept-Language': 'en-US'})
 
         try:
             if post_data is not None:
@@ -168,19 +158,21 @@ class Operations:
             self.response = response
         else:
             self.response = None
-            logging.warning('{0} request responded with status code: {1}, content: {2}'.format('POST' if post_data is not None else 'GET', response.status_code, response.text))
+            logging.warning('{0} request responded with status code: {1}, content: {2}'.format(
+                'POST' if post_data is not None else 'GET', response.status_code, response.text))
             return None
 
         try:
             json.loads(response.text)
         except Exception as e:
-            logging.debug('response content is not in JSON format, response: {0}, exception: {1}', response.text, str(e))
+            logging.debug('response content is not in JSON format, response: {0}, exception: {1}', response.text,
+                          str(e))
 
         return self.response
 
     def sign_payload(self, payload):
-        signed_payload = 'ig_sig_key_version=4&signed_body=' + hmac.new(PRIVATE_KEY.encode('utf-8'), payload.encode('utf-8'), hashlib.sha256).hexdigest() + '.' + payload
+        signed_payload = 'ig_sig_key_version=4&signed_body=' + hmac.new(PRIVATE_KEY.encode('utf-8'),
+                                                                        payload.encode('utf-8'),
+                                                                        hashlib.sha256).hexdigest() + '.' + payload
         logging.debug('signed payload: ' + signed_payload)
         return signed_payload
-
-
