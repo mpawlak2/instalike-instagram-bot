@@ -86,8 +86,7 @@ class Operations:
             self.account.rank_token = '{0}_{1}'.format(self.account.user_id, self.account.get_guid())
             self.account.csrftoken = self.response.cookies['csrftoken']
 
-            logging.info(
-                'logged in successfully as {0}, response {1}'.format(self.account.username, self.response.text))
+            logging.info('logged in successfully as {0}, response {1}'.format(self.account.username, self.response.text))
             return True
 
         return False
@@ -134,7 +133,17 @@ class Operations:
         return media_json
 
     def get_media_from_feed(self):
-        pass
+        media_json = None
+        self.send_request(API_URL + '/feed/timeline/')
+
+        if self.response is not None:
+            try:
+                media_json = json.loads(self.response.text)
+            except Exception as e:
+                logging.error('error downloading media from feed, exception: {0}'.format(e))
+                return None
+
+        return media_json
 
     def get_csrftoken(self):
         return self.send_request(API_URL + '/si/fetch_headers/').cookies['csrftoken']
