@@ -13,8 +13,8 @@ class Algorithm(ABC):
 
 
 class LikeAlgorithm(Algorithm):
-    def __init__(self, operations):
-        self.__operations = operations
+    def __init__(self):
+        pass
 
     def run(self):
         pass
