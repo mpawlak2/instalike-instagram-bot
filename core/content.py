@@ -4,7 +4,7 @@ class ContentManager:
     __media_list = []
     __media_algorithm = None
 
-    def get_next_media(self):
+    def get_media_generator(self):
         if not self.__media_list:
             self.download_media()
 

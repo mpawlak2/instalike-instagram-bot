@@ -12,6 +12,6 @@ class TestContent(TestCase):
 
     def test_return_media_generator(self):
         test_content = ContentManager()
-        gnt = test_content.get_next_media()
+        gnt = test_content.get_media_generator()
 
         self.assertIsInstance(gnt, GeneratorType)
