@@ -1,3 +1,4 @@
+from types import GeneratorType
 from unittest import TestCase
 
 from core.content import ContentManager
@@ -8,3 +9,9 @@ class TestContent(TestCase):
         test_content = ContentManager()
 
         self.assertIsNotNone(test_content)
+
+    def test_return_media_generator(self):
+        test_content = ContentManager()
+        gnt = test_content.get_next_media()
+
+        self.assertIsInstance(gnt, GeneratorType)
