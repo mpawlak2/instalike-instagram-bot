@@ -8,6 +8,11 @@ class MediaAlgorithm(ABC):
 
 
 class TagMediaAlgorithm(MediaAlgorithm):
+    __tag_list = []
+
+    def __init__(self, tag_list):
+        self.__tag_list = tag_list
+
     def get_media(self):
         pass
 
