@@ -96,7 +96,9 @@ class Operations:
         if not self.account.logged_in:
             return True
 
-        return self.send_request(API_URL + '/accounts/logout/')
+        if self.send_request(API_URL + '/accounts/logout/'):
+            self.account.logged_in = False
+            return True
 
     def like_media(self, media_id):
         payload = json.dumps({
