@@ -81,7 +81,7 @@ class Operations:
         if self.account.csrftoken is None:
             return False
 
-        if self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data())):
+        if self.send_request(API_URL + '/accounts/login/', post_data=self.sign_payload(self.account.get_login_data()), require_login=False):
             self.account.logged_in = True
             self.account.user_id = json.loads(self.response.text)['logged_in_user']['pk']
             self.account.rank_token = '{0}_{1}'.format(self.account.user_id, self.account.get_guid())
@@ -178,9 +178,14 @@ class Operations:
         return media_json
 
     def get_csrftoken(self):
-        return self.send_request(API_URL + '/si/fetch_headers/').cookies['csrftoken']
+        return self.send_request(API_URL + '/si/fetch_headers/', require_login=False).cookies['csrftoken']
 
-    def send_request(self, url, post_data=None):
+    def send_request(self, url, post_data=None, require_login=True):
+        if require_login:
+            if not self.account or not self.account.logged_in:
+                logging.error('Trying to make request without logging in.')
+                return False
+
         logging.info('sending request ' + url)
         self.session.headers.update(
             {'Connection': 'close', 'Cookie2': '$Version=1', 'User-Agent': USER_AGENT, 'Accept': '*/*',
