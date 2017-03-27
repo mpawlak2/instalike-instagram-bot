@@ -17,7 +17,12 @@ class TagMediaAlgorithm(MediaAlgorithm):
 
     def get_media(self):
         media_list = []
+
         tag = self.__tag_list.pop()
+        self.__tag_list.append(tag)
+
+        media_json = self.__operations.get_media_by_tag(tag)
+        return media_json
 
 
 class ContentManager:

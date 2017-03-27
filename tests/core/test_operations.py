@@ -53,7 +53,7 @@ class TestOperations(unittest.TestCase):
     def test_send_request_get(self):
         ops = Operations()
 
-        self.assertIsNotNone(ops.send_request('https://i.instagram.com/api/v1/si/fetch_headers/'))
+        self.assertIsNotNone(ops.send_request('https://i.instagram.com/api/v1/si/fetch_headers/', require_login=False))
         self.assertIsNotNone(ops.response)
 
     def test_device_id(self):

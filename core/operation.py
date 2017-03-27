@@ -151,6 +151,9 @@ class Operations:
         pass
 
     def get_media_by_tag(self, tag):
+        if self.account is None:
+            return None
+
         media_json = None
 
         self.send_request(API_URL + '/feed/tag/{0}/?max_id={1}&rank_token={2}&ranked_content=true'.format(tag, '',
