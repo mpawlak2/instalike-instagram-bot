@@ -67,6 +67,25 @@ class ContentManager:
 
 
 class Validator:
+    __banned_usernames = []
+    __banned_tags = []
+
+    # MEDIA VALIDATION
+    min_likes = 0
+    max_likes = 0
+    min_comments = 0
+    max_comments = 0
+    max_days_old = 0
+    spam_media_words = []  # look for these words in description, if found media is not valid.
+
+    # USER VALIDATOIN
+    min_followers = 0
+    max_followers = 0
+    min_posts = 0
+    max_posts = 0
+    max_days_last_post = 0
+    spam_user_words = []
+
     def validate_users(self, user_list):
         pass
 
