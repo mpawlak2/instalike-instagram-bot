@@ -27,6 +27,7 @@ class TagMediaAlgorithm(MediaAlgorithm):
 
         return media_list
 
+
 class FeedMediaAlgorithm(MediaAlgorithm):
     __operations = None
 
@@ -42,6 +43,7 @@ class FeedMediaAlgorithm(MediaAlgorithm):
             media_list.append(media)
 
         return media_list
+
 
 class ContentManager:
     __media_list = []
@@ -62,3 +64,11 @@ class ContentManager:
 
     def download_media(self):
         self.__media_list = self.__media_algorithm.get_media()
+
+
+class Validator:
+    def validate_users(self, user_list):
+        pass
+
+    def validate_media(self, media_list):
+        pass
