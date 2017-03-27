@@ -1,7 +1,7 @@
 from types import GeneratorType
 from unittest import TestCase
 
-from core.content import ContentManager, TagMediaAlgorithm
+from core.content import ContentManager, TagMediaAlgorithm, FeedMediaAlgorithm
 from core.operation import Operations, Account
 
 
@@ -23,3 +23,11 @@ class TestContent(TestCase):
         tma = TagMediaAlgorithm(['polishgirl', 'l4l'], ops)
 
         self.assertIsNotNone(tma.get_media())
+
+    def test_get_media_from_feed_algorithm(self):
+        ops = Operations()
+        ops.log_in(Account('alojzykk', '1q@W3e$R'))
+        tma = FeedMediaAlgorithm(ops)
+
+        self.assertIsNotNone(tma.get_media())
+        print(tma.get_media())

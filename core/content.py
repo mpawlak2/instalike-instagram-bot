@@ -28,8 +28,20 @@ class TagMediaAlgorithm(MediaAlgorithm):
         return media_list
 
 class FeedMediaAlgorithm(MediaAlgorithm):
-    pass
+    __operations = None
 
+    def __init__(self, operations):
+        self.__operations = operations
+
+    def get_media(self):
+        media_list = []
+
+        media_json = self.__operations.get_media_from_feed()
+
+        for media in media_json['items']:
+            media_list.append(media)
+
+        return media_list
 
 class ContentManager:
     __media_list = []
