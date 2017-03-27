@@ -27,6 +27,9 @@ class TagMediaAlgorithm(MediaAlgorithm):
 
         return media_list
 
+class FeedMediaAlgorithm(MediaAlgorithm):
+    pass
+
 
 class ContentManager:
     __media_list = []
