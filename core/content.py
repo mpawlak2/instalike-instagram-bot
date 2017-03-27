@@ -22,7 +22,10 @@ class TagMediaAlgorithm(MediaAlgorithm):
         self.__tag_list.append(tag)
 
         media_json = self.__operations.get_media_by_tag(tag)
-        return media_json
+        for media in media_json['items']:
+            media_list.append(media)
+
+        return media_list
 
 
 class ContentManager:
