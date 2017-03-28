@@ -1,3 +1,4 @@
+import datetime
 from abc import ABC, abstractmethod
 
 
@@ -49,6 +50,7 @@ class ContentManager:
     __media_list = []
     __media_algorithm = None
     __media_generator = None
+    __media_update_date = datetime.datetime.today()
 
     def get_next_media(self):
         if self.__media_generator is None:
@@ -57,13 +59,14 @@ class ContentManager:
         return next(self.__media_generator)
 
     def get_media_generator(self):
-        if not self.__media_list:
+        if not self.__media_list or (datetime.datetime.today() - self.__media_update_date).total_seconds() > 2 * 60:
             self.download_media()
 
         yield self.__media_list.pop()
 
     def download_media(self):
         self.__media_list = self.__media_algorithm.get_media()
+        self.__media_update_date = datetime.datetime.today()
 
 
 class Validator:
