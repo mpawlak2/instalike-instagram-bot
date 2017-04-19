@@ -194,7 +194,7 @@ class Operations:
         if response.status_code != 200:
             return None
 
-        return json.loads(response.content.decode('utf-8'))['graphql']
+        return json.loads(response.content.decode('utf-8'))['graphql']['shortcode_media']
 
     def get_user_details(self, user_name):
         response = self.session.get(self.user_details_url_tmpl.format(user_name), headers=self.headers)
@@ -202,7 +202,6 @@ class Operations:
         if response.status_code != 200 or not response.content:
             return None
 
-        print(response.content.decode('utf-8'))
         try:
             ret = json.loads(response.content.decode('utf-8'))['user']
             return ret

@@ -29,13 +29,13 @@ class Photo:
             self.width = dimensions.get('width', 0)
             self.height = dimensions.get('height', 0)
 
-        self.code = json_node.get('code', '')
+        self.code = json_node.get('shortcode', '')
         self.is_ad = json_node.get('is_ad', False)
         if (json_node.get('likes', None)):
             self.likes_count = json_node['likes']['count']
             self.viewer_has_liked = json_node['likes'].get('viewer_has_liked', False)
         self.is_video = json_node.get('is_video', False)
-        self.display_src = json_node['display_src']
+        self.display_src = json_node['display_url']
         if (json_node.get('location')):
             self.location = json_node.get('location').get('name', 'null')
         self.caption = json_node.get('caption', 'null')
