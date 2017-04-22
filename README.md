@@ -7,7 +7,7 @@
 - Automated likes
 - Automated follows
 - Automated unfollows (requires database connection)
-- **Compatible with PythonAnywhere - end of README**
+- Compatible with PythonAnywhere
 
 # Configuration Guide
 Edit `default.cfg` file
