@@ -155,7 +155,7 @@ class Operations:
         if response.status_code != 200:
             return None
 
-        return json.loads(response.content.decode('utf-8'))['tag']['media']['nodes']
+        return json.loads(response.content.decode('utf-8'))['graphql']['hashtag']['edge_hashtag_to_media']['edges']
 
     def get_feed_media(self):
         response = self.session.get(self.base_url, headers=self.headers)

@@ -109,7 +109,7 @@ class ContentManager:
 				if feed == 0:
 					media_details = self.operation.get_photo_details(media['node']['shortcode'])
 				else:
-					media_details = self.operation.get_photo_details(media['code'])
+					media_details = self.operation.get_photo_details(media['node']['shortcode'])
 
 				if(media_details):
 					media_instance = model.Photo().from_json(media_details)
