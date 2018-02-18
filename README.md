@@ -150,7 +150,7 @@ You can create a new configuration file by copying `default.cfg`, and then you c
 - `python -m pip install requests`
 - `python -m pip install peewee`
 
-# PythonAnywhere setup (it will not work if server location is far away from your real location)
+# PythonAnywhere setup (bot won't work if server location is far away from your real location)
 
 Set up a PythonAnywhere account and start a bash console.
 Clone the repository and then move to the directory:
